@@ -95,8 +95,8 @@ body{
 
 .body-section{
     padding-top: 2rem;
-    padding-left: 20rem ;
-    padding-right: 20rem ;
+    padding-left: 2rem ;
+    padding-right: 2rem ;
 }
 
 .title {
@@ -106,6 +106,7 @@ body{
 }
 
 .carousel-container{
+    justify-content: center;
     position: relative;
     overflow: hidden;
     padding: 0 3rem;
@@ -147,6 +148,27 @@ body{
 
 .movie-number {
     position: absolute;
+    left: -2px;
+    bottom: -10px;
+    font-size: 6rem;
+    font-weight: 900;
+    color: #000;
+    text-shadow: 2px 2px 4px rgb(255, 255, 255);
+    z-index: 3;
+    line-height: 1;
+}
+
+.movie-carousel {
+    counter-reset: movie-counter;
+}
+
+.movie-item {
+    counter-increment: movie-counter;
+}
+
+.movie-item::before {
+    content: counter(movie-counter);
+    position: absolute;
     left: -10px;
     bottom: -10px;
     font-size: 6rem;
@@ -156,3 +178,35 @@ body{
     z-index: 3;
     line-height: 1;
 }
+.body-section h2 {
+    text-align: justify;
+    font-size: 2rem;
+    padding: 2rem;
+
+}
+
+.body-section p {
+    font-size: 1rem;
+    padding: 1.5rem;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+}
+
+
+.cards {
+    
+    background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
+    border-radius: 1rem;
+    padding: 2rem;
+    max-width: 280px;
+    flex: 1 1 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
