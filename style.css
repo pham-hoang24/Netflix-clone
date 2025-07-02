@@ -90,3 +90,46 @@ body{
     background:#cf0812;
 }
 
+
+
+.trending-section{
+    padding: 4rem 0;
+}
+
+.carousel-container{
+    position: relative;
+    overflow: hidden;
+    padding: 0 3rem;
+}
+
+.movie-carousel{
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1rem;
+    scrollbar-width: none;
+}
+
+.movie-item {
+    position: relative;
+    flex: 0 0 200px;
+    height: 300px;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+.movie-item:hover {
+    transform: scale(1.05);
+    z-index: 5;
+}
+
+.movie-poster{
+    width: 100%;
+    height: 100%;
+    scroll-snap-align: start;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+
+}
