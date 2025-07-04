@@ -21,10 +21,9 @@ body{
 
 
 .nav {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
     padding: 1.5rem 3rem;
     display: flex;
     justify-content: space-between;
@@ -33,18 +32,13 @@ body{
 }
 
 .logo {
-    padding-left: 4rem;
-    max-width: 180px;
+    max-width: 15rem;
 }
 
 
 
-.hero{
-    position: relative;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.hero-background{
+    height: 70%;
     background: linear-gradient(
                 rgba(0, 0, 0, 0.4),
                 rgba(0, 0, 0, 0.7)
@@ -55,38 +49,49 @@ body{
             text-align: center;
 }
 
-.hero-content{
-    max-width: 950px;
-    padding: 0 10rem;
+.hero{
+    position: relative;
+    height: 45rem;
+    display: flex;
+    padding-top:10% ;
+    justify-content: center;
+    background-position: center;
+    text-align: center;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 60%;
+    padding: 0 2rem;
     z-index: 2;
 }
+
 .hero h1 {
-    padding-top: 6rem;
-    font-size: 4rem; 
-    font-weight: 900; 
-    line-height: 1.1; 
-    margin-bottom: 1.16px;
-    }
+    font-size: 3.125rem;
+    font-weight: 900;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+}
 
 .hero .subtitle {
-            font-size: 1.5rem;
-            font-weight: 400;
-            margin-bottom: 16px;
-        }
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-bottom: 1rem;
+}
 
 .hero .description {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-        }
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
 
 .sign-in {
 
-    transform: scale(70%);
+    transform: scale(90%);
 }
 
 .email-signup {
+    gap: 1rem;
     display: flex;
-    gap: 0;
     max-width: 600px;
     margin: 0 auto;
     align-items: stretch;
@@ -108,7 +113,7 @@ body{
 }
 .cta-button {
     border-radius: 4px;
-    padding: 0.5rem 16px;
+    padding: 1rem ;
     font-size: 1.5rem;
     font-weight: 600;
     background: #f40612;
@@ -125,18 +130,24 @@ body{
 }
 
 .main-content{
-    padding: 5rem;
+    padding: 1.5rem;
+    width: 100%;
+    align-items: center;
+    margin: 0 auto;
 }
 
 .content-section{
+    max-width: 1200px;
     align-items: center;
-    padding: 0 17rem;
-    padding-bottom: 3rem;
+    margin: 2rem auto;
+
 }
 
 .title {
     font-size: 2rem;
-    margin-bottom: 2rem;
+align-items: center;
+text-align: left;
+
 
 }
 
@@ -144,7 +155,6 @@ body{
     justify-content: center;
     position: relative;
     overflow: hidden;
-    padding: 0 3rem;
 }
 
 .movie-carousel{
@@ -153,14 +163,14 @@ body{
     overflow-x: auto;
     scroll-behavior: smooth;
     scroll-snap-type: x mandatory;
-    padding-bottom: 16px;
+    scroll-padding: 0 1rem;         
     scrollbar-width: none;
 }
 
 .movie-item {
     position: relative;
-    flex: 0 0 12.5rem;
-    height: 18.75rem;
+    flex: 0 0 13.5rem;
+    height: 16.9rem;
     scroll-snap-align: start;
     cursor: pointer;
     transition: transform 0.3s ease;
@@ -181,30 +191,16 @@ body{
     counter-reset: movie-counter;
 }
 
-.movie-number {
-    position: absolute;
-    left: -2px;
-    bottom: -10px;
-    font-size: 6rem;
-    font-weight: 900;
-    color: #000;
-    text-shadow: 2px 2px 4px rgb(255, 255, 255);
-    z-index: 3;
-    line-height: 1;
-}
-
-.movie-carousel {
-    counter-reset: movie-counter;
-}
 
 .movie-item {
     counter-increment: movie-counter;
+    marker: none;
 }
 
 .movie-item::before {
     content: counter(movie-counter);
     position: absolute;
-    left: -10px;
+    left: -15px;
     bottom: -10px;
     font-size: 6rem;
     font-weight: 900;
@@ -227,25 +223,21 @@ body{
 
 
 .card-container {
-    max-width: 1200px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 16px;
-    justify-content: center;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
 }
 
 
 .cards {
-    position: relative;
     background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
     border-radius: 16px;
     padding: 1.5rem;
-    height: 300px;
-    max-width: 300px;
-    flex: 1 1 220px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+    width: 100%;
+    flex: 1 1 100%;
+
 }
 
 .cards svg {
@@ -353,7 +345,7 @@ details[open] .faq-answer {
 }
 
 /* Responsive Design */
-@media (max-width: 768px) {
+@media (max-width: 959px) {
     .hero h1 {
         font-size: 2rem;
     }
@@ -375,6 +367,9 @@ details[open] .faq-answer {
     .email-input {
         border-radius: 4px;
     }
+    .hero-content p {
+        align-items: center;
+    }
 
     .cta-button {
         border-radius: 4px;
@@ -382,7 +377,7 @@ details[open] .faq-answer {
     }
 
     .nav {
-        padding: 16px 1.5rem;
+        padding: 5 1.5rem;
     }
 
     .logo {
@@ -395,10 +390,45 @@ details[open] .faq-answer {
     }
 
     .carousel-container {
-        padding: 0 1.5rem;
+        position: relative;
+    }
+
+    .scroll-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.3s;
+    }
+
+    .scroll-button.left {
+    left: 0;
+    }
+
+    .scroll-button.right {
+    right: 0;
+    }
+
+    .scroll-button:hover {
+    background: rgba(0, 0, 0, 0.9);
+    }
+
+    .scroll-button.hidden {
+    display: none;
     }
 
     .movie-item {
+        border-radius: 4px;
         flex: 0 0 150px;
         height: 225px;
     }
@@ -413,9 +443,7 @@ details[open] .faq-answer {
         
     }
 
-    .faq-title {
-        font-size: 1.8rem;
-    }
+
 
     .faq-question {
         font-size: 1.2rem;
@@ -430,9 +458,19 @@ details[open] .faq-answer {
     .footer {
         padding: 3rem 1.5rem 2rem;
     }
+    
+
+}
+@media (min-width: 960px) {
+  .card-container {
+    flex-direction: row;
+    justify-content: center;
+  }
+
 }
 
-@media (max-width: 480px) {
+
+@media (min-width: 960px) and (max-width: 1279px) {
     .hero {
         min-height: 500px;
     }
@@ -449,4 +487,24 @@ details[open] .faq-answer {
     .movie-item::before {
         font-size: 3rem;
     }
+
+      .card-container {
+    flex-direction: row;
+    justify-content: center;
+  }
+
+  .cards {
+    flex: 1 1 calc(50% - 16px);
+    max-width: calc(50% - 16px);
+  }
+
+}
+
+@media (min-width: 1280px){
+  .cards {
+    flex: 1 1 calc(25% - 16px);
+    max-width: calc(25% - 16px);
+    height: 300px;
+    max-width: 290px;
+  }
 }
