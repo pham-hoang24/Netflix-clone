@@ -1,14 +1,25 @@
 interface TrendingItem {
-  title?: string;
-  name?: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  popularity: number;
+    title?: string;
+    name?: string;
+    overview: string;
+    poster_path: string | null;
+    backdrop_path: string | null;
+    popularity: number;
+    genre_ids?: number[];
+    release_date?: string;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   console.log('TS is connected!');
+
+  let GENRE_MAP: { [id: number]: string } = {};
+
+  async function fetchGenreMap() {
+    const res = await fetch('http://localhost:3000/api/genres');
+    const data = await res.json();
+    GENRE_MAP = data.genres || {};
+  }
+
 
   const carousel = document.querySelector('.movie-carousel') as HTMLElement;
   const leftBtn = document.querySelector('.scroll-button.left') as HTMLElement;
@@ -95,7 +106,13 @@ fetchTrending()
         ? `${BACKDROP_SMALL}${item.backdrop_path}`
         : 'https://via.placeholder.com/300x450?text=No+Image';
 
-      img.addEventListener('click', () => openDetailModal(item));
+      img.addEventListener('click', () => {
+        if (!Object.keys(GENRE_MAP).length) {
+          console.warn('Genre map not loaded yet.');
+          return;
+        }
+        openDetailModal(item);
+      });
 
       container.appendChild(img);
       carousel.appendChild(container);
@@ -105,55 +122,61 @@ fetchTrending()
   }
 
   function openDetailModal(item: TrendingItem) {
-    const overlay = document.createElement('div');
-    overlay.className = 'modal-overlay';
-    overlay.style.cssText = `
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.8); display: flex;
-      align-items: center; justify-content: center; z-index: 1000;
-    `;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
 
-    const content = document.createElement('div');
-    content.className = 'modal-content';
-    content.style.cssText = `
-      position: relative; background: #000; padding: 1rem;
-      border-radius: 8px; max-width: 800px; width: 90%;
-      max-height: 90%; overflow-y: auto; color: #fff;
-    `;
+  const content = document.createElement('div');
+  content.className = 'modal-content';
 
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = '×';
-    closeBtn.style.cssText = `
-      position: absolute; top: 0.5rem; right: 0.5rem;
-      background: transparent; border: none; color: #fff;
-      font-size: 2rem; cursor: pointer;
-    `;
-    closeBtn.addEventListener('click', () => overlay.remove());
+  const backdrop = document.createElement('div');
+  backdrop.className = 'modal-backdrop';
+  backdrop.style.backgroundImage = `url(${item.backdrop_path ? BACKDROP_BASE + item.backdrop_path : POSTER_BASE + item.poster_path})`;
 
-    const imageElem = document.createElement('img');
-    imageElem.src = item.backdrop_path
-      ? `${BACKDROP_BASE}${item.backdrop_path}`
-      : item.poster_path
-      ? `${POSTER_BASE}${item.poster_path}`
-      : 'https://via.placeholder.com/1280x720?text=No+Image';
-    imageElem.alt = item.title ?? item.name ?? 'Backdrop';
-    imageElem.style.width = '100%';
-    imageElem.style.borderRadius = '4px';
+  const closeBtn = document.createElement('button');
+  closeBtn.className = 'modal-close';
+  closeBtn.textContent = '×';
+  closeBtn.onclick = () => overlay.remove();
 
-    const descriptionElem = document.createElement('p');
-    descriptionElem.textContent = item.overview || 'No description available.';
-    descriptionElem.style.marginTop = '1rem';
+  const logo = document.createElement('img');
+  logo.className = 'modal-logo';
+  logo.src = '/25b45a29-02f9-45e3-b65e-61d103e62694.png'; // Your uploaded PNG logo
+  logo.alt = 'Logo';
 
-    content.append(closeBtn, imageElem, descriptionElem);
-    overlay.appendChild(content);
-    overlay.addEventListener('click', (e) => {
-      if (e.target === overlay) overlay.remove();
+const tags = document.createElement('div');
+    tags.className = 'modal-tags';
+    tags.innerHTML = '';
+
+    const genreNames = item.genre_ids?.map(id => GENRE_MAP[id]).filter(Boolean) || [];
+    const year = item.release_date?.slice(0, 4) ?? 'Unknown';
+    const tagList = [...genreNames, year].filter(Boolean);
+
+    tagList.forEach(text => {
+      const span = document.createElement('span');
+      span.className = 'tag-pill';
+      span.textContent = text ?? '';
+      tags.appendChild(span);
     });
 
-    document.body.appendChild(overlay);
-  }
+  const description = document.createElement('p');
+  description.className = 'modal-description';
+  description.textContent = item.overview || 'No description available.';
 
-  fetchTrending()
+
+  const bottomContainer = document.createElement('div');
+bottomContainer.className = 'modal-bottom-container';
+bottomContainer.append(logo, tags, description);
+
+content.append(bottomContainer,backdrop, closeBtn);
+  overlay.appendChild(content);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  document.body.appendChild(overlay);
+}
+
+ fetchGenreMap()
+    .then(() => fetchTrending())
     .then(({ movies, tvShows }) => populateCarousel(combineAndSort(movies, tvShows)))
-    .catch(err => console.error('Failed to load TMDB trending:', err));
+    .catch(err => console.error('Failed to load app data:', err));
 });

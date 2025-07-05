@@ -50,6 +50,31 @@ app.get('/api/trending/tv', async (req, res) => {
   }
 });
 
+// ✅ New route: Combined Genre Map
+app.get('/api/genres', async (req, res) => {
+  try {
+    const [movieRes, tvRes] = await Promise.all([
+      axios.get('https://api.themoviedb.org/3/genre/movie/list', {
+        params: { api_key: TMDB_API_KEY, language: 'en-US' },
+      }),
+      axios.get('https://api.themoviedb.org/3/genre/tv/list', {
+        params: { api_key: TMDB_API_KEY, language: 'en-US' },
+      })
+    ]);
+
+    const allGenres = [...movieRes.data.genres, ...tvRes.data.genres];
+    const genreMap = {};
+    allGenres.forEach(g => {
+      genreMap[g.id] = g.name;
+    });
+
+    res.json({ genres: genreMap });
+  } catch (error) {
+    console.error('Error fetching genre data:', error.message);
+    res.status(500).json({ error: 'Failed to fetch genre list' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });

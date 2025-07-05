@@ -45,6 +45,24 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 };
 document.addEventListener('DOMContentLoaded', function () {
     console.log('TS is connected!');
+    var GENRE_MAP = {};
+    function fetchGenreMap() {
+        return __awaiter(this, void 0, void 0, function () {
+            var res, data;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, fetch('http://localhost:3000/api/genres')];
+                    case 1:
+                        res = _a.sent();
+                        return [4 /*yield*/, res.json()];
+                    case 2:
+                        data = _a.sent();
+                        GENRE_MAP = data.genres || {};
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
     var carousel = document.querySelector('.movie-carousel');
     var leftBtn = document.querySelector('.scroll-button.left');
     var rightBtn = document.querySelector('.scroll-button.right');
@@ -130,37 +148,54 @@ document.addEventListener('DOMContentLoaded', function () {
                 : item.backdrop_path
                     ? "".concat(BACKDROP_SMALL).concat(item.backdrop_path)
                     : 'https://via.placeholder.com/300x450?text=No+Image';
-            img.addEventListener('click', function () { return openDetailModal(item); });
+            img.addEventListener('click', function () {
+                if (!Object.keys(GENRE_MAP).length) {
+                    console.warn('Genre map not loaded yet.');
+                    return;
+                }
+                openDetailModal(item);
+            });
             container.appendChild(img);
             carousel.appendChild(container);
         });
         updateScrollButtons(); // Call after content is populated
     }
     function openDetailModal(item) {
-        var _a, _b;
+        var _a, _b, _c;
         var overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
-        overlay.style.cssText = "\n      position: fixed; top: 0; left: 0; width: 100%; height: 100%;\n      background: rgba(0, 0, 0, 0.8); display: flex;\n      align-items: center; justify-content: center; z-index: 1000;\n    ";
         var content = document.createElement('div');
         content.className = 'modal-content';
-        content.style.cssText = "\n      position: relative; background: #000; padding: 1rem;\n      border-radius: 8px; max-width: 800px; width: 90%;\n      max-height: 90%; overflow-y: auto; color: #fff;\n    ";
+        var backdrop = document.createElement('div');
+        backdrop.className = 'modal-backdrop';
+        backdrop.style.backgroundImage = "url(".concat(item.backdrop_path ? BACKDROP_BASE + item.backdrop_path : POSTER_BASE + item.poster_path, ")");
         var closeBtn = document.createElement('button');
+        closeBtn.className = 'modal-close';
         closeBtn.textContent = '×';
-        closeBtn.style.cssText = "\n      position: absolute; top: 0.5rem; right: 0.5rem;\n      background: transparent; border: none; color: #fff;\n      font-size: 2rem; cursor: pointer;\n    ";
-        closeBtn.addEventListener('click', function () { return overlay.remove(); });
-        var imageElem = document.createElement('img');
-        imageElem.src = item.backdrop_path
-            ? "".concat(BACKDROP_BASE).concat(item.backdrop_path)
-            : item.poster_path
-                ? "".concat(POSTER_BASE).concat(item.poster_path)
-                : 'https://via.placeholder.com/1280x720?text=No+Image';
-        imageElem.alt = (_b = (_a = item.title) !== null && _a !== void 0 ? _a : item.name) !== null && _b !== void 0 ? _b : 'Backdrop';
-        imageElem.style.width = '100%';
-        imageElem.style.borderRadius = '4px';
-        var descriptionElem = document.createElement('p');
-        descriptionElem.textContent = item.overview || 'No description available.';
-        descriptionElem.style.marginTop = '1rem';
-        content.append(closeBtn, imageElem, descriptionElem);
+        closeBtn.onclick = function () { return overlay.remove(); };
+        var logo = document.createElement('img');
+        logo.className = 'modal-logo';
+        logo.src = '/25b45a29-02f9-45e3-b65e-61d103e62694.png'; // Your uploaded PNG logo
+        logo.alt = 'Logo';
+        var tags = document.createElement('div');
+        tags.className = 'modal-tags';
+        tags.innerHTML = '';
+        var genreNames = ((_a = item.genre_ids) === null || _a === void 0 ? void 0 : _a.map(function (id) { return GENRE_MAP[id]; }).filter(Boolean)) || [];
+        var year = (_c = (_b = item.release_date) === null || _b === void 0 ? void 0 : _b.slice(0, 4)) !== null && _c !== void 0 ? _c : 'Unknown';
+        var tagList = __spreadArray(__spreadArray([], genreNames, true), [year], false).filter(Boolean);
+        tagList.forEach(function (text) {
+            var span = document.createElement('span');
+            span.className = 'tag-pill';
+            span.textContent = text !== null && text !== void 0 ? text : '';
+            tags.appendChild(span);
+        });
+        var description = document.createElement('p');
+        description.className = 'modal-description';
+        description.textContent = item.overview || 'No description available.';
+        var bottomContainer = document.createElement('div');
+        bottomContainer.className = 'modal-bottom-container';
+        bottomContainer.append(logo, tags, description);
+        content.append(bottomContainer, backdrop, closeBtn);
         overlay.appendChild(content);
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay)
@@ -168,10 +203,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         document.body.appendChild(overlay);
     }
-    fetchTrending()
+    fetchGenreMap()
+        .then(function () { return fetchTrending(); })
         .then(function (_a) {
         var movies = _a.movies, tvShows = _a.tvShows;
         return populateCarousel(combineAndSort(movies, tvShows));
     })
-        .catch(function (err) { return console.error('Failed to load TMDB trending:', err); });
+        .catch(function (err) { return console.error('Failed to load app data:', err); });
 });
