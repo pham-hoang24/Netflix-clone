@@ -61,13 +61,13 @@ body{
 
 .hero-content {
     text-align: center;
-    max-width: 60%;
+    max-width: 40%;
     padding: 0 2rem;
     z-index: 2;
 }
 
 .hero h1 {
-    font-size: 3.125rem;
+    font-size: 4.3rem;
     font-weight: 900;
     margin-bottom: 1rem;
     line-height: 1.1;
@@ -151,20 +151,69 @@ text-align: left;
 
 }
 
-.carousel-container{
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
+.carousel-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  gap: 1rem;
 }
 
-.movie-carousel{
+.carousel-container {
+  flex: 1;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.movie-carousel {
+  display: flex;
+  gap: 3rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 1rem;
+  scrollbar-width: none;
+}
+
+/* Adjust scroll button styles */
+.scroll-button {
+    height: 120px;
+    width: 20px;
+    background: rgba(110, 107, 107, 0.7);
+    border: none;
+    color: white;
+    font-size: 2.5rem;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    z-index: 5;
     display: flex;
-    gap: 3rem;
-    overflow-x: auto;
-    scroll-behavior: smooth;
-    scroll-snap-type: x mandatory;
-    scroll-padding: 0 1rem;         
-    scrollbar-width: none;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    transition: background 0.3s;
+    height: 100%; /* Stretch vertically if needed */
+}
+
+.scroll-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.scroll-button.left {
+  left: 0;
+}
+
+.scroll-button.right {
+  right: 0;
+}
+
+.scroll-button:hover {
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.scroll-button.hidden {
+  display: none;
 }
 
 .movie-item {
@@ -248,8 +297,6 @@ text-align: left;
     vertical-align: bottom;
 }
 
-.faq-section{
-}
 
 .faq-container{
     max-width: 1200px;
@@ -389,43 +436,10 @@ details[open] .faq-answer {
         padding: 0 1.5rem;
     }
 
-    .carousel-container {
+    .carousel-wrapper {
         position: relative;
     }
 
-    .scroll-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.7);
-    border: none;
-    color: white;
-    font-size: 2.5rem;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    z-index: 10;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-    transition: background 0.3s;
-    }
-
-    .scroll-button.left {
-    left: 0;
-    }
-
-    .scroll-button.right {
-    right: 0;
-    }
-
-    .scroll-button:hover {
-    background: rgba(0, 0, 0, 0.9);
-    }
-
-    .scroll-button.hidden {
-    display: none;
-    }
 
     .movie-item {
         border-radius: 4px;
@@ -439,9 +453,6 @@ details[open] .faq-answer {
         bottom: -5px;
     }
 
-    .faq-section {
-        
-    }
 
 
 
