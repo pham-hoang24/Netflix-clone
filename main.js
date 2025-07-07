@@ -46,12 +46,22 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
 document.addEventListener('DOMContentLoaded', function () {
     console.log('TS is connected!');
     var GENRE_MAP = {};
+    var MOVIE_LOGO_MAP = {};
+    var TV_LOGO_MAP = {};
+    var POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
+    var BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280';
+    var BACKDROP_SMALL = 'https://image.tmdb.org/t/p/w780';
+    var API_BASE = 'http://localhost:3000';
+    var scrollAmount = 1056;
+    var carousel = document.querySelector('.movie-carousel');
+    var leftBtn = document.querySelector('.scroll-button.left');
+    var rightBtn = document.querySelector('.scroll-button.right');
     function fetchGenreMap() {
         return __awaiter(this, void 0, void 0, function () {
             var res, data;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, fetch('http://localhost:3000/api/genres')];
+                    case 0: return [4 /*yield*/, fetch("".concat(API_BASE, "/api/genres"))];
                     case 1:
                         res = _a.sent();
                         return [4 /*yield*/, res.json()];
@@ -63,70 +73,71 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
-    var carousel = document.querySelector('.movie-carousel');
-    var leftBtn = document.querySelector('.scroll-button.left');
-    var rightBtn = document.querySelector('.scroll-button.right');
-    var scrollAmount = 1056;
+    function fetchLogoMaps() {
+        return __awaiter(this, void 0, void 0, function () {
+            var _a, movieRes, tvRes;
+            return __generator(this, function (_b) {
+                switch (_b.label) {
+                    case 0: return [4 /*yield*/, Promise.all([
+                            fetch("".concat(API_BASE, "/api/logo/map?type=movie")),
+                            fetch("".concat(API_BASE, "/api/logo/map?type=tv"))
+                        ])];
+                    case 1:
+                        _a = _b.sent(), movieRes = _a[0], tvRes = _a[1];
+                        return [4 /*yield*/, movieRes.json()];
+                    case 2:
+                        MOVIE_LOGO_MAP = _b.sent();
+                        return [4 /*yield*/, tvRes.json()];
+                    case 3:
+                        TV_LOGO_MAP = _b.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    }
     function updateScrollButtons() {
         if (!carousel || !leftBtn || !rightBtn)
             return;
         var maxScrollLeft = carousel.scrollWidth - carousel.clientWidth;
-        leftBtn.classList.toggle('hidden', carousel.scrollLeft <= 0);
+        leftBtn.classList.toggle('hidden', carousel.scrollLeft <= 2);
         rightBtn.classList.toggle('hidden', carousel.scrollLeft + 2 >= maxScrollLeft);
     }
     if (leftBtn && rightBtn && carousel) {
         leftBtn.addEventListener('click', function () {
             carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-            setTimeout(updateScrollButtons, 300);
         });
         rightBtn.addEventListener('click', function () {
             carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-            setTimeout(updateScrollButtons, 300);
         });
         carousel.addEventListener('scroll', updateScrollButtons);
         window.addEventListener('resize', updateScrollButtons);
     }
-    var POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
-    var BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280';
-    var BACKDROP_SMALL = 'https://image.tmdb.org/t/p/w780';
     function fetchTrending() {
         return __awaiter(this, void 0, void 0, function () {
-            var API_BASE, _a, movieRes, tvRes, moviesData, tvData;
-            return __generator(this, function (_b) {
-                switch (_b.label) {
-                    case 0:
-                        API_BASE = 'http://localhost:3000';
-                        return [4 /*yield*/, Promise.all([
-                                fetch("".concat(API_BASE, "/api/trending/movie")),
-                                fetch("".concat(API_BASE, "/api/trending/tv"))
-                            ])];
+            var _a, movieRes, tvRes;
+            var _b;
+            return __generator(this, function (_c) {
+                switch (_c.label) {
+                    case 0: return [4 /*yield*/, Promise.all([
+                            fetch("".concat(API_BASE, "/api/trending/movie")),
+                            fetch("".concat(API_BASE, "/api/trending/tv"))
+                        ])];
                     case 1:
-                        _a = _b.sent(), movieRes = _a[0], tvRes = _a[1];
+                        _a = _c.sent(), movieRes = _a[0], tvRes = _a[1];
                         if (!movieRes.ok || !tvRes.ok) {
                             throw new Error('Failed to fetch trending data.');
                         }
+                        _b = {};
                         return [4 /*yield*/, movieRes.json()];
                     case 2:
-                        moviesData = _b.sent();
+                        _b.movies = (_c.sent()).results.slice(0, 10);
                         return [4 /*yield*/, tvRes.json()];
-                    case 3:
-                        tvData = _b.sent();
-                        return [2 /*return*/, {
-                                movies: moviesData.results.slice(0, 10), // top 10 movies
-                                tvShows: tvData.results.slice(0, 10) // top 10 TV shows
-                            }];
+                    case 3: return [2 /*return*/, (_b.tvShows = (_c.sent()).results.slice(0, 10),
+                            _b)];
                 }
             });
         });
     }
-    // Combine and sort results by popularity, then populate carousel (unchanged logic)
-    fetchTrending()
-        .then(function (_a) {
-        var movies = _a.movies, tvShows = _a.tvShows;
-        var topItems = combineAndSort(movies, tvShows);
-        populateCarousel(topItems);
-    })
-        .catch(function (err) { return console.error('Failed to load trending data:', err); });
     function combineAndSort(movies, tvShows) {
         return __spreadArray(__spreadArray([], movies, true), tvShows, true).filter(function (item) { return item.poster_path || item.backdrop_path; })
             .sort(function (a, b) { return b.popularity - a.popularity; })
@@ -158,10 +169,10 @@ document.addEventListener('DOMContentLoaded', function () {
             container.appendChild(img);
             carousel.appendChild(container);
         });
-        updateScrollButtons(); // Call after content is populated
+        updateScrollButtons();
     }
     function openDetailModal(item) {
-        var _a, _b, _c;
+        var _a, _b, _c, _d, _e;
         var overlay = document.createElement('div');
         overlay.className = 'modal-overlay';
         var content = document.createElement('div');
@@ -175,18 +186,21 @@ document.addEventListener('DOMContentLoaded', function () {
         closeBtn.onclick = function () { return overlay.remove(); };
         var logo = document.createElement('img');
         logo.className = 'modal-logo';
-        logo.src = '/25b45a29-02f9-45e3-b65e-61d103e62694.png'; // Your uploaded PNG logo
-        logo.alt = 'Logo';
+        var logoUrl = item.title && MOVIE_LOGO_MAP[item.title]
+            ? MOVIE_LOGO_MAP[item.title]
+            : item.name && TV_LOGO_MAP[item.name]
+                ? TV_LOGO_MAP[item.name]
+                : null;
+        logo.src = logoUrl || 'netflix_logo.png';
+        logo.alt = (_b = (_a = item.title) !== null && _a !== void 0 ? _a : item.name) !== null && _b !== void 0 ? _b : 'Logo';
         var tags = document.createElement('div');
         tags.className = 'modal-tags';
-        tags.innerHTML = '';
-        var genreNames = ((_a = item.genre_ids) === null || _a === void 0 ? void 0 : _a.map(function (id) { return GENRE_MAP[id]; }).filter(Boolean)) || [];
-        var year = (_c = (_b = item.release_date) === null || _b === void 0 ? void 0 : _b.slice(0, 4)) !== null && _c !== void 0 ? _c : 'Unknown';
-        var tagList = __spreadArray(__spreadArray([], genreNames, true), [year], false).filter(Boolean);
-        tagList.forEach(function (text) {
+        var genreNames = ((_c = item.genre_ids) === null || _c === void 0 ? void 0 : _c.map(function (id) { return GENRE_MAP[id]; }).filter(Boolean)) || [];
+        var year = (_e = (_d = item.release_date) === null || _d === void 0 ? void 0 : _d.slice(0, 4)) !== null && _e !== void 0 ? _e : 'Unknown';
+        __spreadArray(__spreadArray([], genreNames, true), [year], false).forEach(function (text) {
             var span = document.createElement('span');
             span.className = 'tag-pill';
-            span.textContent = text !== null && text !== void 0 ? text : '';
+            span.textContent = text;
             tags.appendChild(span);
         });
         var description = document.createElement('p');
@@ -195,7 +209,7 @@ document.addEventListener('DOMContentLoaded', function () {
         var bottomContainer = document.createElement('div');
         bottomContainer.className = 'modal-bottom-container';
         bottomContainer.append(logo, tags, description);
-        content.append(bottomContainer, backdrop, closeBtn);
+        content.append(backdrop, closeBtn, bottomContainer);
         overlay.appendChild(content);
         overlay.addEventListener('click', function (e) {
             if (e.target === overlay)
@@ -204,7 +218,8 @@ document.addEventListener('DOMContentLoaded', function () {
         document.body.appendChild(overlay);
     }
     fetchGenreMap()
-        .then(function () { return fetchTrending(); })
+        .then(fetchLogoMaps)
+        .then(fetchTrending)
         .then(function (_a) {
         var movies = _a.movies, tvShows = _a.tvShows;
         return populateCarousel(combineAndSort(movies, tvShows));
