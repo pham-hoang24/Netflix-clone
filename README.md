@@ -1,2 +1,2 @@
-# Netflix-clone
+# Netflix-landing-clone
 
