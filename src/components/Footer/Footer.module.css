@@ -1,0 +1,33 @@
+.footer {
+  background-color: #000;
+  color: #737373;
+  padding: 70px 45px;
+  font-size: 1em;
+  line-height: 1.5;
+}
+
+.footer p {
+  margin-bottom: 30px;
+}
+
+.footerLinks {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 15px;
+  margin-bottom: 30px;
+}
+
+.footerLinks a {
+  color: #737373;
+  text-decoration: none;
+  font-size: 0.9em;
+}
+
+.footerLinks a:hover {
+  text-decoration: underline;
+}
+
+.copyright {
+  font-size: 0.9em;
+  color: #737373;
+}

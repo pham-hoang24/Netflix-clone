@@ -1,0 +1,114 @@
+.loginPage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #000;
+  background-size: cover;
+  background-position: center;
+  padding: 20px;
+}
+
+.loginForm {
+  background-color: rgba(0, 0, 0, 0.75);
+  padding: 60px 68px 40px;
+  border-radius: 4px;
+  width: 100%;
+  max-width: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.loginForm h2 {
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 28px;
+  text-align: left;
+}
+
+.inputGroup {
+  margin-bottom: 16px;
+}
+
+.inputGroup input {
+  width: 100%;
+  padding: 16px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #333;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.inputGroup input::placeholder {
+  color: #8c8c8c;
+}
+
+.signInButton {
+  background-color: #e50914;
+  color: #fff;
+  padding: 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 24px;
+  transition: background-color 0.3s ease;
+}
+
+.signInButton:hover {
+  background-color: #f40612;
+}
+
+.helpText {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  font-size: 0.85rem;
+}
+
+.helpText label {
+  color: #b3b3b3;
+  display: flex;
+  align-items: center;
+}
+
+.helpText input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+.helpText a {
+  color: #b3b3b3;
+  text-decoration: none;
+}
+
+.helpText a:hover {
+  text-decoration: underline;
+}
+
+.signUpText {
+  color: #737373;
+  font-size: 1rem;
+  margin-top: 60px;
+}
+
+.signUpText a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.signUpText a:hover {
+  text-decoration: underline;
+}
+
+.errorMessage {
+  background-color: #e87c03;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  text-align: left;
+}

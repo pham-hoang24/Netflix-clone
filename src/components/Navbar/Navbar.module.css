@@ -1,0 +1,31 @@
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem auto;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 10;
+  max-width: 65%;
+}
+
+.logo {
+  max-width: 10rem;
+}
+
+.signIn {
+  align-items: top;
+  background: #f40612;
+  color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.signIn:hover {
+  background: #cf0812;
+}

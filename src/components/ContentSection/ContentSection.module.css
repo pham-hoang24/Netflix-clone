@@ -1,0 +1,13 @@
+.contentSection {
+  max-width: 1200px;
+  align-items: center;
+  margin: 2rem auto;
+}
+
+.title {
+  font-size: 2rem;
+  align-items: center;
+  text-align: left;
+  margin-bottom: 1rem;
+  padding-top: 1rem; /* Added padding-top */
+}

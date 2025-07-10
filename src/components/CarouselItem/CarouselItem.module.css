@@ -1,0 +1,78 @@
+.movieItem {
+  position: relative;
+  flex: 0 0 13.5rem;
+  height: auto;
+  scroll-snap-align: start;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.movieItem:hover {
+  transform: scale(1.05);
+  z-index: 5;
+}
+
+.moviePoster {
+  width: 200px;
+  height: 300px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.rankOverlay {
+  position: absolute;
+  left: -20px;
+  bottom: 2px;
+  font-weight: 900;
+  color: #fff;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+  z-index: 3;
+  line-height: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 959px) {
+  .movieItem {
+    flex: 0 0 150px;
+    height: 225px;
+  }
+
+  .rankOverlay {
+    font-size: 4rem;
+    left: -5px;
+    bottom: 2px;
+  }
+}
+
+@media (min-width: 960px) and (max-width: 1279px) {
+  .movieItem {
+    flex: 0 0 120px;
+    height: 180px;
+  }
+
+  .rankOverlay {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 1280px) and (max-width: 1599px) {
+  .movieItem {
+    flex: 0 0 150px;
+    height: 225px;
+  }
+
+  .rankOverlay {
+    font-size: 4rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  .movieItem {
+    flex: 0 0 180px;
+    height: 270px;
+  }
+
+  .rankOverlay {
+    font-size: 5rem;
+  }
+}

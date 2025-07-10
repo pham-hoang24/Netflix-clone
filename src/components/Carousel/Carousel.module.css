@@ -1,0 +1,70 @@
+
+.carouselWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+  gap: 1rem;
+}
+
+.carouselContainer {
+  flex: 1;
+  overflow-x: auto;
+  width: 100%;
+}
+
+.movieCarousel {
+  display: flex;
+  gap: 3rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 1rem;
+  scrollbar-width: none;
+  padding: 2rem;
+  counter-reset: movie-counter;
+}
+
+.movieCarousel::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for Chrome, Safari and Opera */
+}
+
+.scrollButton {
+  height: 120px;
+  width: 20px;
+  background: rgba(110, 107, 107, 0.7);
+  border: none;
+  color: white;
+  font-size: 2.5rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.3s;
+  height: 100%;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  pointer-events: auto;
+}
+
+.scrollButton:hover {
+  background: rgba(139, 139, 139, 0.9);
+}
+
+.scrollButton.hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.scrollButton.left {
+  left: 0;
+}
+
+.scrollButton.right {
+  right: 0;
+}
