@@ -2,12 +2,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './LoginPage.module.css';
+import { useAuth } from '../../context/AuthContext';
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -16,12 +18,9 @@ const LoginPage: React.FC = () => {
     // Simulate authentication
     if (email === 'test@example.com' && password === 'password123') {
       console.log('Login successful!');
-      navigate('/'); // Redirect to home page on success
+      login(); // Use login from AuthContext
     } else {
       setError("Sorry, we can't find an account with this email address. Please try again orcreate a new account.");
-      <div>
-        
-      </div>
     }
   };
 
