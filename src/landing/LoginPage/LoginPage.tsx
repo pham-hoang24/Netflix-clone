@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../../context/AuthContext';
 
@@ -39,7 +39,15 @@ const LoginPage: React.FC = () => {
   };
 
   return (
+    
     <div className={styles.loginPage}>
+      <Link to="/">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+          alt="Netflix Logo"
+          className={styles.netflixLogo}
+        />
+      </Link>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <h2>Sign In</h2>
         {error && <div className={styles.errorMessage}>{error}</div>}

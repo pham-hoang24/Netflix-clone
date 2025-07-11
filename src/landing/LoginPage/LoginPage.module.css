@@ -11,6 +11,26 @@
   padding: 20px;
 }
 
+.netflixLogo {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 150px; /* Adjust as needed */
+  cursor: pointer;
+}
+
+.nav{
+  position: fixed;
+  display: flex; 
+  height: 30px;
+  width: 100%;
+  z-index: 1;
+  padding: 20px;
+  transition: all 0.5s ease;
+  transition-timing-function: ease-in ;
+  justify-content: space-between;
+}
+
 .loginForm {
   opacity: 90%;
   background-color: rgba(0, 0, 0, 0.75);
