@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from './landing/Landing/LandingPage';
 import LoginPage from './landing/LoginPage/LoginPage';
-import HomePage from './home/HomePage'; // Assuming this is the main component for the home page
+import HomePage from './home/HomePage';// Assuming this is the main component for the home page
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 const App: React.FC = () => {
