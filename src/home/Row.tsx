@@ -1,16 +1,30 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import axios from "./axios";
 import "./Row.css";
-import YouTube from "react-youtube";
+import YouTube, { YouTubeProps } from "react-youtube";
 import movieTrailer from "movie-trailer";
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
-function Row({ title, fetchUrl, isLargeRow }) {
-  const [movies, setMovies] = useState([]);
-  const [trailerUrl, setTrailerUrl] = useState("");
-  const [noTrailer, setNoTrailer] = useState(false);
-  const fetchDebounce = useRef(null);
+interface Movie {
+  id: number;
+  name: string;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+}
+
+interface RowProps {
+  title: string;
+  fetchUrl: string;
+  isLargeRow?: boolean;
+}
+
+const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [trailerUrl, setTrailerUrl] = useState<string>("");
+  const [noTrailer, setNoTrailer] = useState<boolean>(false);
+  const fetchDebounce = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -19,7 +33,7 @@ function Row({ title, fetchUrl, isLargeRow }) {
       try {
         const res = await axios.get(fetchUrl, { signal: controller.signal });
         setMovies(res.data.results);
-      } catch (e) {
+      } catch (e: any) {
         if (e.name !== "CanceledError" && e.name !== "AbortError") {
           console.error("Fetch movies failed:", e);
         }
@@ -27,15 +41,21 @@ function Row({ title, fetchUrl, isLargeRow }) {
     }, 300);
 
     return () => {
-      clearTimeout(fetchDebounce.current);
+      if (fetchDebounce.current) {
+        clearTimeout(fetchDebounce.current);
+      }
       controller.abort();
     };
   }, [fetchUrl]);
 
-  const opts = { height: "390", width: "100%", playerVars: { autoplay: 1 } };
+  const opts: YouTubeProps["opts"] = {
+    height: "390",
+    width: "100%",
+    playerVars: { autoplay: 1 },
+  };
 
   const handleClick = useCallback(
-    (movie) => {
+    (movie: Movie) => {
       if (trailerUrl) {
         setTrailerUrl("");
         setNoTrailer(false);
@@ -44,14 +64,15 @@ function Row({ title, fetchUrl, isLargeRow }) {
         const query = movie?.name || movie?.title || "";
         if (!query) return;
 
-        movieTrailer(null, { tmdbId: movie.id })
-          .then((url) => {
+        (movieTrailer as any)(null, { tmdbId: movie.id })
+          .then((url: string | null) => {
             if (!url) throw new Error("No URL returned");
-            const id = new URLSearchParams(new URL(url).search).get("v");
+            const urlParams = new URLSearchParams(new URL(url).search);
+            const id = urlParams.get("v");
             if (id) setTrailerUrl(id);
             else throw new Error("No video ID in URL");
           })
-          .catch((_) => {
+          .catch((_: any) => {
             console.warn("No trailer found for:", query);
             setNoTrailer(true);
           });
@@ -84,6 +105,6 @@ function Row({ title, fetchUrl, isLargeRow }) {
       )}
     </div>
   );
-}
+};
 
 export default Row;
