@@ -1,6 +1,17 @@
-const API_key = process.env.REACT_APP_TMDB_API_KEY;
+const API_key: string | undefined = process.env.REACT_APP_TMDB_API_KEY;
 
-const requests = {
+interface Requests {
+  fetchTrending: string;
+  fetchNetflixOriginals: string;
+  fetchTopRated: string;
+  fetchActionMovies: string;
+  fetchComedyMovies: string;
+  fetchHorrorMovies: string;
+  fetchRomanceMovies: string;
+  fetchDocumentaries: string;
+}
+
+const requests: Requests = {
   fetchTrending: `/trending/all/week?api_key=${API_key}&language=en-US`,
   fetchNetflixOriginals: `/discover/tv?api_key=${API_key}&with_networks=213`,
   fetchTopRated: `/movie/top_rated?api_key=${API_key}&language=en-US`,
