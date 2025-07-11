@@ -1,15 +1,29 @@
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../../context/AuthContext';
+
+// Define type for the location state
+interface LocationState {
+  email?: string;
+}
 
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
+
+  // Pre-fill email from location state if available
+  useEffect(() => {
+    const state = location.state as LocationState;
+    if (state?.email) {
+      setEmail(state.email);
+    }
+  }, [location.state]);
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
@@ -20,7 +34,7 @@ const LoginPage: React.FC = () => {
       console.log('Login successful!');
       login(); // Use login from AuthContext
     } else {
-      setError("Sorry, we can't find an account with this email address. Please try again orcreate a new account.");
+      setError("Sorry, we can't find an account with this email address. Please try again or create a new account.");
     }
   };
 
