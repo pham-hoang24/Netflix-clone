@@ -38,33 +38,36 @@
 }
 .cardContainer {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem; /* or try 16px or 24px */
 }
+
 
 
 .cards {
-
-    background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
-    border-radius: 16px;
-    padding: 1.5rem;
-    width: 100%;
-    flex: 1 1 100%;
-    padding: 1rem;
-
+  position: relative;
+  background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
+  border-radius: 16px;
+  padding: 1.5rem;
+  width: 100%;
+  flex: 1 1 100%;
 }
 
-.cards .svgContainer {
-    width: 72px;
-    height: 72px;
- position: absolute;
+.svg {
+  position: absolute;
   right: 1rem;
   bottom: 1rem;
+  width: 72px;
+  height: 72px;
 }
+
+
 
 
 .cards h3 {
   font-size: 1.4rem;
-  padding: 0.25rem;
+  padding: 1rem;
 }
 
 .cards p {

@@ -46,20 +46,22 @@
 
 
 .cards {
-    position: relative; /* Add this if not present */
+
     background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
     border-radius: 16px;
     padding: 1.5rem;
     width: 100%;
     flex: 1 1 100%;
+    padding: 1rem;
+    position: relative;
 
 }
 
-.cards .svg-container {
+.cards .svgContainer {
     width: 72px;
     height: 72px;
  position: absolute;
-  right: 1rem;
+  left: 1rem;
   bottom: 1rem;
 }
 

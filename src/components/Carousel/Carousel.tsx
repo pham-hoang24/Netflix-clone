@@ -35,6 +35,7 @@ const Carousel: React.FC<CarouselProps> = ({ items, onItemClick }) => {
   useEffect(() => {
     const carousel = carouselRef.current;
     if (carousel) {
+      carousel.scrollLeft = 0; // Ensure carousel starts at the beginning
       carousel.addEventListener('scroll', updateScrollButtons);
       window.addEventListener('resize', updateScrollButtons);
       updateScrollButtons(); // Initial check

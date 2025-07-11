@@ -31,3 +31,60 @@
   font-size: 0.9em;
   color: #737373;
 }
+
+.footerContent {
+  margin-bottom: 50px;
+  text-align: center;
+}
+
+.footerContent p {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+.emailSignup {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.emailInput {
+  padding: 15px;
+  border: 1px solid #8c8c8c;
+  border-radius: 4px;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 1rem;
+  flex-grow: 1;
+  max-width: 450px;
+}
+
+.emailInput::placeholder {
+  color: #8c8c8c;
+}
+
+.ctaButton {
+  background-color: #e50914;
+  color: #fff;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.ctaButton:hover {
+  background-color: #f40612;
+}
+
+.ctaButton svg {
+  fill: currentColor;
+}

@@ -4,12 +4,15 @@
   align-items: center;
   min-height: 100vh;
   background-color: #000;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
+  url('./the_netflix_login_background__canada__2024___by_logofeveryt_dh0w8qv-fullview.jpg');
   background-size: cover;
   background-position: center;
   padding: 20px;
 }
 
 .loginForm {
+  opacity: 90%;
   background-color: rgba(0, 0, 0, 0.75);
   padding: 60px 68px 40px;
   border-radius: 4px;
@@ -45,7 +48,7 @@
 }
 
 .signInButton {
-  background-color: #e50914;
+  background: #f40612;
   color: #fff;
   padding: 16px;
   border: none;
@@ -58,7 +61,7 @@
 }
 
 .signInButton:hover {
-  background-color: #f40612;
+  background: #cf0812;
 }
 
 .helpText {

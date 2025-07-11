@@ -16,6 +16,8 @@
   width: 100%;
   transition: background 0.3s ease;
   position: relative;
+  list-style: none;
+  list-style-type: none;
 }
 
 .faqQuestion:hover {
