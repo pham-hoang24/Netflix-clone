@@ -9,8 +9,8 @@ import FaqSection from '../FaqSection/FaqSection';
 import LoginPage from '../LoginPage/LoginPage'; // Import the new LoginPage component
 import { fetchGenres, fetchTrendingWithDetails, TrendingItem } from '../../services/api-client';
 
-import './App.module.css';
-import styles from './App.module.css';
+import './LandingPage.module.css';
+import styles from './LandingPage.module.css';
 
 const App: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<TrendingItem | null>(null);

@@ -1,10 +1,10 @@
-import "./App.css";
+import "./HomePage.css";
 import requests from "./requests";
 import Row from "./Row";
 import Banner from "./Banner";
 import Nav from "./Nav";
 
-function App() {
+function HomePage() {
   const rowList = [
     {
       title: "NETFLIX ORIGINALS",
@@ -24,7 +24,7 @@ function App() {
   ];
 
   return (
-    <div className="App">
+    <div className="homepage">
       <Nav />
       <Banner />
       {rowList.map((row, index) => (
@@ -39,4 +39,4 @@ function App() {
   );
 }
 
-export default App;
+export default HomePage;
