@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
 import './index.css'; // CRA's default global CSS
-import App from './components/App/App';
+import App from './landing/App/App';
 
 
 const root = ReactDOM.createRoot(
