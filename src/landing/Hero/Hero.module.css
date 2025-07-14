@@ -9,26 +9,26 @@
 }
 
 .heroContent {
-  padding-top: 10rem;
+  padding-top: 2rem; /* Adjusted base padding-top */
   text-align: center;
   max-width: 80%;
 }
 
 .hero h1 {
-  font-size: 3.6rem;
+  font-size: 1.8rem; /* Base style for smallest screens */
   font-weight: 900;
   margin-bottom: 1rem;
   line-height: 1.1;
 }
 
 .subtitle {
-  font-size: 1.5rem;
+  font-size: 1rem; /* Base style for smallest screens */
   font-weight: 400;
   margin-bottom: 1rem;
 }
 
 .description {
-  font-size: 1.2rem;
+  font-size: 0.9rem; /* Base style for smallest screens */
   margin-bottom: 2rem;
 }
 
@@ -87,4 +87,56 @@
 
 .ctaButton:hover {
   background: #cf0812;
+}
+
+
+@media (min-width: 600px){
+  .hero h1{
+    margin-bottom: 1rem;
+    font-size: 2rem;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  .description {
+    font-size: 1rem;
+  }
+  .heroContent {
+    padding-top: 5rem;
+  }
+}
+
+@media (min-width: 960px){
+  .hero h1{
+    margin-bottom: 1rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 1.5rem;
+  }
+  .description {
+    font-size: 1.2rem;
+  }
+  .heroContent {
+    padding-top: 10rem;
+  }
+}
+
+@media (min-width: 1280px){
+  .hero h1{
+    margin-bottom: 1rem;
+    font-size: 3.5rem;
+    font-weight: 900;
+  }
+  .subtitle {
+    font-size: 1.5rem;
+  }
+  .description {
+    font-size: 1.2rem;
+  }
+  .heroContent {
+    padding-top: 12rem;
+  }
 }
