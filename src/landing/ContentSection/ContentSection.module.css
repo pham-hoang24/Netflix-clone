@@ -5,9 +5,16 @@
 }
 
 .title {
-  font-size: 2rem;
+  font-size: 1.15rem;
   align-items: center;
   text-align: left;
   margin-bottom: 1rem;
   padding-top: 1rem; /* Added padding-top */
+}
+
+@media (min-width: 980px) {
+  .title {
+    font-size: 1.5rem;
+  }
+
 }
