@@ -142,15 +142,16 @@ const LandingPage: React.FC = () => {
         {/* Placeholder for cards */}
         <div className={styles.cardContainer}>
           <div className={styles.cards}>
-            <h3>Enjoy on your TV</h3>
-            <p>
-              Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV,
-              Blu-ray players and more.
-            </p>
+            <div className={styles.textContainer}>
+              <h3>Enjoy on your TV</h3>
+              <p>
+                Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV,
+                Blu-ray players and more.
+              </p>
+            </div>
             <svg
               className={styles.svg}
-              width="72"
-              height="72"
+
               viewBox="0 0 72 72"
               fill="none"
             >
@@ -273,14 +274,14 @@ const LandingPage: React.FC = () => {
             </svg>
           </div>
           <div className={styles.cards}>
-            <h3>Download your series to watch offline</h3>
-            <p>
-              Save your favourites easily and always have something to watch.
-            </p>
+            <div className={styles.textContainer}>
+              <h3>Download your series to watch offline</h3>
+              <p>
+                Save your favourites easily and always have something to watch.
+              </p>
+            </div>
             <svg
               className={styles.svg}
-              width="72"
-              height="72"
               viewBox="0 0 72 72"
               fill="none"
             >
@@ -423,15 +424,15 @@ const LandingPage: React.FC = () => {
             </svg>
           </div>
           <div className={styles.cards}>
-            <h3>Watch everywhere</h3>
-            <p>
-              Stream unlimited films and series on your phone, tablet, laptop
-              and TV.
-            </p>
+            <div className={styles.textContainer}>
+              <h3>Watch everywhere</h3>
+              <p>
+                Stream unlimited films and series on your phone, tablet, laptop
+                and TV.
+              </p>
+            </div>
             <svg
               className={styles.svg}
-              width="72"
-              height="72"
               viewBox="0 0 72 72"
               fill="none"
             >
@@ -602,15 +603,15 @@ const LandingPage: React.FC = () => {
             </svg>{" "}
           </div>
           <div className={styles.cards}>
-            <h3>Create profiles for children</h3>
-            <p>
-              Send children on adventures with their favourite characters in a
-              space made just for them — free with your membership.
-            </p>
+            <div className={styles.textContainer}>
+              <h3>Create profiles for children</h3>
+              <p>
+                Send children on adventures with their favourite characters in a
+                space made just for them — free with your membership.
+              </p>
+            </div>
             <svg
               className={styles.svg}
-              width="72"
-              height="72"
               viewBox="0 0 72 72"
               fill="none"
             >

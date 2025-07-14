@@ -48,6 +48,7 @@
 .cards {
   background: linear-gradient(to bottom right, #1a1b3a, #2b0c17);
   border-radius: 16px;
+  height:205px ;
   padding: 1.5rem;
   width: 100%;
   flex: 1 1 100%;
@@ -56,10 +57,10 @@
   justify-content: space-between; /* Distribute space between content and SVG */
 }
 
+
 .svg {
-  margin-top: 1rem; /* Add margin to separate from text */
-  width: 72px;
-  height: 72px;
+  width: 63.36px;
+  height: 63.36px;
   align-self: flex-end; /* Align SVG to the end of the flex container */
 }
 
@@ -70,18 +71,27 @@
   font-size: 1.2rem;
   padding-bottom: 1rem ;
   font-weight: 700;
-  width: 80%;
+  width: 88%;
+}
+
+.textContainer {
+  text-align: left;
 }
 
 .cards p {
   font-size: 16px;
-  opacity: 80%;
-  width: 80%;
+  opacity: 88%;
+  width: 88%;
 }
 
 /* Responsive Design */
 
-@media (min-width: 600px) {
+
+@media (min-width: 960px) {
+  .svg {
+    width: 72px;
+    height: 72px;
+  }
   .cards {
     flex: 0 0 calc(50% - 8px); /* 50% width minus half the gap */
     box-sizing: border-box;
@@ -89,9 +99,10 @@
   .cards h3 {
     font-size: 1.3rem;
     padding-bottom: 1rem ;
-    width: 80%;
+    width: 88%;
   }
-}
+  
+  }
 
 @media (min-width: 1280px) {
 .cards{
@@ -101,6 +112,11 @@
 .cards h3 {
   font-size: 1.4rem;
   padding-bottom: 1rem ;
-  width: 80%;
+  width: 88%;
 }
+.cards {
+  height:294px ;
+
+}
+
 }
