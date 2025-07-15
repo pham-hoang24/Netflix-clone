@@ -35,7 +35,11 @@ const LoginPage: React.FC = () => {
       await signInWithEmailAndPassword(auth, email, password);
       login(); // Use login from AuthContext
     } catch (error: any) {
-      setError(error.message);
+      if (error.code === 'auth/invalid-credential') {
+        setError('Invalid email or password. Please try again.');
+      } else {
+        setError(error.message);
+      }
     }
   };
 

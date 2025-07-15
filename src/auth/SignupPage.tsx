@@ -101,9 +101,7 @@ const SignupPage: React.FC = () => {
       case 1:
         return (
           <div className={styles.stepContent}>
-            
             <h2>Step 1: Create Account</h2>
-            <p></p>
             {error && <p className={styles.error}>{error}</p>}
             <input
               type="email"
