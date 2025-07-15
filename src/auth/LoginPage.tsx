@@ -12,6 +12,11 @@ interface LocationState {
   email?: string;
 }
 
+interface HandleLoginResult {
+    newSession: boolean;
+    message?: string;
+}
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,11 +55,12 @@ const LoginPage: React.FC = () => {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const newSessionId = userCredential.user.uid + Date.now();
       const result = await handleLoginFunction({ newSessionId });
+      const data = result.data as HandleLoginResult;
 
-      if (result.data.newSession) {
+      if (data.newSession) {
         login(); // Use login from AuthContext
       } else {
-        setError(result.data.message);
+        setError(data.message || null);
         setShowModal(true);
       }
     } catch (error: any) {
