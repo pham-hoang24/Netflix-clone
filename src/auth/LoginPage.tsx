@@ -1,8 +1,10 @@
 
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../services/firebase';
 import styles from './LoginPage.module.css';
-import { useAuth } from '../../context/AuthContext';
+import { useAuth } from '../context/AuthContext';
 
 // Define type for the location state
 interface LocationState {
@@ -25,21 +27,32 @@ const LoginPage: React.FC = () => {
     }
   }, [location.state]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null); // Clear previous errors
 
-    // Simulate authentication
-    if (email === 'test@example.com' && password === 'password123') {
-      console.log('Login successful!');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       login(); // Use login from AuthContext
-    } else {
-      setError("Sorry, we can't find an account with this email address. Please try again or create a new account.");
+    } catch (error: any) {
+      if (error.code === 'auth/invalid-credential') {
+        setError('Invalid email or password. Please try again.');
+      } else {
+        setError(error.message);
+      }
     }
   };
 
   return (
+    
     <div className={styles.loginPage}>
+      <Link to="/">
+        <img
+          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+          alt="Netflix Logo"
+          className={styles.netflixLogo}
+        />
+      </Link>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
         <h2>Sign In</h2>
         {error && <div className={styles.errorMessage}>{error}</div>}
@@ -71,7 +84,7 @@ const LoginPage: React.FC = () => {
           <a href="#">Need help?</a>
         </div>
         <div className={styles.signUpText}>
-          New to Netflix? <a href="#">Sign up now</a>.
+          New to Netflix? <Link to="/signup">Sign up now</Link>.
         </div>
       </form>
     </div>
