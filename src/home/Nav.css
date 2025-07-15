@@ -21,8 +21,45 @@
     object-fit: contain;
 }
 .nav_avatar{
+    position: relative;
+    width: 30px;
+    object-fit: contain;
+    cursor: pointer;
+}
+
+.nav_avatar_container {
     position: fixed;
     right: 20px;
-    width: 30px;
-object-fit: contain;
+    top: 20px;
+    z-index: 2;
+}
+
+.nav_dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background-color: #111;
+    border: 1px solid #333;
+    border-radius: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 150px;
+}
+
+.nav_dropdown_item {
+    color: white;
+    text-decoration: none;
+    padding: 8px 10px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    border: none;
+    background: none;
+    text-align: left;
+    font-size: 1rem;
+}
+
+.nav_dropdown_item:hover {
+    background-color: #333;
 }
