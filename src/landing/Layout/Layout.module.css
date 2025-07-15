@@ -6,19 +6,36 @@
 }
 
 .heroSectionWrapper {
-  height: 70%;
+  height: 30rem; /* Base height for smallest screens */
   background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.7)),
     url('./the_netflix_login_background__canada__2024___by_logofeveryt_dh0w8qv-fullview.jpg');
   background-size: cover;
   background-position: center;
   text-align: center;
   position: relative;
-  height: 45rem; /* This was from .hero in original Hero.module.css */
   display: flex;
   flex-direction: column;
   justify-content: flex-start; /* Align content to the top */
   align-items: center;
   padding-top: 0; /* Remove padding-top from here */
+}
+
+@media (min-width: 600px) {
+  .heroSectionWrapper {
+    height: 35rem;
+  }
+}
+
+@media (min-width: 960px) {
+  .heroSectionWrapper {
+    height: 40rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .heroSectionWrapper {
+    height: 45rem;
+  }
 }
 
 .mainContent {
@@ -27,3 +44,4 @@
   align-items: center;
   margin: 0 auto;
 }
+
