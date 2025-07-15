@@ -1,6 +1,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../services/firebase';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../../context/AuthContext';
 
@@ -25,16 +27,15 @@ const LoginPage: React.FC = () => {
     }
   }, [location.state]);
 
-  const handleSubmit = (event: React.FormEvent) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null); // Clear previous errors
 
-    // Simulate authentication
-    if (email === 'test@example.com' && password === 'password123') {
-      console.log('Login successful!');
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
       login(); // Use login from AuthContext
-    } else {
-      setError("Sorry, we can't find an account with this email address. Please try again or create a new account.");
+    } catch (error: any) {
+      setError(error.message);
     }
   };
 
@@ -79,7 +80,7 @@ const LoginPage: React.FC = () => {
           <a href="#">Need help?</a>
         </div>
         <div className={styles.signUpText}>
-          New to Netflix? <a href="#">Sign up now</a>.
+          New to Netflix? <Link to="/signup">Sign up now</Link>.
         </div>
       </form>
     </div>
