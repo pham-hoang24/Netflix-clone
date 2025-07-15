@@ -48,7 +48,7 @@ const Nav: React.FC = () => {
         {dropdownOpen && (
           <div className="nav_dropdown">
             <Link to="/settings" className="nav_dropdown_item" onClick={() => setDropdownOpen(false)}>
-              Account Settings
+              Settings
             </Link>
             <button onClick={handleSignOut} className="nav_dropdown_item">
               Sign Out
