@@ -1,8 +1,8 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import LandingPage from './landing/Landing/LandingPage';
-import LoginPage from './landing/LoginPage/LoginPage';
-import SignupPage from './landing/SignupPage/SignupPage';
+import LoginPage from './auth/LoginPage';
+import SignupPage from './auth/SignupPage';
 import HomePage from './home/HomePage';// Assuming this is the main component for the home page
 import SettingsPage from './settings/SettingsPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';

@@ -32,14 +32,19 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return unsubscribe;
   }, []);
 
+  useEffect(() => {
+    if (currentUser && !loading) {
+      navigate('/home');
+    }
+  }, [currentUser, loading, navigate]);
+
   const login = () => {
     // The onAuthStateChanged listener will handle the user state update
-    navigate('/home'); // Redirect to home page after login
   };
 
   const logout = () => {
     auth.signOut();
-    navigate('/login'); // Redirect to login page after logout
+    navigate('/'); // Redirect to landing page after logout
   };
 
   return (
