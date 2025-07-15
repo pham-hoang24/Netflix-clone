@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useCallback } from "react";
+import { Link } from 'react-router-dom';
+import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
 
 const Nav: React.FC = () => {
   const [show, handleShow] = useState<boolean>(false);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+  const { logout } = useAuth();
 
   const handleScroll = useCallback(() => {
     if (window.scrollY > 100) {
@@ -19,6 +23,15 @@ const Nav: React.FC = () => {
     };
   }, [handleScroll]);
 
+  const handleAvatarClick = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    logout();
+    setDropdownOpen(false);
+  };
+
   return (
     <div className={`nav ${show && "nav_black"}`}>
       <img
@@ -26,11 +39,23 @@ const Nav: React.FC = () => {
         src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
         alt="Netflix Logo"
       />
-      <img
-        className="nav_avatar"
-        src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-        alt="Netflix Avatar"
-      />
+      <div className="nav_avatar_container" onClick={handleAvatarClick}>
+        <img
+          className="nav_avatar"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+          alt="Netflix Avatar"
+        />
+        {dropdownOpen && (
+          <div className="nav_dropdown">
+            <Link to="/settings" className="nav_dropdown_item" onClick={() => setDropdownOpen(false)}>
+              Account Settings
+            </Link>
+            <button onClick={handleSignOut} className="nav_dropdown_item">
+              Sign Out
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
