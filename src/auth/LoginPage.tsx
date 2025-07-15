@@ -5,6 +5,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../context/AuthContext';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 
 // Define type for the location state
 interface LocationState {
@@ -15,9 +16,11 @@ const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const functions = getFunctions();
 
   // Pre-fill email from location state if available
   useEffect(() => {
@@ -27,21 +30,68 @@ const LoginPage: React.FC = () => {
     }
   }, [location.state]);
 
+  const handleLoginFunction = httpsCallable(functions, 'handleLogin');
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null); // Clear previous errors
 
+    if (!email || !password) {
+      setError('This field is required');
+      return;
+    }
+
+    if (email.length > 255 || password.length > 255) {
+        setError('Too long');
+        return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      login(); // Use login from AuthContext
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const newSessionId = userCredential.user.uid + Date.now();
+      const result = await handleLoginFunction({ newSessionId });
+
+      if (result.data.newSession) {
+        login(); // Use login from AuthContext
+      } else {
+        setError(result.data.message);
+        setShowModal(true);
+      }
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
         setError('Invalid email or password. Please try again.');
-      } else {
+      } else if (error.code === 'auth/user-disabled') {
+        setError('Your account has been disabled. Please contact support.');
+      }
+      else {
         setError(error.message);
       }
     }
   };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (error) {
+        setError(null);
+    }
+}
+
+const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (error) {
+        setError(null);
+    }
+}
+
+  const handleModalChoice = (choice: 'stay' | 'return') => {
+    if (choice === 'stay') {
+        login();
+    } else {
+        setShowModal(false);
+    }
+  }
+
+  const isButtonDisabled = !email || !password;
 
   return (
     
@@ -61,7 +111,7 @@ const LoginPage: React.FC = () => {
             type="email"
             placeholder="Email or phone number"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             required
           />
         </div>
@@ -70,11 +120,11 @@ const LoginPage: React.FC = () => {
             type="password"
             placeholder="Password"
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             required
           />
         </div>
-        <button type="submit" className={styles.signInButton}>
+        <button type="submit" className={styles.signInButton} disabled={isButtonDisabled}>
           Sign In
         </button>
         <div className={styles.helpText}>
@@ -87,6 +137,16 @@ const LoginPage: React.FC = () => {
           New to Netflix? <Link to="/signup">Sign up now</Link>.
         </div>
       </form>
+
+      {showModal && (
+        <div className={styles.modal}>
+            <div className={styles.modalContent}>
+                <p>{error}</p>
+                <button onClick={() => handleModalChoice('stay')}>Stay on this browser</button>
+                <button onClick={() => handleModalChoice('return')}>Return to existing browser</button>
+            </div>
+        </div>
+      )}
     </div>
   );
 };
