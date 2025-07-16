@@ -2,11 +2,13 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
+import { useTranslation } from "react-i18next";
 
 const Nav: React.FC = () => {
   const [show, handleShow] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   const handleScroll = useCallback(() => {
     if (window.scrollY > 100) {
@@ -48,10 +50,10 @@ const Nav: React.FC = () => {
         {dropdownOpen && (
           <div className="nav_dropdown">
             <Link to="/settings" className="nav_dropdown_item" onClick={() => setDropdownOpen(false)}>
-              Settings
+              {t('nav.settings')}
             </Link>
             <button onClick={handleSignOut} className="nav_dropdown_item">
-              Sign Out
+              {t('nav.signOut')}
             </button>
           </div>
         )}

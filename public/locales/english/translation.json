@@ -83,5 +83,26 @@
     "readyToWatch":"Ready to watch? Enter your email to create or restart your membership.",
     "emailPlaceholder":"Email or phone number",
     "getStarted":"Get started"
+  },
+  "banner": {
+    "play": "Play",
+    "myList": "My List"
+  },
+  "nav": {
+    "settings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "homePage": {
+    "netflixOriginals": "NETFLIX ORIGINALS",
+    "trendingNow": "Trending Now",
+    "topRated": "Top Rated",
+    "actionMovies": "Action Movies",
+    "comedyMovies": "Comedy Movies",
+    "horrorMovies": "Horror Movies",
+    "romanceMovies": "Romance Movies",
+    "documentaries": "Documentaries"
+  },
+  "row": {
+    "noTrailer": "This movie currently does not have a trailer."
   }
 }
