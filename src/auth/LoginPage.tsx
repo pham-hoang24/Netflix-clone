@@ -6,6 +6,7 @@ import { auth } from '../services/firebase';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../context/AuthContext';
 import { getFunctions, httpsCallable } from 'firebase/functions';
+import { useTranslation } from 'react-i18next';
 
 // Define type for the location state
 interface LocationState {
@@ -26,6 +27,7 @@ const LoginPage: React.FC = () => {
   const location = useLocation();
   const { login } = useAuth();
   const functions = getFunctions();
+  const { t } = useTranslation();
 
   // Pre-fill email from location state if available
   useEffect(() => {
@@ -42,12 +44,12 @@ const LoginPage: React.FC = () => {
     setError(null); // Clear previous errors
 
     if (!email || !password) {
-      setError('This field is required');
+      setError(t('login.fieldRequired'));
       return;
     }
 
     if (email.length > 255 || password.length > 255) {
-        setError('Too long');
+        setError(t('login.tooLong'));
         return;
     }
 
@@ -65,9 +67,9 @@ const LoginPage: React.FC = () => {
       }
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
-        setError('Invalid email or password. Please try again.');
+        setError(t('login.invalidCredentials'));
       } else if (error.code === 'auth/user-disabled') {
-        setError('Your account has been disabled. Please contact support.');
+        setError(t('login.accountDisabled'));
       }
       else {
         setError(error.message);
@@ -110,12 +112,12 @@ const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         />
       </Link>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
-        <h2>Sign In</h2>
+        <h2>{t('login.signIn')}</h2>
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.inputGroup}>
           <input
             type="email"
-            placeholder="Email or phone number"
+            placeholder={t('login.emailPlaceholder')}
             value={email}
             onChange={handleEmailChange}
             required
@@ -124,23 +126,23 @@ const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         <div className={styles.inputGroup}>
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t('login.passwordPlaceholder')}
             value={password}
             onChange={handlePasswordChange}
             required
           />
         </div>
         <button type="submit" className={styles.signInButton} disabled={isButtonDisabled}>
-          Sign In
+          {t('login.signIn')}
         </button>
         <div className={styles.helpText}>
           <label>
-            <input type="checkbox" /> Remember me
+            <input type="checkbox" /> {t('login.rememberMe')}
           </label>
-          <a href="#">Need help?</a>
+          <a href="#">{t('login.needHelp')}</a>
         </div>
         <div className={styles.signUpText}>
-          New to Netflix? <Link to="/signup">Sign up now</Link>.
+          {t('login.newToNetflix')} <Link to="/signup">{t('login.signUpNow')}</Link>.
         </div>
       </form>
 
@@ -148,8 +150,8 @@ const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         <div className={styles.modal}>
             <div className={styles.modalContent}>
                 <p>{error}</p>
-                <button onClick={() => handleModalChoice('stay')}>Stay on this browser</button>
-                <button onClick={() => handleModalChoice('return')}>Return to existing browser</button>
+                <button onClick={() => handleModalChoice('stay')}>{t('login.stayOnBrowser')}</button>
+                <button onClick={() => handleModalChoice('return')}>{t('login.returnToExisting')}</button>
             </div>
         </div>
       )}
