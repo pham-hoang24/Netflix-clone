@@ -1,59 +1,105 @@
 {
-  "welcomeMessage": "Chào mừng đến với trang web của chúng tôi!",
-  "hero.title": "Phim, chương trình truyền hình và nhiều nội dung khác không giới hạn",
-  "hero.subtitle": "Bắt đầu từ 9,49 €. Hủy bất cứ lúc nào.",
-  "hero.description": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
-  "hero.emailPlaceholder": "Địa chỉ email",
-  "hero.emailValidationError": "Vui lòng nhập địa chỉ email hợp lệ.",
-  "hero.emailSignInError": "Vui lòng nhập địa chỉ email hợp lệ để đăng nhập.",
-  "hero.checking": "Đang kiểm tra...",
-  "hero.getStarted": "Bắt đầu",
-  "footer.readyToWatch": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
-  "footer.emailPlaceholder": "Địa chỉ email",
-  "footer.getStarted": "Bắt đầu",
-  "footer.questionsCall": "Có câu hỏi? Gọi 1-800-000-0000",
-  "footer.faq": "Câu hỏi thường gặp",
-  "footer.helpCentre": "Trung tâm trợ giúp",
-  "footer.account": "Tài khoản",
-  "footer.mediaCentre": "Trung tâm truyền thông",
-  "footer.investorRelations": "Quan hệ nhà đầu tư",
-  "footer.jobs": "Việc làm",
-  "footer.waysToWatch": "Cách xem",
-  "footer.termsOfUse": "Điều khoản sử dụng",
-  "footer.privacy": "Quyền riêng tư",
-  "footer.cookiePreferences": "Tùy chọn cookie",
-  "footer.corporateInformation": "Thông tin công ty",
-  "footer.contactUs": "Liên hệ với chúng tôi",
-  "footer.copyright": "© 2024 Netflix, Inc.",
-  "english": "English",
-  "signIn": "Sign In",
-  "vietnamese": "Tiếng Việt",
-  "finnish": "Suomi",
-  "navbar.signIn": "Đăng nhập",
-  "landingPage.trendingNow": "Đang thịnh hành",
-  "landingPage.moreReasonsToJoin": "Thêm lý do để tham gia",
-  "landingPage.enjoyOnTv.title": "Thưởng thức trên TV của bạn",
-  "landingPage.enjoyOnTv.description": "Xem trên TV thông minh, PlayStation, Xbox, Chromecast, Apple TV, đầu phát Blu-ray và nhiều hơn nữa.",
-  "landingPage.downloadSeries.title": "Tải xuống các bộ phim của bạn để xem ngoại tuyến",
-  "landingPage.downloadSeries.description": "Lưu các mục yêu thích của bạn một cách dễ dàng và luôn có thứ để xem.",
-  "landingPage.watchEverywhere.title": "Xem mọi lúc mọi nơi",
-  "landingPage.watchEverywhere.description": "Phát trực tuyến không giới hạn phim và chương trình truyền hình trên điện thoại, máy tính bảng, máy tính xách tay và TV của bạn.",
-  "landingPage.createProfiles.title": "Tạo hồ sơ cho trẻ em",
-  "landingPage.createProfiles.description": "Gửi trẻ em vào cuộc phiêu lưu với các nhân vật yêu thích của chúng trong một không gian dành riêng cho chúng – miễn phí với tư cách thành viên của bạn.",
-  "landingPage.faqTitle": "Câu hỏi thường gặp",
-  "landingPage.loading": "Đang tải...",
-  "landingPage.loadError": "Không thể tải nội dung. Vui lòng thử lại sau.",
-  "landingPage.retry": "Thử lại",
-  "faq.whatIsNetflix.question": "Netflix là gì?",
-  "faq.whatIsNetflix.answer": "Netflix là dịch vụ phát trực tuyến cung cấp nhiều chương trình truyền hình, phim, anime, phim tài liệu đoạt giải thưởng và nhiều nội dung khác – trên hàng nghìn thiết bị kết nối internet.<br>Bạn có thể xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn, không có một quảng cáo nào – tất cả chỉ với một mức giá hàng tháng thấp. Luôn có điều gì đó mới mẻ để khám phá, và các chương trình truyền hình và phim mới được thêm vào mỗi tuần!",
-  "faq.howMuchCost.question": "Netflix có giá bao nhiêu?",
-  "faq.howMuchCost.answer": "Xem Netflix trên điện thoại thông minh, máy tính bảng, TV thông minh, máy tính xách tay hoặc thiết bị phát trực tuyến của bạn, tất cả chỉ với một khoản phí cố định hàng tháng. Các gói dao động từ 9,49 € đến 17,99 € một tháng. Không có chi phí bổ sung, không có hợp đồng.",
-  "faq.whereWatch.question": "Tôi có thể xem ở đâu?",
-  "faq.whereWatch.answer": "Xem mọi lúc, mọi nơi. Đăng nhập bằng tài khoản Netflix của bạn để xem ngay lập tức trên web tại netflix.com từ máy tính cá nhân của bạn hoặc trên bất kỳ thiết bị kết nối internet nào cung cấp ứng dụng Netflix, bao gồm TV thông minh, điện thoại thông minh, máy tính bảng, trình phát đa phương tiện trực tuyến và máy chơi game.<br>Bạn cũng có thể tải xuống các chương trình yêu thích của mình bằng ứng dụng iOS hoặc Android. Sử dụng tính năng tải xuống để xem khi bạn đang di chuyển và không có kết nối internet. Mang Netflix theo bạn mọi lúc mọi nơi.",
-  "faq.howCancel.question": "Làm cách nào để hủy?",
-  "faq.howCancel.answer": "Netflix linh hoạt. Không có hợp đồng khó chịu và không có cam kết. Bạn có thể dễ dàng hủy tài khoản của mình trực tuyến chỉ với hai cú nhấp chuột. Không có phí hủy – bắt đầu hoặc dừng tài khoản của bạn bất cứ lúc nào.",
-  "faq.whatWatch.question": "Tôi có thể xem gì trên Netflix?",
-  "faq.whatWatch.answer": "Netflix có một thư viện phong phú các bộ phim truyện, phim tài liệu, phim bộ, anime, phim gốc Netflix đoạt giải thưởng và nhiều nội dung khác. Xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn.",
-  "faq.goodForChildren.question": "Netflix có tốt cho trẻ em không?",
-  "faq.goodForChildren.answer": "Trải nghiệm Netflix dành cho trẻ em được bao gồm trong tư cách thành viên của bạn để cha mẹ có thể kiểm soát trong khi trẻ em thưởng thức các chương trình truyền hình và phim thân thiện với gia đình trong không gian riêng của chúng.<br>Hồ sơ trẻ em đi kèm với các điều khiển của phụ huynh được bảo vệ bằng mã PIN cho phép bạn hạn chế xếp hạng độ tuổi của nội dung trẻ em có thể xem và chặn các tiêu đề cụ thể mà bạn không muốn trẻ em xem."
+  "hero": {
+    "title": "Phim, chương trình truyền hình và nhiều nội dung khác không giới hạn",
+    "subtitle": "Bắt đầu từ 9,49 €. Hủy bất cứ lúc nào.",
+    "description": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
+    "emailPlaceholder": "Địa chỉ email",
+    "emailValidationError": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "emailSignInError": "Vui lòng nhập địa chỉ email hợp lệ để đăng nhập.",
+    "checking": "Đang kiểm tra...",
+    "getStarted": "Bắt đầu"
+  },
+  "login": {
+    "signIn": "Đăng nhập",
+    "emailPlaceholder": "Email hoặc số điện thoại",
+    "passwordPlaceholder": "Mật khẩu",
+    "rememberMe": "Ghi nhớ tôi",
+    "needHelp": "Cần trợ giúp?",
+    "newToNetflix": "Bạn mới sử dụng Netflix?",
+    "signUpNow": "Đăng ký ngay.",
+    "invalidCredentials": "Email hoặc mật khẩu không hợp lệ. Vui lòng thử lại.",
+    "fieldRequired": "Trường này là bắt buộc",
+    "tooLong": "Quá dài",
+    "accountDisabled": "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ bộ phận hỗ trợ.",
+    "simultaneousLogin": "Bạn đã đăng nhập vào một trình duyệt khác. Bạn có muốn đăng xuất khỏi trình duyệt trước đó không?",
+    "stayOnBrowser": "Tiếp tục sử dụng trình duyệt này",
+    "returnToExisting": "Quay lại trình duyệt hiện tại"
+  },
+  "footer": {
+    "readyToWatch": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
+    "emailPlaceholder": "Địa chỉ email",
+    "getStarted": "Bắt đầu",
+    "questionsCall": "Có câu hỏi? Gọi 1-800-000-0000",
+    "faq": "Câu hỏi thường gặp",
+    "helpCentre": "Trung tâm trợ giúp",
+    "account": "Tài khoản",
+    "mediaCentre": "Trung tâm truyền thông",
+    "investorRelations": "Quan hệ nhà đầu tư",
+    "jobs": "Việc làm",
+    "waysToWatch": "Cách xem",
+    "termsOfUse": "Điều khoản sử dụng",
+    "privacy": "Quyền riêng tư",
+    "cookiePreferences": "Tùy chọn cookie",
+    "corporateInformation": "Thông tin công ty",
+    "contactUs": "Liên hệ với chúng tôi",
+    "copyright": "© 2024 Netflix, Inc."
+  },
+  "language": {
+    "english": "English",
+    "vietnamese": "Tiếng Việt",
+    "finnish": "Suomi"
+  },
+  "navbar": {
+    "signIn": "Đăng nhập"
+  },
+  "landingPage": {
+    "trendingNow": "Đang thịnh hành",
+    "moreReasonsToJoin": "Thêm lý do để tham gia",
+    "enjoyOnTv": {
+      "title": "Thưởng thức trên TV của bạn",
+      "description": "Xem trên TV thông minh, PlayStation, Xbox, Chromecast, Apple TV, đầu phát Blu-ray và nhiều hơn nữa."
+    },
+    "downloadSeries": {
+      "title": "Tải xuống các bộ phim của bạn để xem ngoại tuyến",
+      "description": "Lưu các mục yêu thích của bạn một cách dễ dàng và luôn có thứ để xem."
+    },
+    "watchEverywhere": {
+      "title": "Xem mọi lúc mọi nơi",
+      "description": "Phát trực tuyến không giới hạn phim và chương trình truyền hình trên điện thoại, máy tính bảng, máy tính xách tay và TV của bạn."
+    },
+    "createProfiles": {
+      "title": "Tạo hồ sơ cho trẻ em",
+      "description": "Gửi trẻ em vào cuộc phiêu lưu với các nhân vật yêu thích của chúng trong một không gian dành riêng cho chúng – miễn phí với tư cách thành viên của bạn."
+    },
+    "faqTitle": "Câu hỏi thường gặp",
+    "loading": "Đang tải...",
+    "loadError": "Không thể tải nội dung. Vui lòng thử lại sau.",
+    "retry": "Thử lại"
+  },
+  "faq": {
+    "whatIsNetflix": {
+      "question": "Netflix là gì?",
+      "answer": "Netflix là dịch vụ phát trực tuyến cung cấp nhiều chương trình truyền hình, phim, anime, phim tài liệu đoạt giải thưởng và nhiều nội dung khác – trên hàng nghìn thiết bị kết nối internet.<br>Bạn có thể xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn, không có một quảng cáo nào – tất cả chỉ với một mức giá hàng tháng thấp. Luôn có điều gì đó mới mẻ để khám phá, và các chương trình truyền hình và phim mới được thêm vào mỗi tuần!"
+    },
+    "howMuchCost": {
+      "question": "Netflix có giá bao nhiêu?",
+      "answer": "Xem Netflix trên điện thoại thông minh, máy tính bảng, TV thông minh, máy tính xách tay hoặc thiết bị phát trực tuyến của bạn, tất cả chỉ với một khoản phí cố định hàng tháng. Các gói dao động từ 9,49 € đến 17,99 € một tháng. Không có chi phí bổ sung, không có hợp đồng."
+    },
+    "whereWatch": {
+      "question": "Tôi có thể xem ở đâu?",
+      "answer": "Xem mọi lúc, mọi nơi. Đăng nhập bằng tài khoản Netflix của bạn để xem ngay lập tức trên web tại netflix.com từ máy tính cá nhân của bạn hoặc trên bất kỳ thiết bị kết nối internet nào cung cấp ứng dụng Netflix, bao gồm TV thông minh, điện thoại thông minh, máy tính bảng, trình phát đa phương tiện trực tuyến và máy chơi game.<br>Bạn cũng có thể tải xuống các chương trình yêu thích của mình bằng ứng dụng iOS hoặc Android. Sử dụng tính năng tải xuống để xem khi bạn đang di chuyển và không có kết nối internet. Mang Netflix theo bạn mọi lúc mọi nơi."
+    },
+    "howCancel": {
+      "question": "Làm cách nào để hủy?",
+      "answer": "Netflix linh hoạt. Không có hợp đồng khó chịu và không có cam kết. Bạn có thể dễ dàng hủy tài khoản của mình trực tuyến chỉ với hai cú nhấp chuột. Không có phí hủy – bắt đầu hoặc dừng tài khoản của bạn bất cứ lúc nào."
+    },
+    "whatWatch": {
+      "question": "Tôi có thể xem gì trên Netflix?",
+      "answer": "Netflix có một thư viện phong phú các bộ phim truyện, phim tài liệu, phim bộ, anime, phim gốc Netflix đoạt giải thưởng và nhiều nội dung khác. Xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn."
+    },
+    "goodForChildren": {
+      "question": "Netflix có tốt cho trẻ em không?",
+      "answer": "Trải nghiệm Netflix dành cho trẻ em được bao gồm trong tư cách thành viên của bạn để cha mẹ có thể kiểm soát trong khi trẻ em thưởng thức các chương trình truyền hình và phim thân thiện với gia đình trong không gian riêng của chúng.<br>Hồ sơ trẻ em đi kèm với các điều khiển của phụ huynh được bảo vệ bằng mã PIN cho phép bạn hạn chế xếp hạng độ tuổi của nội dung trẻ em có thể xem và chặn các tiêu đề cụ thể mà bạn không muốn trẻ em xem."
+    }
+  }
 }
