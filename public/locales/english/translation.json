@@ -104,5 +104,32 @@
   },
   "row": {
     "noTrailer": "This movie currently does not have a trailer."
+  },
+  "signup": {
+    "emailPasswordRequired": "Email and password are required.",
+    "passwordLengthError": "Password must be at least 6 characters long.",
+    "invalidEmail": "Please enter a valid email address.",
+    "deviceSelectionRequired": "Please select at least one device.",
+    "profileNameRequired": "Profile name is required.",
+    "languageSelectionRequired": "Please select at least one language.",
+    "step1Title": "Step 1: Create your account",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "next": "Next",
+    "step2Title": "Step 2: Choose your devices",
+    "deviceTV": "TV",
+    "deviceMobile": "Mobile",
+    "deviceDesktop": "Desktop",
+    "back": "Back",
+    "step3Title": "Step 3: Name your profile",
+    "profileNamePlaceholder": "Profile Name",
+    "step4Title": "Step 4: Choose your preferred languages",
+    "languageEnglish": "English",
+    "languageVietnamese": "Vietnamese",
+    "languageFinnish": "Finnish",
+    "step5Title": "Step 5: Tell us what you like (optional)",
+    "preferredShowsPlaceholder": "Enter comma-separated show names or genres (e.g., Action, Comedy)",
+    "signUp": "Sign Up",
+    "skip": "Skip"
   }
 }

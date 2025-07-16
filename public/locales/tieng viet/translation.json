@@ -112,7 +112,7 @@
   },
   "homePage": {
     "netflixOriginals": "NETFLIX ORIGINALS",
-    "trendingNow": "Thịnh hành bây giờ",
+    "trendingNow": "Thịnh hành ngay",
     "topRated": "Xếp hạng cao nhất",
     "actionMovies": "Phim hành động",
     "comedyMovies": "Phim hài",
@@ -122,5 +122,32 @@
   },
   "row": {
     "noTrailer": "Phim này hiện không có trailer."
+  },
+  "signup": {
+    "emailPasswordRequired": "Yêu cầu email và mật khẩu.",
+    "passwordLengthError": "Mật khẩu phải dài ít nhất 6 ký tự.",
+    "invalidEmail": "Vui lòng nhập một địa chỉ email hợp lệ.",
+    "deviceSelectionRequired": "Vui lòng chọn ít nhất một thiết bị.",
+    "profileNameRequired": "Yêu cầu tên hồ sơ.",
+    "languageSelectionRequired": "Vui lòng chọn ít nhất một ngôn ngữ.",
+    "step1Title": "Bước 1: Tạo tài khoản của bạn",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mật khẩu",
+    "next": "Tiếp theo",
+    "step2Title": "Bước 2: Chọn thiết bị của bạn",
+    "deviceTV": "TV",
+    "deviceMobile": "Di động",
+    "deviceDesktop": "Máy tính để bàn",
+    "back": "Quay lại",
+    "step3Title": "Bước 3: Đặt tên cho hồ sơ của bạn",
+    "profileNamePlaceholder": "Tên hồ sơ",
+    "step4Title": "Bước 4: Chọn ngôn ngữ ưa thích của bạn",
+    "languageEnglish": "Tiếng Anh",
+    "languageVietnamese": "Tiếng Việt",
+    "languageFinnish": "Tiếng Phần Lan",
+    "step5Title": "Bước 5: Cho chúng tôi biết bạn thích gì (tùy chọn)",
+    "preferredShowsPlaceholder": "Nhập tên chương trình hoặc thể loại được phân tách bằng dấu phẩy (ví dụ: Hành động, Hài)",
+    "signUp": "Đăng ký",
+    "skip": "Bỏ qua"
   }
 }
