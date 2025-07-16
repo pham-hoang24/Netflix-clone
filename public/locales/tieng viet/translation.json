@@ -101,5 +101,26 @@
       "question": "Netflix có tốt cho trẻ em không?",
       "answer": "Trải nghiệm Netflix dành cho trẻ em được bao gồm trong tư cách thành viên của bạn để cha mẹ có thể kiểm soát trong khi trẻ em thưởng thức các chương trình truyền hình và phim thân thiện với gia đình trong không gian riêng của chúng.<br>Hồ sơ trẻ em đi kèm với các điều khiển của phụ huynh được bảo vệ bằng mã PIN cho phép bạn hạn chế xếp hạng độ tuổi của nội dung trẻ em có thể xem và chặn các tiêu đề cụ thể mà bạn không muốn trẻ em xem."
     }
+  },
+  "banner": {
+    "play": "Phát",
+    "myList": "Danh sách của tôi"
+  },
+  "nav": {
+    "settings": "Cài đặt",
+    "signOut": "Đăng xuất"
+  },
+  "homePage": {
+    "netflixOriginals": "NETFLIX ORIGINALS",
+    "trendingNow": "Thịnh hành bây giờ",
+    "topRated": "Xếp hạng cao nhất",
+    "actionMovies": "Phim hành động",
+    "comedyMovies": "Phim hài",
+    "horrorMovies": "Phim kinh dị",
+    "romanceMovies": "Phim lãng mạn",
+    "documentaries": "Phim tài liệu"
+  },
+  "row": {
+    "noTrailer": "Phim này hiện không có trailer."
   }
 }

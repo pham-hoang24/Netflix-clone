@@ -88,5 +88,26 @@
   "signup.step4Title": "Vaihe 4: Valitse suosikkiohjelmat (valinnainen)",
   "signup.preferredShowsPlaceholder": "Anna pilkulla eroteltuja ohjelmien nimiä tai genrejä (esim. Toiminta, Komedia)",
   "signup.signUp": "Rekisteröidy",
-  "signup.skip": "Ohita"
+  "signup.skip": "Ohita",
+  "banner": {
+    "play": "Toista",
+    "myList": "Oma lista"
+  },
+  "nav": {
+    "settings": "Asetukset",
+    "signOut": "Kirjaudu ulos"
+  },
+  "homePage": {
+    "netflixOriginals": "NETFLIX ORIGINALS",
+    "trendingNow": "Trendaavat nyt",
+    "topRated": "Parhaat arvosanat",
+    "actionMovies": "Toimintaelokuvat",
+    "comedyMovies": "Komediaelokuvat",
+    "horrorMovies": "Kauuelokuvat",
+    "romanceMovies": "Romanssielokuvat",
+    "documentaries": "Dokumentit"
+  },
+  "row": {
+    "noTrailer": "Tällä elokuvalla ei tällä hetkellä ole traileria."
+  }
 }
