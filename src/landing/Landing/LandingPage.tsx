@@ -10,11 +10,12 @@ import {
   fetchTrendingWithDetails,
   TrendingItem,
 } from "../../services/api-client";
-
+import { useTranslation } from 'react-i18next'; // Add this import
 import "./LandingPage.module.css";
 import styles from "./LandingPage.module.css";
 
 const LandingPage: React.FC = () => {
+  const{t} =  useTranslation()
   const [selectedItem, setSelectedItem] = useState<TrendingItem | null>(null);
   const [trendingItems, setTrendingItems] = useState<TrendingItem[]>([]);
   const [genreMap, setGenreMap] = useState<{ [id: number]: string }>({});
@@ -51,34 +52,28 @@ const LandingPage: React.FC = () => {
 
   const faqs = [
     {
-      question: "What is Netflix?",
-      answer:
-        "Netflix is a streaming service that offers a wide variety of award-winning TV programmes, films, anime, documentaries and more – on thousands of internet-connected devices.<br>You can watch as much as you want, whenever you want, without a single advert – all for one low monthly price. There's always something new to discover, and new TV programmes and films are added every week!",
+      question: "faq.whatIsNetflix.question", // Use translation key
+      answer: "faq.whatIsNetflix.answer",     // Use translation key
     },
     {
-      question: "How much does Netflix cost?",
-      answer:
-        "Watch Netflix on your smartphone, tablet, smart TV, laptop or streaming device, all for one fixed monthly fee. Plans range from €9.49 to €17.99 a month. No extra costs, no contracts.",
+      question: "faq.howMuchCost.question",
+      answer: "faq.howMuchCost.answer",
     },
     {
-      question: "Where can I watch?",
-      answer:
-        "Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.<br>You can also download your favourite programmes with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere.",
+      question: "faq.whereWatch.question",
+      answer: "faq.whereWatch.answer",
     },
     {
-      question: "How do I cancel?",
-      answer:
-        "Netflix is flexible. There are no annoying contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account at any time.",
+      question: "faq.howCancel.question",
+      answer: "faq.howCancel.answer",
     },
     {
-      question: "What can I watch on Netflix?",
-      answer:
-        "Netflix has an extensive library of feature films, documentaries, series, anime, award-winning Netflix originals, and more. Watch as much as you want, any time you want.",
+      question: "faq.whatWatch.question",
+      answer: "faq.whatWatch.answer",
     },
     {
-      question: "Is Netflix good for children?",
-      answer:
-        "The Netflix Children's experience is included in your membership to give parents control while children enjoy family-friendly TV programmes and films in their own space.<br>Children's profiles come with PIN-protected parental controls that let you restrict the maturity rating of content children can watch and block specific titles you don’t want children to see.",
+      question: "faq.goodForChildren.question",
+      answer: "faq.goodForChildren.answer",
     },
   ];
 
@@ -93,7 +88,7 @@ const LandingPage: React.FC = () => {
             height: "100vh",
           }}
         >
-          Loading...
+          {t("landingPage.loading")} {/* Use translation key */}
         </div>
       </Layout>
     );
@@ -125,28 +120,28 @@ const LandingPage: React.FC = () => {
               cursor: "pointer",
             }}
           >
-            Retry
+            {t("landingPage.retry")} {/* Use translation key */}
           </button>
         </div>
       </Layout>
     );
+    
   }
 
   return (
     <Layout>
       <Hero />
-      <ContentSection title="Trending Now">
+      <ContentSection title="landingPage.trendingNow">
         <Carousel items={trendingItems} onItemClick={handleItemClick} />
       </ContentSection>
-      <ContentSection title="More reasons to join">
+      <ContentSection title="landingPage.moreReasonsToJoin">
         {/* Placeholder for cards */}
         <div className={styles.cardContainer}>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>Enjoy on your TV</h3>
+              <h3>{t("landingPage.enjoyOnTv.title")}</h3> {/* Use translation key */}
               <p>
-                Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV,
-                Blu-ray players and more.
+                {t("landingPage.enjoyOnTv.description")} {/* Use translation key */}
               </p>
             </div>
             <svg
@@ -275,9 +270,9 @@ const LandingPage: React.FC = () => {
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>Download your series to watch offline</h3>
+              <h3>{t("landingPage.downloadSeries.title")}</h3> {/* Use translation key */}
               <p>
-                Save your favourites easily and always have something to watch.
+                {t("landingPage.downloadSeries.description")} {/* Use translation key */}
               </p>
             </div>
             <svg
@@ -425,10 +420,9 @@ const LandingPage: React.FC = () => {
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>Watch everywhere</h3>
+              <h3>{t("landingPage.watchEverywhere.title")}</h3> {/* Use translation key */}
               <p>
-                Stream unlimited films and series on your phone, tablet, laptop
-                and TV.
+                {t("landingPage.watchEverywhere.description")} {/* Use translation key */}
               </p>
             </div>
             <svg
@@ -604,10 +598,9 @@ const LandingPage: React.FC = () => {
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>Create profiles for children</h3>
+              <h3>{t("landingPage.createProfiles.title")}</h3> {/* Use translation key */}
               <p>
-                Send children on adventures with their favourite characters in a
-                space made just for them — free with your membership.
+                {t("landingPage.createProfiles.description")} {/* Use translation key */}
               </p>
             </div>
             <svg
