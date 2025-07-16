@@ -14,6 +14,7 @@ const SignupPage: React.FC = () => {
     password: '',
     devices: [] as string[],
     profileName: '',
+    preferredLanguages: [] as string[],
     preferredShows: [] as string[],
   });
   const [error, setError] = useState<string | null>(null);
@@ -23,11 +24,12 @@ const SignupPage: React.FC = () => {
     const { name, value, type } = e.target;
     if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement;
+      const arrayName = name as 'devices' | 'preferredLanguages';
       setFormData((prev) => ({
         ...prev,
-        devices: checked
-          ? [...prev.devices, value]
-          : prev.devices.filter((device) => device !== value),
+        [arrayName]: checked
+          ? [...prev[arrayName], value]
+          : prev[arrayName].filter((item) => item !== value),
       }));
     } else {
       setFormData((prev) => ({
@@ -49,8 +51,7 @@ const SignupPage: React.FC = () => {
           setError(t('signup.passwordLengthError'));
           return;
         }
-        // Basic email format validation
-        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
           setError(t('signup.invalidEmail'));
           return;
         }
@@ -64,6 +65,12 @@ const SignupPage: React.FC = () => {
       case 3:
         if (!formData.profileName.trim()) {
           setError(t('signup.profileNameRequired'));
+          return;
+        }
+        break;
+      case 4:
+        if (formData.preferredLanguages.length === 0) {
+          setError(t('signup.languageSelectionRequired'));
           return;
         }
         break;
@@ -90,7 +97,8 @@ const SignupPage: React.FC = () => {
         profileType: 'Adult', // Default profile type
         devices: formData.devices,
         profileName: formData.profileName,
-        preferred_genres: formData.preferredShows.map(s => s.trim()).filter(s => s.length > 0), // Clean up and filter empty strings
+        preferredLanguages: formData.preferredLanguages,
+        preferred_genres: formData.preferredShows.map(s => s.trim()).filter(s => s.length > 0),
       });
       navigate('/home');
     } catch (err: any) {
@@ -185,6 +193,47 @@ const SignupPage: React.FC = () => {
         return (
           <div className={styles.stepContent}>
             <h2>{t('signup.step4Title')}</h2>
+            {error && <p className={styles.error}>{error}</p>}
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="English"
+                checked={formData.preferredLanguages.includes('English')}
+                onChange={handleChange}
+              />
+              {t('signup.languageEnglish')}
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="Vietnamese"
+                checked={formData.preferredLanguages.includes('Vietnamese')}
+                onChange={handleChange}
+              />
+              {t('signup.languageVietnamese')}
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="Finnish"
+                checked={formData.preferredLanguages.includes('Finnish')}
+                onChange={handleChange}
+              />
+              {t('signup.languageFinnish')}
+            </label>
+            <div className={styles.navigationButtons}>
+              <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
+              <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
+            </div>
+          </div>
+        );
+      case 5:
+        return (
+          <div className={styles.stepContent}>
+            <h2>{t('signup.step5Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
             <textarea
               name="preferredShows"
