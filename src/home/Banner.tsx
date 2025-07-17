@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "./axios";
 import "./Banner.css";
 import requests from "./requests";
+import { useTranslation } from "react-i18next";
 
 interface Movie {
   backdrop_path: string;
@@ -13,6 +14,8 @@ interface Movie {
 
 const Banner: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
+  const { t } = useTranslation();
+  
 
   useEffect(() => {
     async function fetchData() {
@@ -48,8 +51,8 @@ const Banner: React.FC = () => {
           {movie?.title || movie?.name || movie?.original_name}
         </h1>
         <div className="banner__buttons">
-          <button className="banner__button">Play</button>
-          <button className="banner__button">My List</button>
+          <button className="banner__button">{t('banner.play')}</button>
+          <button className="banner__button">{t('banner.myList')}</button>
         </div>
         <h1 className="banner__description">{truncate(movie?.overview, 150)}</h1>
       </div>

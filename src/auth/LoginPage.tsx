@@ -5,19 +5,29 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../services/firebase';
 import styles from './LoginPage.module.css';
 import { useAuth } from '../context/AuthContext';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { useTranslation } from 'react-i18next';
 
 // Define type for the location state
 interface LocationState {
   email?: string;
 }
 
+interface HandleLoginResult {
+    newSession: boolean;
+    message?: string;
+}
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [showModal, setShowModal] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { login } = useAuth();
+  const functions = getFunctions();
+  const { t } = useTranslation();
 
   // Pre-fill email from location state if available
   useEffect(() => {
@@ -27,21 +37,69 @@ const LoginPage: React.FC = () => {
     }
   }, [location.state]);
 
+  const handleLoginFunction = httpsCallable(functions, 'handleLogin');
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setError(null); // Clear previous errors
 
+    if (!email || !password) {
+      setError(t('login.fieldRequired'));
+      return;
+    }
+
+    if (email.length > 255 || password.length > 255) {
+        setError(t('login.tooLong'));
+        return;
+    }
+
     try {
-      await signInWithEmailAndPassword(auth, email, password);
-      login(); // Use login from AuthContext
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const newSessionId = userCredential.user.uid + Date.now();
+      const result = await handleLoginFunction({ newSessionId });
+      const data = result.data as HandleLoginResult;
+
+      if (data.newSession) {
+        login(); // Use login from AuthContext
+      } else {
+        setError(data.message || null);
+        setShowModal(true);
+      }
     } catch (error: any) {
       if (error.code === 'auth/invalid-credential') {
-        setError('Invalid email or password. Please try again.');
-      } else {
+        setError(t('login.invalidCredentials'));
+      } else if (error.code === 'auth/user-disabled') {
+        setError(t('login.accountDisabled'));
+      }
+      else {
         setError(error.message);
       }
     }
   };
+
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+    if (error) {
+        setError(null);
+    }
+}
+
+const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(e.target.value);
+    if (error) {
+        setError(null);
+    }
+}
+
+  const handleModalChoice = (choice: 'stay' | 'return') => {
+    if (choice === 'stay') {
+        login();
+    } else {
+        setShowModal(false);
+    }
+  }
+
+  const isButtonDisabled = !email || !password;
 
   return (
     
@@ -54,39 +112,49 @@ const LoginPage: React.FC = () => {
         />
       </Link>
       <form className={styles.loginForm} onSubmit={handleSubmit}>
-        <h2>Sign In</h2>
+        <h2>{t('login.signIn')}</h2>
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.inputGroup}>
           <input
             type="email"
-            placeholder="Email or phone number"
+            placeholder={t('login.emailPlaceholder')}
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={handleEmailChange}
             required
           />
         </div>
         <div className={styles.inputGroup}>
           <input
             type="password"
-            placeholder="Password"
+            placeholder={t('login.passwordPlaceholder')}
             value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            onChange={handlePasswordChange}
             required
           />
         </div>
-        <button type="submit" className={styles.signInButton}>
-          Sign In
+        <button type="submit" className={styles.signInButton} disabled={isButtonDisabled}>
+          {t('login.signIn')}
         </button>
         <div className={styles.helpText}>
           <label>
-            <input type="checkbox" /> Remember me
+            <input type="checkbox" /> {t('login.rememberMe')}
           </label>
-          <a href="#">Need help?</a>
+          <a href="#">{t('login.needHelp')}</a>
         </div>
         <div className={styles.signUpText}>
-          New to Netflix? <Link to="/signup">Sign up now</Link>.
+          {t('login.newToNetflix')} <Link to="/signup">{t('login.signUpNow')}</Link>.
         </div>
       </form>
+
+      {showModal && (
+        <div className={styles.modal}>
+            <div className={styles.modalContent}>
+                <p>{error}</p>
+                <button onClick={() => handleModalChoice('stay')}>{t('login.stayOnBrowser')}</button>
+                <button onClick={() => handleModalChoice('return')}>{t('login.returnToExisting')}</button>
+            </div>
+        </div>
+      )}
     </div>
   );
 };

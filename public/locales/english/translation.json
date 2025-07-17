@@ -1,0 +1,148 @@
+{
+  "navbar": {
+    "english": "English",
+    "signIn": "Sign In",
+    "vietnamese": "Tiếng Việt",
+    "finnish": "Suomi"
+  },
+  "hero": {
+    "getStarted": "Get started",
+    "title": "Unlimited films, series and more.",
+    "subtitle": "Starts at €9.49. Cancel at any time.",
+    "description": "Ready to watch? Enter your email to create or restart your membership.",
+    "emailSignInError": "Please enter a valid email address to sign in.",
+    "emailValidationError": "Please enter a valid email address."
+  },
+  "login": {
+    "signIn": "Sign In",
+    "emailPlaceholder": "Email or phone number",
+    "passwordPlaceholder": "Password",
+    "rememberMe": "Remember me",
+    "needHelp": "Need help?",
+    "newToNetflix": "New to Netflix?",
+    "signUpNow": "Sign up now.",
+    "invalidCredentials": "Invalid email or password. Please try again.",
+    "fieldRequired": "This field is required",
+    "tooLong": "Too long",
+    "accountDisabled": "Your account has been disabled. Please contact support.",
+    "simultaneousLogin": "You have already signed in to another browser. Would you like to sign out of the previous browser",
+    "stayOnBrowser": "Stay on this browser",
+    "returnToExisting": "Return to existing browser"
+  },
+  "landingPage": {
+    "loading": "Loading...",
+    "failedToLoad": "Failed to load content. Please try again later.",
+    "retry": "Retry",
+    "trendingNow": "Trending Now",
+    "moreReasonsToJoin": "More reasons to join",
+    "enjoyOnTv": {
+      "title": "Enjoy on your TV",
+      "description": "Watch on smart TVs, PlayStation, Xbox, Chromecast, Apple TV, Blu-ray players and more."
+    },
+    "downloadSeries": {
+      "title": "Download your series to watch offline",
+      "description": "Save your favourites easily and always have something to watch."
+    },
+    "watchEverywhere": {
+      "title": "Watch everywhere",
+      "description": "Stream unlimited films and series on your phone, tablet, laptop and TV."
+    },
+    "createProfiles": {
+      "title": "Create profiles for children",
+      "description": "Send children on adventures with their favourite characters in a space made just for them — free with your membership."
+    },
+    "faqTitle": "Frequently Asked Questions"
+  },
+  "faq": {
+    "whatIsNetflix": {
+      "question": "What is Netflix?",
+      "answer": "Netflix is a streaming service that offers a wide variety of award-winning TV programmes, films, anime, documentaries and more – on thousands of internet-connected devices.<br>You can watch as much as you want, whenever you want, without a single advert – all for one low monthly price. There's always something new to discover, and new TV programmes and films are added every week!"
+    },
+    "howMuchCost": {
+      "question": "How much does Netflix cost?",
+      "answer": "Watch Netflix on your smartphone, tablet, smart TV, laptop or streaming device, all for one fixed monthly fee. Plans range from €9.49 to €17.99 a month. No extra costs, no contracts."
+    },
+    "whereCanIWatch": {
+      "question": "Where can I watch?",
+      "answer": "Watch anywhere, anytime. Sign in with your Netflix account to watch instantly on the web at netflix.com from your personal computer or on any internet-connected device that offers the Netflix app, including smart TVs, smartphones, tablets, streaming media players and game consoles.<br>You can also download your favourite programmes with the iOS or Android app. Use downloads to watch while you're on the go and without an internet connection. Take Netflix with you anywhere."
+    },
+    "howDoICancel": {
+      "question": "How do I cancel?",
+      "answer": "Netflix is flexible. There are no annoying contracts and no commitments. You can easily cancel your account online in two clicks. There are no cancellation fees – start or stop your account at any time."
+    },
+    "whatCanIWatch": {
+      "question": "What can I watch on Netflix?",
+      "answer": "Netflix has an extensive library of feature films, documentaries, series, anime, award-winning Netflix originals, and more. Watch as much as you want, any time you want."
+    },
+    "isNetflixGoodForChildren": {
+      "question": "Is Netflix good for children?",
+      "answer": "The Netflix Children's experience is included in your membership to give parents control while children enjoy family-friendly TV programmes and films in their own space.<br>Children's profiles come with PIN-protected parental controls that let you restrict the maturity rating of content children can watch and block specific titles you don’t want children to see."
+    }
+  },
+  "footer":{
+    "readyToWatch":"Ready to watch? Enter your email to create or restart your membership.",
+    "emailPlaceholder":"Email or phone number",
+    "getStarted":"Get started"
+  },
+  "banner": {
+    "play": "Play",
+    "myList": "My List"
+  },
+  "nav": {
+    "settings": "Settings",
+    "signOut": "Sign Out"
+  },
+  "homePage": {
+    "netflixOriginals": "NETFLIX ORIGINALS",
+    "trendingNow": "Trending Now",
+    "topRated": "Top Rated",
+    "actionMovies": "Action Movies",
+    "comedyMovies": "Comedy Movies",
+    "horrorMovies": "Horror Movies",
+    "romanceMovies": "Romance Movies",
+    "documentaries": "Documentaries"
+  },
+  "row": {
+    "noTrailer": "This movie currently does not have a trailer."
+  },
+  "signup": {
+    "emailPasswordRequired": "Email and password are required.",
+    "passwordLengthError": "Password must be at least 6 characters long.",
+    "invalidEmail": "Please enter a valid email address.",
+    "deviceSelectionRequired": "Please select at least one device.",
+    "profileNameRequired": "Profile name is required.",
+    "languageSelectionRequired": "Please select at least one language.",
+    "step1Title": "Step 1: Create your account",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Password",
+    "next": "Next",
+    "step2Title": "Step 2: Choose your devices",
+    "deviceTV": "TV",
+    "deviceMobile": "Mobile",
+    "deviceDesktop": "Desktop",
+    "back": "Back",
+    "step3Title": "Step 3: Name your profile",
+    "profileNamePlaceholder": "Profile Name",
+    "step4Title": "Step 4: Choose your preferred languages",
+    "languageEnglish": "English",
+    "languageVietnamese": "Vietnamese",
+    "languageFinnish": "Finnish",
+    "step5Title": "Step 5: Tell us what you like (optional)",
+    "preferredShowsPlaceholder": "Enter comma-separated show names or genres (e.g., Action, Comedy)",
+    "signUp": "Sign Up",
+    "skip": "Skip"
+  },
+  "settings": {
+    "title": "Account",
+    "membershipBilling": "Membership & Billing",
+    "email": "Email",
+    "changePassword": "Change password",
+    "profileAndParentalControls": "Profile & Parental Controls",
+    "profileName": "Profile Name",
+    "preferredLanguages": "Preferred Languages",
+    "preferredShows": "Preferred Shows",
+    "devices": "Devices",
+    "cancel": "Cancel",
+    "save": "Save"
+  }
+}

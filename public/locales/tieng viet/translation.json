@@ -1,0 +1,166 @@
+{
+  "hero": {
+    "title": "Phim, chương trình truyền hình và nhiều nội dung khác không giới hạn",
+    "subtitle": "Bắt đầu từ 9,49 €. Hủy bất cứ lúc nào.",
+    "description": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
+    "emailPlaceholder": "Địa chỉ email",
+    "emailValidationError": "Vui lòng nhập địa chỉ email hợp lệ.",
+    "emailSignInError": "Vui lòng nhập địa chỉ email hợp lệ để đăng nhập.",
+    "checking": "Đang kiểm tra...",
+    "getStarted": "Bắt đầu"
+  },
+  "login": {
+    "signIn": "Đăng nhập",
+    "emailPlaceholder": "Email hoặc số điện thoại",
+    "passwordPlaceholder": "Mật khẩu",
+    "rememberMe": "Ghi nhớ tôi",
+    "needHelp": "Cần trợ giúp?",
+    "newToNetflix": "Bạn mới sử dụng Netflix?",
+    "signUpNow": "Đăng ký ngay.",
+    "invalidCredentials": "Email hoặc mật khẩu không hợp lệ. Vui lòng thử lại.",
+    "fieldRequired": "Trường này là bắt buộc",
+    "tooLong": "Quá dài",
+    "accountDisabled": "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ bộ phận hỗ trợ.",
+    "simultaneousLogin": "Bạn đã đăng nhập vào một trình duyệt khác. Bạn có muốn đăng xuất khỏi trình duyệt trước đó không?",
+    "stayOnBrowser": "Tiếp tục sử dụng trình duyệt này",
+    "returnToExisting": "Quay lại trình duyệt hiện tại"
+  },
+  "footer": {
+    "readyToWatch": "Bạn đã sẵn sàng xem chưa? Nhập email của bạn để tạo hoặc khởi động lại tư cách thành viên của bạn.",
+    "emailPlaceholder": "Địa chỉ email",
+    "getStarted": "Bắt đầu",
+    "questionsCall": "Có câu hỏi? Gọi 1-800-000-0000",
+    "faq": "Câu hỏi thường gặp",
+    "helpCentre": "Trung tâm trợ giúp",
+    "account": "Tài khoản",
+    "mediaCentre": "Trung tâm truyền thông",
+    "investorRelations": "Quan hệ nhà đầu tư",
+    "jobs": "Việc làm",
+    "waysToWatch": "Cách xem",
+    "termsOfUse": "Điều khoản sử dụng",
+    "privacy": "Quyền riêng tư",
+    "cookiePreferences": "Tùy chọn cookie",
+    "corporateInformation": "Thông tin công ty",
+    "contactUs": "Liên hệ với chúng tôi",
+    "copyright": "© 2024 Netflix, Inc."
+  },
+  "language": {
+    "english": "English",
+    "vietnamese": "Tiếng Việt",
+    "finnish": "Suomi"
+  },
+  "navbar": {
+    "signIn": "Đăng nhập"
+  },
+  "landingPage": {
+    "trendingNow": "Đang thịnh hành",
+    "moreReasonsToJoin": "Thêm lý do để tham gia",
+    "enjoyOnTv": {
+      "title": "Thưởng thức trên TV của bạn",
+      "description": "Xem trên TV thông minh, PlayStation, Xbox, Chromecast, Apple TV, đầu phát Blu-ray và nhiều hơn nữa."
+    },
+    "downloadSeries": {
+      "title": "Tải xuống các bộ phim của bạn để xem ngoại tuyến",
+      "description": "Lưu các mục yêu thích của bạn một cách dễ dàng và luôn có thứ để xem."
+    },
+    "watchEverywhere": {
+      "title": "Xem mọi lúc mọi nơi",
+      "description": "Phát trực tuyến không giới hạn phim và chương trình truyền hình trên điện thoại, máy tính bảng, máy tính xách tay và TV của bạn."
+    },
+    "createProfiles": {
+      "title": "Tạo hồ sơ cho trẻ em",
+      "description": "Gửi trẻ em vào cuộc phiêu lưu với các nhân vật yêu thích của chúng trong một không gian dành riêng cho chúng – miễn phí với tư cách thành viên của bạn."
+    },
+    "faqTitle": "Câu hỏi thường gặp",
+    "loading": "Đang tải...",
+    "loadError": "Không thể tải nội dung. Vui lòng thử lại sau.",
+    "retry": "Thử lại"
+  },
+  "faq": {
+    "whatIsNetflix": {
+      "question": "Netflix là gì?",
+      "answer": "Netflix là dịch vụ phát trực tuyến cung cấp nhiều chương trình truyền hình, phim, anime, phim tài liệu đoạt giải thưởng và nhiều nội dung khác – trên hàng nghìn thiết bị kết nối internet.<br>Bạn có thể xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn, không có một quảng cáo nào – tất cả chỉ với một mức giá hàng tháng thấp. Luôn có điều gì đó mới mẻ để khám phá, và các chương trình truyền hình và phim mới được thêm vào mỗi tuần!"
+    },
+    "howMuchCost": {
+      "question": "Netflix có giá bao nhiêu?",
+      "answer": "Xem Netflix trên điện thoại thông minh, máy tính bảng, TV thông minh, máy tính xách tay hoặc thiết bị phát trực tuyến của bạn, tất cả chỉ với một khoản phí cố định hàng tháng. Các gói dao động từ 9,49 € đến 17,99 € một tháng. Không có chi phí bổ sung, không có hợp đồng."
+    },
+    "whereWatch": {
+      "question": "Tôi có thể xem ở đâu?",
+      "answer": "Xem mọi lúc, mọi nơi. Đăng nhập bằng tài khoản Netflix của bạn để xem ngay lập tức trên web tại netflix.com từ máy tính cá nhân của bạn hoặc trên bất kỳ thiết bị kết nối internet nào cung cấp ứng dụng Netflix, bao gồm TV thông minh, điện thoại thông minh, máy tính bảng, trình phát đa phương tiện trực tuyến và máy chơi game.<br>Bạn cũng có thể tải xuống các chương trình yêu thích của mình bằng ứng dụng iOS hoặc Android. Sử dụng tính năng tải xuống để xem khi bạn đang di chuyển và không có kết nối internet. Mang Netflix theo bạn mọi lúc mọi nơi."
+    },
+    "howCancel": {
+      "question": "Làm cách nào để hủy?",
+      "answer": "Netflix linh hoạt. Không có hợp đồng khó chịu và không có cam kết. Bạn có thể dễ dàng hủy tài khoản của mình trực tuyến chỉ với hai cú nhấp chuột. Không có phí hủy – bắt đầu hoặc dừng tài khoản của bạn bất cứ lúc nào."
+    },
+    "whatWatch": {
+      "question": "Tôi có thể xem gì trên Netflix?",
+      "answer": "Netflix có một thư viện phong phú các bộ phim truyện, phim tài liệu, phim bộ, anime, phim gốc Netflix đoạt giải thưởng và nhiều nội dung khác. Xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn."
+    },
+    "goodForChildren": {
+      "question": "Netflix có tốt cho trẻ em không?",
+      "answer": "Trải nghiệm Netflix dành cho trẻ em được bao gồm trong tư cách thành viên của bạn để cha mẹ có thể kiểm soát trong khi trẻ em thưởng thức các chương trình truyền hình và phim thân thiện với gia đình trong không gian riêng của chúng.<br>Hồ sơ trẻ em đi kèm với các điều khiển của phụ huynh được bảo vệ bằng mã PIN cho phép bạn hạn chế xếp hạng độ tuổi của nội dung trẻ em có thể xem và chặn các tiêu đề cụ thể mà bạn không muốn trẻ em xem."
+    }
+  },
+  "banner": {
+    "play": "Phát",
+    "myList": "Danh sách của tôi"
+  },
+  "nav": {
+    "settings": "Cài đặt",
+    "signOut": "Đăng xuất"
+  },
+  "homePage": {
+    "netflixOriginals": "NETFLIX ORIGINALS",
+    "trendingNow": "Thịnh hành ngay",
+    "topRated": "Xếp hạng cao nhất",
+    "actionMovies": "Phim hành động",
+    "comedyMovies": "Phim hài",
+    "horrorMovies": "Phim kinh dị",
+    "romanceMovies": "Phim lãng mạn",
+    "documentaries": "Phim tài liệu"
+  },
+  "row": {
+    "noTrailer": "Phim này hiện không có trailer."
+  },
+  "signup": {
+    "emailPasswordRequired": "Yêu cầu email và mật khẩu.",
+    "passwordLengthError": "Mật khẩu phải dài ít nhất 6 ký tự.",
+    "invalidEmail": "Vui lòng nhập một địa chỉ email hợp lệ.",
+    "deviceSelectionRequired": "Vui lòng chọn ít nhất một thiết bị.",
+    "profileNameRequired": "Yêu cầu tên hồ sơ.",
+    "languageSelectionRequired": "Vui lòng chọn ít nhất một ngôn ngữ.",
+    "step1Title": "Bước 1: Tạo tài khoản của bạn",
+    "emailPlaceholder": "Email",
+    "passwordPlaceholder": "Mật khẩu",
+    "next": "Tiếp theo",
+    "step2Title": "Bước 2: Chọn thiết bị của bạn",
+    "deviceTV": "TV",
+    "deviceMobile": "Di động",
+    "deviceDesktop": "Máy tính để bàn",
+    "back": "Quay lại",
+    "step3Title": "Bước 3: Đặt tên cho hồ sơ của bạn",
+    "profileNamePlaceholder": "Tên hồ sơ",
+    "step4Title": "Bước 4: Chọn ngôn ngữ ưa thích của bạn",
+    "languageEnglish": "Tiếng Anh",
+    "languageVietnamese": "Tiếng Việt",
+    "languageFinnish": "Tiếng Phần Lan",
+    "step5Title": "Bước 5: Cho chúng tôi biết bạn thích gì (tùy chọn)",
+    "preferredShowsPlaceholder": "Nhập tên chương trình hoặc thể loại được phân tách bằng dấu phẩy (ví dụ: Hành động, Hài)",
+    "signUp": "Đăng ký",
+    "skip": "Bỏ qua"
+  },
+  "settings": {
+    "title": "Tài khoản",
+    "membershipBilling": "Tư cách thành viên & thanh toán",
+    "email": "Email",
+    "changePassword": "Đổi mật khẩu",
+    "profileAndParentalControls": "Hồ sơ & kiểm soát của phụ huynh",
+    "profileName": "Tên hồ sơ",
+    "preferredLanguages": "Ngôn ngữ ưa thích",
+    "preferredShows": "Chương trình ưa thích",
+    "devices": "Thiết bị",
+    "cancel": "Hủy",
+    "save": "Lưu"
+  }
+}
