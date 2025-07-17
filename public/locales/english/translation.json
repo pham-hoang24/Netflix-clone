@@ -131,5 +131,18 @@
     "preferredShowsPlaceholder": "Enter comma-separated show names or genres (e.g., Action, Comedy)",
     "signUp": "Sign Up",
     "skip": "Skip"
+  },
+  "settings": {
+    "title": "Account",
+    "membershipBilling": "Membership & Billing",
+    "email": "Email",
+    "changePassword": "Change password",
+    "profileAndParentalControls": "Profile & Parental Controls",
+    "profileName": "Profile Name",
+    "preferredLanguages": "Preferred Languages",
+    "preferredShows": "Preferred Shows",
+    "devices": "Devices",
+    "cancel": "Cancel",
+    "save": "Save"
   }
 }

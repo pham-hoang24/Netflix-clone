@@ -4,6 +4,7 @@ import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
 import { useTranslation } from "react-i18next";
 
+
 const Nav: React.FC = () => {
   const [show, handleShow] = useState<boolean>(false);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
@@ -33,7 +34,6 @@ const Nav: React.FC = () => {
     logout();
     setDropdownOpen(false);
   };
-
   return (
     <div className={`nav ${show && "nav_black"}`}>
       <img
@@ -41,23 +41,30 @@ const Nav: React.FC = () => {
         src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
         alt="Netflix Logo"
       />
-      <div className="nav_avatar_container" onClick={handleAvatarClick}>
-        <img
-          className="nav_avatar"
-          src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
-          alt="Netflix Avatar"
-        />
-        {dropdownOpen && (
-          <div className="nav_dropdown">
-            <Link to="/settings" className="nav_dropdown_item" onClick={() => setDropdownOpen(false)}>
-              {t('nav.settings')}
-            </Link>
-            <button onClick={handleSignOut} className="nav_dropdown_item">
-              {t('nav.signOut')}
-            </button>
-          </div>
-        )}
-      </div>
+        <div className="nav_avatar_container">
+          <img
+            className="nav_avatar"
+            src="https://upload.wikimedia.org/wikipedia/commons/0/0b/Netflix-avatar.png"
+            alt="Netflix Avatar"
+            onClick={handleAvatarClick}
+          />
+          {dropdownOpen && (
+            <div className="nav_dropdown">
+              <Link
+                to="/settings"
+                className="nav_dropdown_item"
+                onClick={() => {
+                  console.log('clicked settings link');
+                  setDropdownOpen(false);
+                }}>
+                {t('nav.settings')}
+              </Link>
+              <button onClick={handleSignOut} className="nav_dropdown_item">
+                {t('nav.signOut')}
+              </button>
+            </div>
+          )}
+        </div>
     </div>
   );
 };

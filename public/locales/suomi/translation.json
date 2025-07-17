@@ -114,5 +114,18 @@
   },
   "row": {
     "noTrailer": "Tällä elokuvalla ei tällä hetkellä ole traileria."
+  },
+  "settings": {
+    "title": "Tili",
+    "membershipBilling": "Jäsenyys ja laskutus",
+    "email": "Sähköposti",
+    "changePassword": "Vaihda salasana",
+    "profileAndParentalControls": "Profiili ja vanhempien valvonta",
+    "profileName": "Profiilin nimi",
+    "preferredLanguages": "Ensisijaiset kielet",
+    "preferredShows": "Ensisijaiset ohjelmat",
+    "devices": "Laitteet",
+    "cancel": "Peruuta",
+    "save": "Tallenna"
   }
 }

@@ -32,11 +32,6 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return unsubscribe;
   }, []);
 
-  useEffect(() => {
-    if (currentUser && !loading) {
-      navigate('/home');
-    }
-  }, [currentUser, loading, navigate]);
 
   const login = () => {
     // The onAuthStateChanged listener will handle the user state update
