@@ -149,5 +149,18 @@
     "preferredShowsPlaceholder": "Nhập tên chương trình hoặc thể loại được phân tách bằng dấu phẩy (ví dụ: Hành động, Hài)",
     "signUp": "Đăng ký",
     "skip": "Bỏ qua"
+  },
+  "settings": {
+    "title": "Tài khoản",
+    "membershipBilling": "Tư cách thành viên & thanh toán",
+    "email": "Email",
+    "changePassword": "Đổi mật khẩu",
+    "profileAndParentalControls": "Hồ sơ & kiểm soát của phụ huynh",
+    "profileName": "Tên hồ sơ",
+    "preferredLanguages": "Ngôn ngữ ưa thích",
+    "preferredShows": "Chương trình ưa thích",
+    "devices": "Thiết bị",
+    "cancel": "Hủy",
+    "save": "Lưu"
   }
 }
