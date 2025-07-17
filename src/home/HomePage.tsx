@@ -4,6 +4,7 @@ import requests from "./requests";
 import Row from "./Row";
 import Banner from "./Banner";
 import Nav from "./Nav";
+import { useTranslation } from "react-i18next";
 
 interface RowData {
   title: string;
@@ -12,22 +13,23 @@ interface RowData {
 }
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
   const rowList: RowData[] = [
     {
-      title: "NETFLIX ORIGINALS",
+      title: t('homePage.netflixOriginals'),
       fetchUrl: requests.fetchNetflixOriginals,
       isLargeRow: true,
     },
     {
-      title: "Trending Now",
+      title: t('homePage.trendingNow'),
       fetchUrl: requests.fetchTrending,
     },
-    { title: "Top Rated", fetchUrl: requests.fetchTopRated },
-    { title: "Action Movies", fetchUrl: requests.fetchActionMovies },
-    { title: "Comedy Movies", fetchUrl: requests.fetchComedyMovies },
-    { title: "Horror Movies", fetchUrl: requests.fetchHorrorMovies },
-    { title: "Romance Movies", fetchUrl: requests.fetchRomanceMovies },
-    { title: "Documentaries", fetchUrl: requests.fetchDocumentaries },
+    { title: t('homePage.topRated'), fetchUrl: requests.fetchTopRated },
+    { title: t('homePage.actionMovies'), fetchUrl: requests.fetchActionMovies },
+    { title: t('homePage.comedyMovies'), fetchUrl: requests.fetchComedyMovies },
+    { title: t('homePage.horrorMovies'), fetchUrl: requests.fetchHorrorMovies },
+    { title: t('homePage.romanceMovies'), fetchUrl: requests.fetchRomanceMovies },
+    { title: t('homePage.documentaries'), fetchUrl: requests.fetchDocumentaries },
   ];
 
   return (

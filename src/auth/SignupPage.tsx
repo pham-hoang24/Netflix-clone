@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
 import styles from './SignupPage.module.css';
+import { useTranslation } from 'react-i18next';
 
 const SignupPage: React.FC = () => {
   const navigate = useNavigate();
@@ -13,19 +14,22 @@ const SignupPage: React.FC = () => {
     password: '',
     devices: [] as string[],
     profileName: '',
+    preferredLanguages: [] as string[],
     preferredShows: [] as string[],
   });
   const [error, setError] = useState<string | null>(null);
+  const { t } = useTranslation();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
     if (type === 'checkbox') {
       const { checked } = e.target as HTMLInputElement;
+      const arrayName = name as 'devices' | 'preferredLanguages';
       setFormData((prev) => ({
         ...prev,
-        devices: checked
-          ? [...prev.devices, value]
-          : prev.devices.filter((device) => device !== value),
+        [arrayName]: checked
+          ? [...prev[arrayName], value]
+          : prev[arrayName].filter((item) => item !== value),
       }));
     } else {
       setFormData((prev) => ({
@@ -40,28 +44,33 @@ const SignupPage: React.FC = () => {
     switch (currentStep) {
       case 1:
         if (!formData.email || !formData.password) {
-          setError('Email and password are required.');
+          setError(t('signup.emailPasswordRequired'));
           return;
         }
         if (formData.password.length < 6) {
-          setError('Password must be at least 6 characters long.');
+          setError(t('signup.passwordLengthError'));
           return;
         }
-        // Basic email format validation
-        if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email)) {
-          setError('Please enter a valid email address.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          setError(t('signup.invalidEmail'));
           return;
         }
         break;
       case 2:
         if (formData.devices.length === 0) {
-          setError('Please select at least one device.');
+          setError(t('signup.deviceSelectionRequired'));
           return;
         }
         break;
       case 3:
         if (!formData.profileName.trim()) {
-          setError('Profile name is required.');
+          setError(t('signup.profileNameRequired'));
+          return;
+        }
+        break;
+      case 4:
+        if (formData.preferredLanguages.length === 0) {
+          setError(t('signup.languageSelectionRequired'));
           return;
         }
         break;
@@ -88,7 +97,8 @@ const SignupPage: React.FC = () => {
         profileType: 'Adult', // Default profile type
         devices: formData.devices,
         profileName: formData.profileName,
-        preferred_genres: formData.preferredShows.map(s => s.trim()).filter(s => s.length > 0), // Clean up and filter empty strings
+        preferredLanguages: formData.preferredLanguages,
+        preferred_genres: formData.preferredShows.map(s => s.trim()).filter(s => s.length > 0),
       });
       navigate('/home');
     } catch (err: any) {
@@ -101,29 +111,29 @@ const SignupPage: React.FC = () => {
       case 1:
         return (
           <div className={styles.stepContent}>
-            <h2>Step 1: Create Account</h2>
+            <h2>{t('signup.step1Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
             <input
               type="email"
               name="email"
-              placeholder="Email"
+              placeholder={t('signup.emailPlaceholder')}
               value={formData.email}
               onChange={handleChange}
             />
             <input
               type="password"
               name="password"
-              placeholder="Password"
+              placeholder={t('signup.passwordPlaceholder')}
               value={formData.password}
               onChange={handleChange}
             />
-            <button type="button" onClick={handleNextStep}>Next</button>
+            <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
           </div>
         );
       case 2:
         return (
           <div className={styles.stepContent}>
-            <h2>Step 2: Choose Devices</h2>
+            <h2>{t('signup.step2Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
             <label>
               <input
@@ -133,7 +143,7 @@ const SignupPage: React.FC = () => {
                 checked={formData.devices.includes('TV')}
                 onChange={handleChange}
               />
-              TV
+              {t('signup.deviceTV')}
             </label>
             <label>
               <input
@@ -143,7 +153,7 @@ const SignupPage: React.FC = () => {
                 checked={formData.devices.includes('Mobile')}
                 onChange={handleChange}
               />
-              Mobile
+              {t('signup.deviceMobile')}
             </label>
             <label>
               <input
@@ -153,47 +163,88 @@ const SignupPage: React.FC = () => {
                 checked={formData.devices.includes('Desktop')}
                 onChange={handleChange}
               />
-              Desktop
+              {t('signup.deviceDesktop')}
             </label>
             <div className={styles.navigationButtons}>
-              <button type="button" onClick={handlePrevStep}>Back</button>
-              <button type="button" onClick={handleNextStep}>Next</button>
+              <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
+              <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
             </div>
           </div>
         );
       case 3:
         return (
           <div className={styles.stepContent}>
-            <h2>Step 3: Name Your Profile</h2>
+            <h2>{t('signup.step3Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
             <input
               type="text"
               name="profileName"
-              placeholder="Profile Name"
+              placeholder={t('signup.profileNamePlaceholder')}
               value={formData.profileName}
               onChange={handleChange}
             />
             <div className={styles.navigationButtons}>
-              <button type="button" onClick={handlePrevStep}>Back</button>
-              <button type="button" onClick={handleNextStep}>Next</button>
+              <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
+              <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
             </div>
           </div>
         );
       case 4:
         return (
           <div className={styles.stepContent}>
-            <h2>Step 4: Choose Favorite Shows (Optional)</h2>
+            <h2>{t('signup.step4Title')}</h2>
+            {error && <p className={styles.error}>{error}</p>}
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="English"
+                checked={formData.preferredLanguages.includes('English')}
+                onChange={handleChange}
+              />
+              {t('signup.languageEnglish')}
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="Vietnamese"
+                checked={formData.preferredLanguages.includes('Vietnamese')}
+                onChange={handleChange}
+              />
+              {t('signup.languageVietnamese')}
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="preferredLanguages"
+                value="Finnish"
+                checked={formData.preferredLanguages.includes('Finnish')}
+                onChange={handleChange}
+              />
+              {t('signup.languageFinnish')}
+            </label>
+            <div className={styles.navigationButtons}>
+              <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
+              <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
+            </div>
+          </div>
+        );
+      case 5:
+        return (
+          <div className={styles.stepContent}>
+            <h2>{t('signup.step5Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
             <textarea
               name="preferredShows"
-              placeholder="Enter comma-separated show names or genres (e.g., Action, Comedy)"
+              placeholder={t('signup.preferredShowsPlaceholder')}
               value={formData.preferredShows.join(', ')}
               onChange={(e) => setFormData(prev => ({ ...prev, preferredShows: e.target.value.split(',').map(s => s.trim()) }))}
             />
             <div className={styles.navigationButtons}>
-              <button type="button" onClick={handlePrevStep}>Back</button>
-              <button type="button" onClick={handleFinalSubmit}>Sign Up</button>
-              <button type="button" onClick={handleFinalSubmit}>Skip</button>
+              <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
+              <button type="button" onClick={handleFinalSubmit}>{t('signup.signUp')}</button>
+              <button type="button" onClick={handleFinalSubmit}>{t('signup.skip')}</button>
             </div>
           </div>
         );

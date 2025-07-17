@@ -11,7 +11,9 @@
 .heroContent {
   padding-top: 2rem; /* Adjusted base padding-top */
   text-align: center;
-  max-width: 80%;
+  max-width: 1200px;
+  width: 80%;
+
 }
 
 .hero h1 {
