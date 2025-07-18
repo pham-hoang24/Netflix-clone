@@ -94,6 +94,7 @@
   "signup.preferredShowsPlaceholder": "Anna pilkulla eroteltuja ohjelmien nimiä tai genrejä (esim. Toiminta, Komedia)",
   "signup.signUp": "Rekisteröidy",
   "signup.skip": "Ohita",
+  "regionLoading": "Aluetietojen haku... Odota.",
   "banner": {
     "play": "Toista",
     "myList": "Oma lista"
