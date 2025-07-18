@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate,useLocation } from 'react-router-dom';
 import { onAuthStateChanged, User } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '../services/firebase';
@@ -32,11 +32,12 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return unsubscribe;
   }, []);
 
+  const location = useLocation();
   useEffect(() => {
-    if (currentUser && !loading) {
+    if (currentUser && !loading && location.pathname === '/login') {
       navigate('/home');
     }
-  }, [currentUser, loading, navigate]);
+  }, [currentUser, loading, navigate,location.pathname]);
 
   const login = () => {
     // The onAuthStateChanged listener will handle the user state update
