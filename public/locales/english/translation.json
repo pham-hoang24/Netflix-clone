@@ -132,5 +132,18 @@
     "signUp": "Sign Up",
     "skip": "Skip",
     "regionLoading": "Fetching region information... Please wait."
-  }
+  },
+"settings": {
+  "title": "Account",
+  "membershipBilling": "Membership & Billing",
+  "email": "Email",
+  "changePassword": "Change password",
+  "profileAndParentalControls": "Profile & Parental Controls",
+  "profileName": "Profile Name",
+  "preferredLanguages": "Preferred Languages",
+  "preferredShows": "Preferred Shows",
+  "devices": "Devices",
+  "cancel": "Cancel",
+  "save": "Save"
+}
 }
