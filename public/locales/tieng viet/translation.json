@@ -148,6 +148,7 @@
     "step5Title": "Bước 5: Cho chúng tôi biết bạn thích gì (tùy chọn)",
     "preferredShowsPlaceholder": "Nhập tên chương trình hoặc thể loại được phân tách bằng dấu phẩy (ví dụ: Hành động, Hài)",
     "signUp": "Đăng ký",
-    "skip": "Bỏ qua"
+    "skip": "Bỏ qua",
+    "regionLoading": "Đang tìm nạp thông tin khu vực... Vui lòng đợi."
   }
 }

@@ -130,6 +130,7 @@
     "step5Title": "Step 5: Tell us what you like (optional)",
     "preferredShowsPlaceholder": "Enter comma-separated show names or genres (e.g., Action, Comedy)",
     "signUp": "Sign Up",
-    "skip": "Skip"
+    "skip": "Skip",
+    "regionLoading": "Fetching region information... Please wait."
   }
 }

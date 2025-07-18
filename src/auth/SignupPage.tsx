@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore';
@@ -18,7 +18,42 @@ const SignupPage: React.FC = () => {
     preferredShows: [] as string[],
   });
   const [error, setError] = useState<string | null>(null);
+  const [region, setRegion] = useState<string>('US'); // Default region
+  const [isRegionLoading, setIsRegionLoading] = useState<boolean>(true);
   const { t } = useTranslation();
+
+  useEffect(() => {
+    const fetchRegion = async () => {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 seconds timeout
+
+      try {
+        const response = await fetch('https://ipapi.co/json/', { signal: controller.signal });
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (data.country_code) {
+          setRegion(data.country_code);
+        } else {
+          console.warn('ipapi.co did not return a country_code, defaulting to US.');
+        }
+      } catch (err: any) {
+        if (err.name === 'AbortError') {
+          console.error('Region API call timed out:', err);
+        } else {
+          console.error('Failed to fetch region:', err);
+        }
+        setRegion('US'); // Fallback to default region
+      } finally {
+        setIsRegionLoading(false);
+      }
+    };
+
+    fetchRegion();
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -89,11 +124,16 @@ const SignupPage: React.FC = () => {
     e.preventDefault();
     setError(null);
 
+    if (isRegionLoading) {
+      setError(t('signup.regionLoading')); // You'll need to add this translation key
+      return;
+    }
+
     try {
       const { user } = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
       await setDoc(doc(db, 'users', user.uid), {
         email: formData.email,
-        region: 'US', // Default region
+        region: region, // Use fetched or default region
         profileType: 'Adult', // Default profile type
         devices: formData.devices,
         profileName: formData.profileName,
@@ -243,8 +283,8 @@ const SignupPage: React.FC = () => {
             />
             <div className={styles.navigationButtons}>
               <button type="button" onClick={handlePrevStep}>{t('signup.back')}</button>
-              <button type="button" onClick={handleFinalSubmit}>{t('signup.signUp')}</button>
-              <button type="button" onClick={handleFinalSubmit}>{t('signup.skip')}</button>
+              <button type="button" onClick={handleFinalSubmit} disabled={isRegionLoading}>{t('signup.signUp')}</button>
+              <button type="button" onClick={handleFinalSubmit} disabled={isRegionLoading}>{t('signup.skip')}</button>
             </div>
           </div>
         );
