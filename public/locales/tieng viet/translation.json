@@ -150,5 +150,18 @@
     "signUp": "Đăng ký",
     "skip": "Bỏ qua",
     "regionLoading": "Đang tìm nạp thông tin khu vực... Vui lòng đợi."
-  }
+  },
+"settings": {
+  "title": "Tài khoản",
+  "membershipBilling": "Tư cách thành viên & thanh toán",
+  "email": "Email",
+  "changePassword": "Đổi mật khẩu",
+  "profileAndParentalControls": "Hồ sơ & kiểm soát của phụ huynh",
+  "profileName": "Tên hồ sơ",
+  "preferredLanguages": "Ngôn ngữ ưa thích",
+  "preferredShows": "Chương trình ưa thích",
+  "devices": "Thiết bị",
+  "cancel": "Hủy",
+  "save": "Lưu"
+}
 }
