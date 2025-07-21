@@ -1,8 +1,12 @@
 import React from 'react';
-import { useLanguage } from '../../context/LanguageContext';
+import { useTranslation } from 'react-i18next';
 
-function LanguageSwitcher() {
-  const { changeLanguage } = useLanguage();
+function LandingPageLanguageSwitcher() {
+  const { i18n } = useTranslation();
+
+  const changeLanguage = (lng: string) => {
+    i18n.changeLanguage(lng);
+  };
 
   return (
     <div>
@@ -13,4 +17,4 @@ function LanguageSwitcher() {
   );
 }
 
-export default LanguageSwitcher;
+export default LandingPageLanguageSwitcher;
