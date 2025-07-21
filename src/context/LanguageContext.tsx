@@ -17,10 +17,14 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [hasManuallySwitched, setHasManuallySwitched] = useState(false);
 
   const changeLanguage = (lang: string) => {
-    i18n.changeLanguage(lang);
-    setLanguage(lang);
-    setHasManuallySwitched(true);
+    i18n.changeLanguage(lang).then(() => {
+      setLanguage(lang);
+      setHasManuallySwitched(true);
+    }).catch(err => {
+      console.error('Failed to change language', err);
+    });
   };
+  
 
   return (
     <LanguageContext.Provider value={{ language, changeLanguage, hasManuallySwitched, setHasManuallySwitched }}>

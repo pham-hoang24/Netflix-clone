@@ -10,9 +10,9 @@ function LandingPageLanguageSwitcher() {
 
   return (
     <div>
-      <button onClick={() => changeLanguage('english')}>English</button>
-      <button onClick={() => changeLanguage('suomi')}>Suomi</button>
-      <button onClick={() => changeLanguage('tieng viet')}>Tiếng Việt</button>
+      <button onClick={() => changeLanguage('en')}>English</button>
+      <button onClick={() => changeLanguage('fi')}>Suomi</button>
+      <button onClick={() => changeLanguage('vi')}>Tiếng Việt</button>
     </div>
   );
 }

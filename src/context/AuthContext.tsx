@@ -26,16 +26,25 @@ const AuthProviderContent: React.FC<{ children: ReactNode }> = ({ children }) =>
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        const userDoc = await getDoc(doc(db, 'users', user.uid));
-        if (userDoc.exists()) {
-          const userData = userDoc.data();
-          setCurrentUser({ ...user, ...userData });
-          const preferredLanguage = userData.preferredLanguages?.[0];
-          if (preferredLanguage && i18n.language !== preferredLanguage) {
-            changeLanguage(preferredLanguage);
+        // Add a check to ensure the user is still authenticated
+        if (auth.currentUser) {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const userData = userDoc.data();
+            setCurrentUser({ ...user, ...userData });
+            const languageMap: Record<string, string> = {
+              English: 'english',
+              Finnish: 'suomi',
+              Vietnamese: 'tieng viet',
+            };          
+            const raw = userData.preferredLanguages?.[0];
+            const code = raw ? languageMap[raw] : undefined;
+            if (code && i18n.language !== code) {
+              changeLanguage(code);
+            }
+          } else {
+            setCurrentUser(user);
           }
-        } else {
-          setCurrentUser(user);
         }
       } else {
         setCurrentUser(null);
