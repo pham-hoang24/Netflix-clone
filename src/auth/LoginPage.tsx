@@ -61,6 +61,7 @@ const LoginPage: React.FC = () => {
 
       if (data.newSession) {
         login(); // Use login from AuthContext
+        navigate('/home');
       } else {
         setError(data.message || null);
         setShowModal(true);
