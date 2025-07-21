@@ -60,20 +60,20 @@ const LandingPage: React.FC = () => {
       answer: "faq.howMuchCost.answer",
     },
     {
-      question: "faq.whereWatch.question",
-      answer: "faq.whereWatch.answer",
+      question: "faq.whereCanIWatch.question",
+      answer: "faq.whereCanIWatch.answer",
     },
     {
-      question: "faq.howCancel.question",
-      answer: "faq.howCancel.answer",
+      question: "faq.howDoICancel.question",
+      answer: "faq.howDoICancel.answer",
     },
     {
-      question: "faq.whatWatch.question",
-      answer: "faq.whatWatch.answer",
+      question: "faq.whatCanIWatch.question",
+      answer: "faq.whatCanIWatch.answer",
     },
     {
-      question: "faq.goodForChildren.question",
-      answer: "faq.goodForChildren.answer",
+      question: "faq.isNetflixGoodForChildren.question",
+      answer: "faq.isNetflixGoodForChildren.answer",
     },
   ];
 

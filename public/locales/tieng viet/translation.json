@@ -85,19 +85,19 @@
       "question": "Netflix có giá bao nhiêu?",
       "answer": "Xem Netflix trên điện thoại thông minh, máy tính bảng, TV thông minh, máy tính xách tay hoặc thiết bị phát trực tuyến của bạn, tất cả chỉ với một khoản phí cố định hàng tháng. Các gói dao động từ 9,49 € đến 17,99 € một tháng. Không có chi phí bổ sung, không có hợp đồng."
     },
-    "whereWatch": {
+    "whereCanIWatch": {
       "question": "Tôi có thể xem ở đâu?",
       "answer": "Xem mọi lúc, mọi nơi. Đăng nhập bằng tài khoản Netflix của bạn để xem ngay lập tức trên web tại netflix.com từ máy tính cá nhân của bạn hoặc trên bất kỳ thiết bị kết nối internet nào cung cấp ứng dụng Netflix, bao gồm TV thông minh, điện thoại thông minh, máy tính bảng, trình phát đa phương tiện trực tuyến và máy chơi game.<br>Bạn cũng có thể tải xuống các chương trình yêu thích của mình bằng ứng dụng iOS hoặc Android. Sử dụng tính năng tải xuống để xem khi bạn đang di chuyển và không có kết nối internet. Mang Netflix theo bạn mọi lúc mọi nơi."
     },
-    "howCancel": {
+    "howDoICancel": {
       "question": "Làm cách nào để hủy?",
       "answer": "Netflix linh hoạt. Không có hợp đồng khó chịu và không có cam kết. Bạn có thể dễ dàng hủy tài khoản của mình trực tuyến chỉ với hai cú nhấp chuột. Không có phí hủy – bắt đầu hoặc dừng tài khoản của bạn bất cứ lúc nào."
     },
-    "whatWatch": {
+    "whatCanIWatch": {
       "question": "Tôi có thể xem gì trên Netflix?",
       "answer": "Netflix có một thư viện phong phú các bộ phim truyện, phim tài liệu, phim bộ, anime, phim gốc Netflix đoạt giải thưởng và nhiều nội dung khác. Xem bao nhiêu tùy thích, bất cứ khi nào bạn muốn."
     },
-    "goodForChildren": {
+    "isNetflixGoodForChildren": {
       "question": "Netflix có tốt cho trẻ em không?",
       "answer": "Trải nghiệm Netflix dành cho trẻ em được bao gồm trong tư cách thành viên của bạn để cha mẹ có thể kiểm soát trong khi trẻ em thưởng thức các chương trình truyền hình và phim thân thiện với gia đình trong không gian riêng của chúng.<br>Hồ sơ trẻ em đi kèm với các điều khiển của phụ huynh được bảo vệ bằng mã PIN cho phép bạn hạn chế xếp hạng độ tuổi của nội dung trẻ em có thể xem và chặn các tiêu đề cụ thể mà bạn không muốn trẻ em xem."
     }
@@ -148,7 +148,8 @@
     "step5Title": "Bước 5: Cho chúng tôi biết bạn thích gì (tùy chọn)",
     "preferredShowsPlaceholder": "Nhập tên chương trình hoặc thể loại được phân tách bằng dấu phẩy (ví dụ: Hành động, Hài)",
     "signUp": "Đăng ký",
-    "skip": "Bỏ qua"
+    "skip": "Bỏ qua",
+    "regionLoading": "Đang tìm nạp thông tin khu vực... Vui lòng đợi."
   },
   "settings": {
     "title": "Tài khoản",
