@@ -9,6 +9,7 @@ interface Requests {
   fetchHorrorMovies: string;
   fetchRomanceMovies: string;
   fetchDocumentaries: string;
+  searchMovies:(query: string) => string;
 }
 
 const requests: Requests = {
@@ -20,5 +21,6 @@ const requests: Requests = {
   fetchHorrorMovies: `/discover/movie?api_key=${API_key}&with_genres=27`,
   fetchRomanceMovies: `/discover/movie?api_key=${API_key}&with_genres=10749`,
   fetchDocumentaries: `/discover/movie?api_key=${API_key}&with_genres=99`,
+  searchMovies: (query: string) => `/search/movie?api_key=${API_key}&query=${query}&language=en-US&page=1&include_adult=false`,
 };
 export default requests;

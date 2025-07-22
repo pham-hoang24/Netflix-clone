@@ -20,6 +20,13 @@
     width: 80px;
     object-fit: contain;
 }
+
+.nav_search {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 .nav_avatar{
     position: relative;
     width: 30px;
