@@ -1,9 +1,11 @@
 import React from "react";
+import { useEffect } from "react";
 import "./HomePage.css";
 import requests from "./requests";
 import Row from "./Row";
 import Banner from "./Banner";
 import Nav from "./Nav";
+import { logUserEvent } from '../services/analytics';
 import { useTranslation } from "react-i18next";
 
 interface RowData {
@@ -13,6 +15,11 @@ interface RowData {
 }
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    logUserEvent('page_view', {
+      page_name: 'HomePage',
+    });
+  }, []);
   const { t } = useTranslation();
   const rowList: RowData[] = [
     {
