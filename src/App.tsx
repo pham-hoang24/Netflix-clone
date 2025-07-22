@@ -9,6 +9,7 @@ import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { I18nextProvider } from 'react-i18next';
 import i18n from './services/i18n'; // Import your i18n configuration
 import { AuthProvider, useAuth } from './context/AuthContext';
+import SearchResultsPage from './search/SearchResultsPage';
 
 const AppContent: React.FC = () => {
   const { loading } = useAuth();
@@ -30,6 +31,11 @@ const AppContent: React.FC = () => {
       <Route path="/settings" element={
         <PrivateRoute>
           <SettingsPage />
+        </PrivateRoute>
+      } />
+      <Route path="/search/:query" element={
+        <PrivateRoute>
+          <SearchResultsPage />
         </PrivateRoute>
       } />
     </Routes>

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Search.module.css';
 import requests from './requests';
 import axios from './axios';
@@ -125,8 +126,7 @@ const Search: React.FC = () => {
             ))}
           </ul>
           <div className={styles.viewAll}>
-            {/* This will be a Link component later */}
-            <a>View all results</a>
+            <Link to={`/search/${query}`}>View all results</Link>
           </div>
         </div>
       )}

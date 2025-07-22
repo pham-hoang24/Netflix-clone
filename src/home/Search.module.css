@@ -1,4 +1,5 @@
 .searchContainer {
+  border: none;
   position: relative;
   width: 300px;
 }

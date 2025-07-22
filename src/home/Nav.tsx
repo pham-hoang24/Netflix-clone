@@ -37,11 +37,13 @@ const Nav: React.FC = () => {
   };
   return (
     <div className={`nav ${show && "nav_black"}`}>
-      <img
-        className="nav_logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-        alt="Netflix Logo"
-      />
+      <Link to="/home">
+        <img 
+          className="nav_logo"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+          alt="Netflix Logo"
+        />
+      </Link>
       <div className="nav_search">
         <Search />
       </div>
