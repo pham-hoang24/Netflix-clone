@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
+import Search from "./Search"
 import { useTranslation } from "react-i18next";
 
 
@@ -36,11 +37,16 @@ const Nav: React.FC = () => {
   };
   return (
     <div className={`nav ${show && "nav_black"}`}>
-      <img
-        className="nav_logo"
-        src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
-        alt="Netflix Logo"
-      />
+      <Link to="/home">
+        <img 
+          className="nav_logo"
+          src="https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+          alt="Netflix Logo"
+        />
+      </Link>
+      <div className="nav_search">
+        <Search />
+      </div>
         <div className="nav_avatar_container">
           <img
             className="nav_avatar"
