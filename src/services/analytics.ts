@@ -1,14 +1,32 @@
-import { logEvent } from 'firebase/analytics';
-import { auth, analytics } from './firebase';
+import { auth } from './firebase';
+import axios from 'axios';
 
-export const logUserEvent = (eventName: string, params: Record<string, any>) => {
+export const logUserEvent = async (eventName: string, params: Record<string, any>) => {
   const user = auth.currentUser;
   const deviceId = navigator.userAgent;
 
-  logEvent(analytics, eventName, {
-    ...params,
-    user_id: user ? user.uid : 'unknown',
-    device_id: deviceId,
-    timestamp: new Date().toISOString(),
-  });
+  if (!user) {
+    console.warn(`Event '${eventName}' not logged: User not authenticated.`);
+    return; // Do not send event if user is not logged in
+  }
+
+  try {
+    const idToken = await user.getIdToken();
+    console.log('Firebase ID Token:', idToken); // <--- ADD THIS LINE TEMPORARILY
+
+    await axios.post('http://localhost:2000/api/log-event', {
+      event: eventName,
+      params: {
+        ...params,
+        device_id: deviceId,
+      },
+    }, {
+      headers: {
+        Authorization: `Bearer ${idToken}`,
+      },
+    });
+    console.log(`Event '${eventName}' logged successfully to Firestore.`);
+  } catch (error) {
+    console.error(`Failed to log event '${eventName}' to Firestore:`, error);
+  }
 };

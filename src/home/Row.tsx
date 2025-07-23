@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
+import React, { useState, useEffect, useRef, useCallback, } from "react";
 import axios from "./axios";
 import "./Row.css";
 import YouTube, { YouTubeProps } from "react-youtube";
 import movieTrailer from "movie-trailer";
-
+import { useAuth } from '../context/AuthContext';
+import { logUserEvent } from '../services/analytics';
 const base_url = "https://image.tmdb.org/t/p/original/";
 
 interface Movie {
@@ -25,6 +26,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
   const [trailerUrl, setTrailerUrl] = useState<string>("");
   const [noTrailer, setNoTrailer] = useState<boolean>(false);
   const fetchDebounce = useRef<NodeJS.Timeout | null>(null);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const controller = new AbortController();
@@ -48,11 +50,41 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
     };
   }, [fetchUrl]);
 
-  const opts: YouTubeProps["opts"] = {
-    height: "390",
-    width: "100%",
-    playerVars: { autoplay: 1 },
+  // Define the origin explicitly for local development
+  const opts = {
+    height: '390',
+    width: '100%',
+    playerVars: {
+      autoplay: 1,
+      origin: window.location.origin, // Crucial for security and communication
+    },
   };
+
+  const [watchStartTime, setWatchStartTime] = useState<number | null>(null);
+  const [currentPlayingMovieId, setCurrentPlayingMovieId] = useState<string | null>(null);
+
+  const onPlayerStateChange = (event: any) => {
+    if (!currentUser) return;
+
+  //   const videoId = trailerUrl; // The videoId is the trailerUrl
+  //   if (!videoId) return;
+
+  //   if (event.data === window.YT.PlayerState.PLAYING) {
+  //     setWatchStartTime(Date.now());
+  //     setCurrentPlayingMovieId(videoId);
+  //     console.log(`Started playing video: ${videoId}`);
+  //   } else if (
+  //     (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
+  //     watchStartTime !== null &&
+  //     currentPlayingMovieId === videoId
+  //   ) {
+  //     const watchDuration = Date.now() - watchStartTime; // Duration in milliseconds
+  //     console.log(`Stopped playing video: ${videoId}, duration: ${watchDuration}ms`);
+  //     // logUserEvent(currentUser.uid, 'watch_time', { videoId: videoId, duration: watchDuration });
+  //     setWatchStartTime(null);
+  //     setCurrentPlayingMovieId(null);
+  //   }
+  // };
 
   const handleClick = useCallback(
     (movie: Movie) => {
@@ -97,7 +129,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
           />
         ))}
       </div>
-      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
+      <YouTube videoId={trailerUrl} opts={opts} onStateChange={onPlayerStateChange} />
       {noTrailer && (
         <div className="row__noTrailer">
           This movie currently does not have a trailer.
@@ -106,5 +138,5 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
     </div>
   );
 };
-
+}
 export default Row;

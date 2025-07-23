@@ -1,5 +1,3 @@
-declare module 'movie-trailer';
-
 declare global {
   interface Window {
     YT: {
@@ -13,3 +11,4 @@ declare global {
     };
   }
 }
+let YT = 
