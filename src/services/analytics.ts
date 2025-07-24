@@ -1,5 +1,15 @@
 import { auth } from './firebase';
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
+
+interface LogEventPayload {
+  event: string;
+  movieId?: string;
+  watchTimeSeconds?: number;
+  deviceType?: string;
+  searchTerm?: string;
+  sessionId?: string;
+  metadata?: Record<string, any>;
+}
 
 export const logUserEvent = async (eventName: string, params: Record<string, any>) => {
   const user = auth.currentUser;
@@ -12,17 +22,35 @@ export const logUserEvent = async (eventName: string, params: Record<string, any
 
   try {
     const idToken = await user.getIdToken();
-    await axios.post('http://localhost:2000/api/log-event', {
+    const deviceType = navigator.userAgent;
+
+    const payload: LogEventPayload = {
       event: eventName,
-      params: {
-        ...params,
-        device_id: deviceId,
-      },
-    }, {
-      headers: {
-        Authorization: `Bearer ${idToken}`,
-      },
-    });
+      deviceType: deviceType,
+    };
+
+    if (eventName === 'watch_time') {
+      const watchTimeSeconds = params.duration != null
+        ? Math.floor(params.duration / 1000)
+        : undefined;
+      payload.movieId = params.videoId;
+      payload.watchTimeSeconds = watchTimeSeconds;
+    }
+
+    // Add other event-specific parameters as needed
+    if (eventName === 'search') {
+      payload.searchTerm = params.searchTerm;
+    }
+
+    await axios.post<any, AxiosResponse<any>, LogEventPayload>(
+      'http://localhost:2000/api/log-event',
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      }
+    );
     console.log(`Event '${eventName}' logged successfully to Firestore.`);
   } catch (error) {
     console.error(`Failed to log event '${eventName}' to Firestore:`, error);
