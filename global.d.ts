@@ -1,3 +1,4 @@
+export {};
 declare global {
   interface Window {
     YT: {
@@ -7,8 +8,8 @@ declare global {
         PAUSED: number;
         BUFFERING: number;
         CUED: number;
+        UNSTARTED: number;
       };
     };
   }
 }
-let YT = 

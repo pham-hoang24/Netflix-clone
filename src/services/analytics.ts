@@ -12,8 +12,6 @@ export const logUserEvent = async (eventName: string, params: Record<string, any
 
   try {
     const idToken = await user.getIdToken();
-    console.log('Firebase ID Token:', idToken); // <--- ADD THIS LINE TEMPORARILY
-
     await axios.post('http://localhost:2000/api/log-event', {
       event: eventName,
       params: {

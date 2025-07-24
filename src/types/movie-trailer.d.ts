@@ -1,15 +1,8 @@
-declare module 'movie-trailer';
+declare module 'movie-trailer' {
+  function movieTrailer(
+    movieName: string | null,
+    options?: { tmdbId?: number; year?: number; age?: number }
+  ): Promise<string | null>;
 
-declare global {
-  interface Window {
-    YT: {
-      PlayerState: {
-        ENDED: number;
-        PLAYING: number;
-        PAUSED: number;
-        BUFFERING: number;
-        CUED: number;
-      };
-    };
-  }
+  export default movieTrailer;
 }
