@@ -28,9 +28,38 @@ if (!admin.apps.length) {
 
 const db = admin.firestore();
 
+async function fetchMediaDetails(id, type) {
+  const params = { api_key: TMDB_API_KEY };
+  const [detailsRes, creditsRes] = await Promise.all([
+    axios.get(`${TMDB_URL}/${type}/${id}`, { params }),
+    axios.get(`${TMDB_URL}/${type}/${id}/credits`, { params }),
+  ]);
+
+  const genres = await getGenres(type);
+  const director = creditsRes.data.crew.find(c => c.job === 'Director')?.name || null;
+
+  return {
+    movieName: detailsRes.data.title || detailsRes.data.name,
+    genre: detailsRes.data.genre_ids?.map(gId => genres[gId]).filter(Boolean).join(', ') || null,
+    publishDate: detailsRes.data.release_date || detailsRes.data.first_air_date || null,
+    director
+  };
+}
+
 const app = express();
 const PORT = process.env.PORT || 2000;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const TMDB_URL = "https://api.themoviedb.org/3";
+
+let genreCache = null;
+
+async function getGenres(type) {
+  if (!genreCache) {
+    const res = await axios.get(`${TMDB_URL}/genre/${type}/list`, { params: { api_key: TMDB_API_KEY } });
+    genreCache = res.data.genres.reduce((m, g) => (m[g.id] = g.name, m), {});
+  }
+  return genreCache;
+}
 
 app.use(cors());
 app.use(express.json());
@@ -64,6 +93,10 @@ app.post('/api/log-event', authenticateUser, async (req, res) => {
       searchTerm,
       deviceType,
       sessionId,
+      movieName,
+      genre,
+      publishDate,
+      director,
       metadata = {}
     } = req.body;
 
@@ -83,6 +116,10 @@ app.post('/api/log-event', authenticateUser, async (req, res) => {
       ...(searchTerm && { searchTerm }),
       ...(deviceType && { deviceType }),
       ...(sessionId && { sessionId }),
+      ...(movieName && { movieName }),
+      ...(genre && { genre }),
+      ...(publishDate && { publishDate }),
+      ...(director && { director }),
       ...metadata
     };
 
@@ -100,6 +137,21 @@ app.post('/api/log-event', authenticateUser, async (req, res) => {
   } catch (error) {
     console.error('Error logging event:', error.message);
     res.status(500).json({ error: 'Failed to log event' });
+  }
+});
+
+// ✅ NEW: Get movie details
+app.get('/api/movie-details/:id/:type', async (req, res) => {
+  try {
+    const { id, type } = req.params;
+    if (!id || !type || (type !== 'movie' && type !== 'tv')) {
+      return res.status(400).json({ error: 'Invalid movie ID or type' });
+    }
+    const details = await fetchMediaDetails(id, type);
+    res.json(details);
+  } catch (error) {
+    console.error('Error fetching movie details:', error.message);
+    res.status(500).json({ error: 'Failed to fetch movie details' });
   }
 });
 
