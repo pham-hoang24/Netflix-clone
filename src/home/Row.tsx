@@ -13,6 +13,7 @@ interface Movie {
   title: string;
   poster_path: string;
   backdrop_path: string;
+  media_type?: string;
 }
 
 interface RowProps {
@@ -87,7 +88,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
   };
 
   const handleClick = useCallback(
-    (movie: Movie) => {
+    async (movie: Movie) => {
       if (trailerUrl) {
         setTrailerUrl("");
         setNoTrailer(false);
@@ -96,6 +97,19 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
         const query = movie?.name || movie?.title || "";
         if (!query) return;
 
+        // Determine media type for the backend call
+        const mediaType = movie.media_type || (movie.title ? 'movie' : 'tv');
+
+        // Fetch movie details from your backend
+        let movieDetails = {};
+        try {
+          const detailsRes = await axios.get(`/api/movie-details/${movie.id}/${mediaType}`);
+          movieDetails = detailsRes.data;
+          console.log("Fetched movie details:", movieDetails);
+        } catch (error) {
+          console.error("Error fetching movie details from backend:", error);
+        }
+
         (movieTrailer as any)(null, { tmdbId: movie.id })
           .then((url: string | null) => {
             if (!url) throw new Error("No URL returned");
@@ -103,6 +117,15 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
             const id = urlParams.get("v");
             if (id) setTrailerUrl(id);
             else throw new Error("No video ID in URL");
+
+            // Log watch event with enriched movie details
+            if (currentUser) {
+              logUserEvent('watch_time', {
+                videoId: id,
+                duration: 0, // Initial duration, will be updated on state change
+                ...movieDetails,
+              });
+            }
           })
           .catch((_: any) => {
             console.warn("No trailer found for:", query);

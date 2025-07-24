@@ -9,6 +9,10 @@ interface LogEventPayload {
   searchTerm?: string;
   sessionId?: string;
   metadata?: Record<string, any>;
+  movieName?: string;
+  genre?: string;
+  publishDate?: string;
+  director?: string;
 }
 
 export const logUserEvent = async (eventName: string, params: Record<string, any>) => {
@@ -35,6 +39,10 @@ export const logUserEvent = async (eventName: string, params: Record<string, any
         : undefined;
       payload.movieId = params.videoId;
       payload.watchTimeSeconds = watchTimeSeconds;
+      payload.movieName = params.movieName;
+      payload.genre = params.genre;
+      payload.publishDate = params.publishDate;
+      payload.director = params.director;
     }
 
     // Add other event-specific parameters as needed
