@@ -66,25 +66,25 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
   const onPlayerStateChange = (event: any) => {
     if (!currentUser) return;
 
-  //   const videoId = trailerUrl; // The videoId is the trailerUrl
-  //   if (!videoId) return;
+    const videoId = trailerUrl; // The videoId is the trailerUrl
+    if (!videoId) return;
 
-  //   if (event.data === window.YT.PlayerState.PLAYING) {
-  //     setWatchStartTime(Date.now());
-  //     setCurrentPlayingMovieId(videoId);
-  //     console.log(`Started playing video: ${videoId}`);
-  //   } else if (
-  //     (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
-  //     watchStartTime !== null &&
-  //     currentPlayingMovieId === videoId
-  //   ) {
-  //     const watchDuration = Date.now() - watchStartTime; // Duration in milliseconds
-  //     console.log(`Stopped playing video: ${videoId}, duration: ${watchDuration}ms`);
-  //     // logUserEvent(currentUser.uid, 'watch_time', { videoId: videoId, duration: watchDuration });
-  //     setWatchStartTime(null);
-  //     setCurrentPlayingMovieId(null);
-  //   }
-  // };
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      setWatchStartTime(Date.now());
+      setCurrentPlayingMovieId(videoId);
+      console.log(`Started playing video: ${videoId}`);
+    } else if (
+      (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
+      watchStartTime !== null &&
+      currentPlayingMovieId === videoId
+    ) {
+      const watchDuration = Date.now() - watchStartTime; // Duration in milliseconds
+      console.log(`Stopped playing video: ${videoId}, duration: ${watchDuration}ms`);
+      logUserEvent('watch_time', { videoId: videoId, duration: watchDuration });
+      setWatchStartTime(null);
+      setCurrentPlayingMovieId(null);
+    }
+  };
 
   const handleClick = useCallback(
     (movie: Movie) => {
@@ -138,5 +138,4 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
     </div>
   );
 };
-}
 export default Row;
