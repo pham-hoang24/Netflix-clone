@@ -81,7 +81,6 @@ const authenticateUser = async (req, res, next) => {
     console.error('Authentication error:', error.message);
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
-  res.json({ success: true });
 };
 
 // ✅ NEW: Event logging endpoint
