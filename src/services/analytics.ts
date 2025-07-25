@@ -37,7 +37,7 @@ export const logUserEvent = async (eventName: string, params: Record<string, any
       const watchTimeSeconds = params.duration != null
         ? Math.floor(params.duration / 1000)
         : undefined;
-      payload.movieId = params.videoId;
+      payload.movieId = params.movieId;
       payload.watchTimeSeconds = watchTimeSeconds;
       payload.movieName = params.movieName;
       payload.genre = params.genre;

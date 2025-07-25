@@ -26,6 +26,7 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [trailerUrl, setTrailerUrl] = useState<string>("");
   const [noTrailer, setNoTrailer] = useState<boolean>(false);
+  const [currentMovieId, setCurrentMovieId] = useState<number | null>(null); // New state for movie ID
   const { currentUser } = useAuth();
 
   useEffect(() => {
@@ -48,40 +49,47 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
   };
 
   const [watchStartTime, setWatchStartTime] = useState<number | null>(null);
-  const [currentPlayingMovieId, setCurrentPlayingMovieId] = useState<string | null>(null);
+  // Removed currentPlayingMovieId state
 
   const onPlayerStateChange = (event: any) => {
     if (!currentUser) return;
 
-    const videoId = trailerUrl; // The videoId is the trailerUrl
-    if (!videoId) return;
+    // const videoId = trailerUrl; // The videoId is the trailerUrl - Removed
+    // if (!videoId) return; - Removed
 
     if (event.data === window.YT.PlayerState.PLAYING) {
       setWatchStartTime(Date.now());
-      setCurrentPlayingMovieId(videoId);
-      console.log(`Started playing video: ${videoId}`);
+      // Removed setCurrentPlayingMovieId(videoId);
+      console.log(`Started playing video`); // Removed videoId from log
     } else if (
       (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
-      watchStartTime !== null &&
-      currentPlayingMovieId === videoId
+      watchStartTime !== null
+      // Removed && currentPlayingMovieId === videoId
     ) {
       const watchDuration = Date.now() - watchStartTime; // Duration in milliseconds
-      console.log(`Stopped playing video: ${videoId}, duration: ${watchDuration}ms`);
-      logUserEvent('watch_time', { videoId: videoId, duration: watchDuration });
+      console.log(`Stopped playing video, duration: ${watchDuration}ms`); // Removed videoId from log
+      if (currentMovieId) { // Added check for currentMovieId
+        logUserEvent('watch_time', {
+          movieId: currentMovieId, // Using currentMovieId from state
+          duration: watchDuration
+        });
+      }
       setWatchStartTime(null);
-      setCurrentPlayingMovieId(null);
+      // Removed setCurrentPlayingMovieId(null);
     }
   };
 
   const handleClick = useCallback(
     async (movie: Movie) => {
-      logUserEvent('movie_select', { movieId: movie.id });
+      logUserEvent('movie_select', { movieId: movie.id, categoryId: categoryId }); // Added categoryId
 
       if (trailerUrl) {
         setTrailerUrl("");
         setNoTrailer(false);
+        setCurrentMovieId(null); // Clear currentMovieId when closing trailer
       } else {
         setNoTrailer(false);
+        setCurrentMovieId(movie.id); // Set currentMovieId on click
         const query = movie?.name || movie?.title || "";
         if (!query) return;
 
@@ -99,7 +107,7 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
           });
       }
     },
-    [trailerUrl, currentUser]
+    [trailerUrl, currentUser, categoryId] // Added categoryId to dependencies
   );
 
   return (
