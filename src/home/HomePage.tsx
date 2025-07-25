@@ -13,6 +13,17 @@ interface RowData {
   isLargeRow?: boolean;
 }
 
+const ROW_ORDER = [
+  'fetchNetflixOriginals',
+  'fetchTrending',
+  'fetchTopRated',
+  'fetchActionMovies',
+  'fetchComedyMovies',
+  'fetchHorrorMovies',
+  'fetchRomanceMovies',
+  'fetchDocumentaries',
+];
+
 const HomePage: React.FC = () => {
   const [rows, setRows] = useState<RowData[]>([]);
   const { t } = useTranslation();
@@ -24,16 +35,24 @@ const HomePage: React.FC = () => {
 
     const fetchCategories = async () => {
       const categories = await getCategories();
-      const rowData = categories.map((category: any) => ({
-        id: category.id,
-        name: t(`homePage.${category.id}`), // Localized name
-        isLargeRow: category.id === 'fetchNetflixOriginals', // Use category.id for comparison
-      }));
-      setRows(rowData);
+      const categoriesMap = new Map(categories.map(cat => [cat.id, cat]));
+
+      const orderedRows: RowData[] = [];
+      ROW_ORDER.forEach(categoryId => {
+        const category = categoriesMap.get(categoryId);
+        if (category) {
+          orderedRows.push({
+            id: category.id,
+            name: t(`homePage.${category.id}`),
+            isLargeRow: category.id === 'fetchNetflixOriginals',
+          });
+        }
+      });
+      setRows(orderedRows);
     };
 
     fetchCategories();
-  }, [t]); // Add t to dependency array
+  }, [t]);
 
   return (
     <div className="homepage">
