@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import './Row.css';
-import YouTube from 'react-youtube';
+import YouTube, { YouTubeProps } from "react-youtube";
 import movieTrailer from 'movie-trailer';
 import { useAuth } from '../context/AuthContext';
 import { logUserEvent } from '../services/analytics';
@@ -39,13 +39,10 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
   }, [categoryId]);
 
   // Define the origin explicitly for local development
-  const opts = {
-    height: '390',
-    width: '100%',
-    playerVars: {
-      autoplay: 1,
-      origin: window.location.origin, // Crucial for security and communication
-    },
+  const opts: YouTubeProps["opts"] = {
+    height: "390",
+    width: "100%",
+    playerVars: { autoplay: 1 },
   };
 
   const [watchStartTime, setWatchStartTime] = useState<number | null>(null);
@@ -126,7 +123,7 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
           />
         ))}
       </div>
-      <YouTube videoId={trailerUrl} opts={opts} onStateChange={onPlayerStateChange} />
+      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} onStateChange={onPlayerStateChange} />}
       {noTrailer && (
         <div className="row__noTrailer">
           This movie currently does not have a trailer.
