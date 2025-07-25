@@ -75,7 +75,7 @@ const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
 
   const handleClick = useCallback(
     async (movie: Movie) => {
-      logUserEvent('Rolect', { movieId: movie.id });
+      logUserEvent('movie_select', { movieId: movie.id });
 
       if (trailerUrl) {
         setTrailerUrl("");
