@@ -4,7 +4,7 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 export const getCategories = async () => {
   const categoriesCol = collection(db, 'categories');
   const categoriesSnapshot = await getDocs(categoriesCol);
-  const categories = categoriesSnapshot.docs.map(doc => doc.data());
+  const categories = categoriesSnapshot.docs.map(doc => ({ ...doc.data(), id: doc.id }));
   return categories;
 };
 
