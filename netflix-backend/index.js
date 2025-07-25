@@ -61,7 +61,7 @@ async function getGenres(type) {
   return genreCache;
 }
 
-app.use(cors());
+app.use(cors({ origin: true }));
 app.use(express.json());
 
 // Middleware to verify Firebase ID token and extract user ID
@@ -81,6 +81,7 @@ const authenticateUser = async (req, res, next) => {
     console.error('Authentication error:', error.message);
     return res.status(401).json({ error: 'Invalid or expired token' });
   }
+  res.json({ success: true });
 };
 
 // ✅ NEW: Event logging endpoint

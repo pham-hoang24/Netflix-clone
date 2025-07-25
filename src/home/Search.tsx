@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Search.module.css';
-import requests from './requests';
-import axios from './axios';
+// import requests from './requests';
+// import axios from './axios';
 
 const base_url = "https://image.tmdb.org/t/p/w200"; // Smaller poster size for suggestions
 
@@ -20,35 +20,35 @@ const Search: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
-  const fetchSearchResults = useCallback(async (searchQuery: string) => {
-    if (searchQuery.trim() === '') {
-      setResults([]);
-      return;
-    }
+  // const fetchSearchResults = useCallback(async (searchQuery: string) => {
+  //   if (searchQuery.trim() === '') {
+  //     setResults([]);
+  //     return;
+  //   }
 
-    setIsLoading(true);
-    setError(null);
+  //   setIsLoading(true);
+  //   setError(null);
 
-    try {
-      const response = await axios.get(requests.searchMovies(searchQuery));
-      setResults(response.data.results.slice(0, 8)); // Limit to 8 results
-    } catch (err) {
-      setError('Failed to fetch search results.');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+  //   try {
+  //     const response = await axios.get(requests.searchMovies(searchQuery));
+  //     setResults(response.data.results.slice(0, 8)); // Limit to 8 results
+  //   } catch (err) {
+  //     setError('Failed to fetch search results.');
+  //     console.error(err);
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      fetchSearchResults(query);
-    }, 300); // 300ms debounce
+  // useEffect(() => {
+  //   const handler = setTimeout(() => {
+  //     fetchSearchResults(query);
+  //   }, 300); // 300ms debounce
 
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [query, fetchSearchResults]);
+  //   return () => {
+  //     clearTimeout(handler);
+  //   };
+  // }, [query, fetchSearchResults]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
