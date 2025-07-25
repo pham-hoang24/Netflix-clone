@@ -33,7 +33,7 @@
     "loading": "Loading...",
     "failedToLoad": "Failed to load content. Please try again later.",
     "retry": "Retry",
-    "trendingNow": "Trending Now",
+    "fetchTrending": "Trending Now",
     "moreReasonsToJoin": "More reasons to join",
     "enjoyOnTv": {
       "title": "Enjoy on your TV",
@@ -56,7 +56,7 @@
   "faq": {
     "whatIsNetflix": {
       "question": "What is Netflix?",
-      "answer": "Netflix is a streaming service that offers a wide variety of award-winning TV programmes, films, anime, documentaries and more – on thousands of internet-connected devices.<br>You can watch as much as you want, whenever you want, without a single advert – all for one low monthly price. There's always something new to discover, and new TV programmes and films are added every week!"
+      "answer": "Netflix is a streaming service that offers a wide variety of award-winning TV programmes, films, anime, fetchDocumentaries and more – on thousands of internet-connected devices.<br>You can watch as much as you want, whenever you want, without a single advert – all for one low monthly price. There's always something new to discover, and new TV programmes and films are added every week!"
     },
     "howMuchCost": {
       "question": "How much does Netflix cost?",
@@ -72,7 +72,7 @@
     },
     "whatCanIWatch": {
       "question": "What can I watch on Netflix?",
-      "answer": "Netflix has an extensive library of feature films, documentaries, series, anime, award-winning Netflix originals, and more. Watch as much as you want, any time you want."
+      "answer": "Netflix has an extensive library of feature films, fetchDocumentaries, series, anime, award-winning Netflix originals, and more. Watch as much as you want, any time you want."
     },
     "isNetflixGoodForChildren": {
       "question": "Is Netflix good for children?",
@@ -93,14 +93,14 @@
     "signOut": "Sign Out"
   },
   "homePage": {
-    "netflixOriginals": "NETFLIX ORIGINALS",
-    "trendingNow": "Trending Now",
-    "topRated": "Top Rated",
-    "actionMovies": "Action Movies",
-    "comedyMovies": "Comedy Movies",
-    "horrorMovies": "Horror Movies",
-    "romanceMovies": "Romance Movies",
-    "documentaries": "Documentaries"
+    "fetchNetflixOriginals": "NETFLIX ORIGINALS",
+    "fetchTrending": "Trending Now",
+    "fetchTopRated": "Top Rated",
+    "fetchActionMovies": "Action Movies",
+    "fetchComedyMovies": "Comedy Movies",
+    "fetchHorrorMovies": "Horror Movies",
+    "fetchRomanceMovies": "Romance Movies",
+    "fetchDocumentaries": "fetchDocumentaries"
   },
   "row": {
     "noTrailer": "This movie currently does not have a trailer."

@@ -5,6 +5,7 @@ import Banner from './Banner';
 import Nav from './Nav';
 import { logUserEvent } from '../services/analytics';
 import { getCategories } from '../services/movieService';
+import { useTranslation } from 'react-i18next';
 
 interface RowData {
   id: string;
@@ -14,6 +15,7 @@ interface RowData {
 
 const HomePage: React.FC = () => {
   const [rows, setRows] = useState<RowData[]>([]);
+  const { t } = useTranslation();
 
   useEffect(() => {
     logUserEvent('page_view', {
@@ -24,14 +26,14 @@ const HomePage: React.FC = () => {
       const categories = await getCategories();
       const rowData = categories.map((category: any) => ({
         id: category.id,
-        name: category.name,
-        isLargeRow: category.name === 'Netflix Originals',
+        name: t(`homePage.${category.id}`), // Localized name
+        isLargeRow: category.id === 'fetchNetflixOriginals', // Use category.id for comparison
       }));
       setRows(rowData);
     };
 
     fetchCategories();
-  }, []);
+  }, [t]); // Add t to dependency array
 
   return (
     <div className="homepage">
