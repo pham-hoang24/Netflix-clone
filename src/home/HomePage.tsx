@@ -1,58 +1,46 @@
-import React from "react";
-import { useEffect } from "react";
-import "./HomePage.css";
-import requests from "./requests";
-import Row from "./Row";
-import Banner from "./Banner";
-import Nav from "./Nav";
+import React, { useEffect, useState } from 'react';
+import './HomePage.css';
+import Row from './Row';
+import Banner from './Banner';
+import Nav from './Nav';
 import { logUserEvent } from '../services/analytics';
-import { useTranslation } from "react-i18next";
+import { getCategories } from '../services/movieService';
 
 interface RowData {
-  title: string;
-  fetchUrl: string;
+  id: string;
+  name: string;
   isLargeRow?: boolean;
 }
 
 const HomePage: React.FC = () => {
+  const [rows, setRows] = useState<RowData[]>([]);
+
   useEffect(() => {
     logUserEvent('page_view', {
       page_name: 'HomePage',
     });
+
+    const fetchCategories = async () => {
+      const categories = await getCategories();
+      const rowData = categories.map((category: any) => ({
+        id: category.id,
+        name: category.name,
+        isLargeRow: category.name === 'Netflix Originals',
+      }));
+      setRows(rowData);
+    };
+
+    fetchCategories();
   }, []);
-  const { t } = useTranslation();
-  const rowList: RowData[] = [
-    {
-      title: t('homePage.netflixOriginals'),
-      fetchUrl: requests.fetchNetflixOriginals,
-      isLargeRow: true,
-    },
-    {
-      title: t('homePage.trendingNow'),
-      fetchUrl: requests.fetchTrending,
-    },
-    { title: t('homePage.topRated'), fetchUrl: requests.fetchTopRated },
-    { title: t('homePage.actionMovies'), fetchUrl: requests.fetchActionMovies },
-    { title: t('homePage.comedyMovies'), fetchUrl: requests.fetchComedyMovies },
-    { title: t('homePage.horrorMovies'), fetchUrl: requests.fetchHorrorMovies },
-    { title: t('homePage.romanceMovies'), fetchUrl: requests.fetchRomanceMovies },
-    { title: t('homePage.documentaries'), fetchUrl: requests.fetchDocumentaries },
-  ];
 
   return (
     <div className="homepage">
       <Nav />
       <Banner />
-      {rowList.map((row, index) => (
-        <Row
-          key={index}
-          title={row.title}
-          fetchUrl={row.fetchUrl}
-          isLargeRow={row.isLargeRow}
-        />
+      {rows.map((row) => (
+        <Row key={row.id} title={row.name} categoryId={row.id} isLargeRow={row.isLargeRow} />
       ))}
     </div>
   );
 };
-
-export default HomePage;
+export default HomePage

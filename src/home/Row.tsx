@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback, } from "react";
-import axios from "./axios";
-import "./Row.css";
-import YouTube, { YouTubeProps } from "react-youtube";
-import movieTrailer from "movie-trailer";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import './Row.css';
+import YouTube from 'react-youtube';
+import movieTrailer from 'movie-trailer';
 import { useAuth } from '../context/AuthContext';
 import { logUserEvent } from '../services/analytics';
+import { getMoviesForCategory } from '../services/movieService';
 const base_url = "https://image.tmdb.org/t/p/original/";
 
 interface Movie {
@@ -18,38 +18,24 @@ interface Movie {
 
 interface RowProps {
   title: string;
-  fetchUrl: string;
+  categoryId: string;
   isLargeRow?: boolean;
 }
 
-const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
+const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [trailerUrl, setTrailerUrl] = useState<string>("");
   const [noTrailer, setNoTrailer] = useState<boolean>(false);
-  const fetchDebounce = useRef<NodeJS.Timeout | null>(null);
   const { currentUser } = useAuth();
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    fetchDebounce.current = setTimeout(async () => {
-      try {
-        const res = await axios.get(fetchUrl, { signal: controller.signal });
-        setMovies(res.data.results);
-      } catch (e: any) {
-        if (e.name !== "CanceledError" && e.name !== "AbortError") {
-          console.error("Fetch movies failed:", e);
-        }
-      }
-    }, 300);
-
-    return () => {
-      if (fetchDebounce.current) {
-        clearTimeout(fetchDebounce.current);
-      }
-      controller.abort();
+    const fetchMovies = async () => {
+      const movies = await getMoviesForCategory(categoryId);
+      setMovies(movies as Movie[]);
     };
-  }, [fetchUrl]);
+
+    fetchMovies();
+  }, [categoryId]);
 
   // Define the origin explicitly for local development
   const opts = {
@@ -89,6 +75,8 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
 
   const handleClick = useCallback(
     async (movie: Movie) => {
+      logUserEvent('Rolect', { movieId: movie.id });
+
       if (trailerUrl) {
         setTrailerUrl("");
         setNoTrailer(false);
@@ -97,19 +85,6 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
         const query = movie?.name || movie?.title || "";
         if (!query) return;
 
-        // Determine media type for the backend call
-        const mediaType = movie.media_type || (movie.title ? 'movie' : 'tv');
-
-        // Fetch movie details from your backend
-        let movieDetails = {};
-        try {
-          const detailsRes = await axios.get(`/api/movie-details/${movie.id}/${mediaType}`);
-          movieDetails = detailsRes.data;
-          console.log("Fetched movie details:", movieDetails);
-        } catch (error) {
-          console.error("Error fetching movie details from backend:", error);
-        }
-
         (movieTrailer as any)(null, { tmdbId: movie.id })
           .then((url: string | null) => {
             if (!url) throw new Error("No URL returned");
@@ -117,15 +92,6 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
             const id = urlParams.get("v");
             if (id) setTrailerUrl(id);
             else throw new Error("No video ID in URL");
-
-            // Log watch event with enriched movie details
-            if (currentUser) {
-              logUserEvent('watch_time', {
-                videoId: id,
-                duration: 0, // Initial duration, will be updated on state change
-                ...movieDetails,
-              });
-            }
           })
           .catch((_: any) => {
             console.warn("No trailer found for:", query);
@@ -133,7 +99,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
           });
       }
     },
-    [trailerUrl]
+    [trailerUrl, currentUser]
   );
 
   return (

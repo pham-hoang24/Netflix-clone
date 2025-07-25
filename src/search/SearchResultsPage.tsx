@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import axios from '../home/axios';
-import requests from '../home/requests';
+// import axios from '../home/axios';
+// import requests from '../home/requests';
 import Nav from '../home/Nav';
 import styles from './SearchResultsPage.module.css';
 
@@ -21,26 +21,26 @@ const SearchResultsPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      if (!query) return;
+  // useEffect(() => {
+  //   const fetchMovies = async () => {
+  //     if (!query) return;
 
-      setIsLoading(true);
-      setError(null);
+  //     setIsLoading(true);
+  //     setError(null);
 
-      try {
-        const response = await axios.get(requests.searchMovies(query));
-        setMovies(response.data.results);
-      } catch (err) {
-        setError('Failed to fetch movies.');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  //     try {
+  //       const response = await axios.get(requests.searchMovies(query));
+  //       setMovies(response.data.results);
+  //     } catch (err) {
+  //       setError('Failed to fetch movies.');
+  //       console.error(err);
+  //     } finally {
+  //       setIsLoading(false);
+  //     }
+  //   };
 
-    fetchMovies();
-  }, [query]);
+  //   fetchMovies();
+  // }, [query]);
 
   return (
     <div className={styles.searchResultsPage}>
