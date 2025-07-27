@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
-// import Search from "./Search"
+import Search from "./Search"
 import { useTranslation } from "react-i18next";
 
 
@@ -44,9 +44,9 @@ const Nav: React.FC = () => {
           alt="Netflix Logo"
         />
       </Link>
-      {/* <div className="nav_search">
+      <div className="nav_search">
         <Search />
-      </div> */}
+      </div>
         <div className="nav_avatar_container">
           <img
             className="nav_avatar"

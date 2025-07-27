@@ -312,6 +312,28 @@ app.get('/api/trending-with-details', async (req, res) => {
   }
 });
 
+// NEW: Multi-search endpoint
+app.get('/api/search/multi', async (req, res) => {
+  try {
+    const searchQuery = req.query.query;
+    if (!searchQuery) {
+      return res.status(400).json({ error: 'Search query is required.' });
+    }
+
+    const response = await axios.get(`${TMDB_URL}/search/multi`, {
+      params: {
+        api_key: TMDB_API_KEY,
+        query: searchQuery,
+        language: 'en-US',
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching multi-search data from TMDB:', error.message);
+    res.status(500).json({ error: 'Failed to fetch multi-search data.' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Firebase Admin initialized: ${!!admin.apps.length}`);
