@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import styles from './Search.module.css';
 import requests from './requests';
 import axios from './axios';
+import { logUserEvent } from '../services/analytics';
 
 const base_url = "https://image.tmdb.org/t/p/w200"; // Smaller poster size for suggestions
 
 interface Movie {
   id: number;
-  title: string;
+  title?: string;
+  name?: string;
   poster_path: string;
 }
 
@@ -19,6 +21,7 @@ const Search: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [activeIndex, setActiveIndex] = useState(-1);
   const searchContainerRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const fetchSearchResults = useCallback(async (searchQuery: string) => {
     if (searchQuery.trim() === '') {
@@ -30,8 +33,8 @@ const Search: React.FC = () => {
     setError(null);
 
     try {
-      const response = await axios.get(requests.searchMovies(searchQuery));
-      setResults(response.data.results.slice(0, 8)); // Limit to 8 results
+      const response = await axios.get('/api/search/multi', { params: { query: searchQuery } });
+      setResults(response.data.results.filter((item: Movie) => item.poster_path).slice(0, 4)); // Filter and limit
     } catch (err) {
       setError('Failed to fetch search results.');
       console.error(err);
@@ -64,6 +67,10 @@ const Search: React.FC = () => {
     };
   }, []);
 
+  const handleSuggestionClick = useCallback(async (movie: Movie) => {
+    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_suggestion' });
+    navigate(`/search/${movie.title || movie.name}`); // Redirect to search results page
+  }, [navigate]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'ArrowDown') {
@@ -72,8 +79,9 @@ const Search: React.FC = () => {
       setActiveIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
     } else if (e.key === 'Enter') {
       if (activeIndex >= 0 && results[activeIndex]) {
-        // For now, we'll just log the selection. Navigation can be added later.
-        console.log('Selected movie:', results[activeIndex]);
+        handleSuggestionClick(results[activeIndex]); // Trigger click handler on Enter
+      } else if (query.trim() !== '') {
+        navigate(`/search/${query}`); // If no suggestion selected, navigate to full search results
       }
     }
   };
@@ -96,7 +104,6 @@ const Search: React.FC = () => {
     );
   };
 
-
   return (
     <div className={styles.searchContainer} ref={searchContainerRef}>
       <input
@@ -113,14 +120,18 @@ const Search: React.FC = () => {
         <div className={styles.resultsContainer}>
           <ul className={styles.resultsList}>
             {results.map((movie, index) => (
-              <li key={movie.id} className={`${styles.resultItem} ${index === activeIndex ? styles.active : ''}`}>
+              <li
+                key={movie.id}
+                className={`${styles.resultItem} ${index === activeIndex ? styles.active : ''}`}
+                onClick={() => handleSuggestionClick(movie)} // Add onClick handler
+              >
                 <div className={styles.resultLink}>
                   <img
                     src={movie.poster_path ? `${base_url}${movie.poster_path}` : 'https://via.placeholder.com/200x300'}
                     alt={movie.title}
                     className={styles.poster}
                   />
-                  <div className={styles.title}>{highlightMatch(movie.title, query)}</div>
+                  <div className={styles.title}>{highlightMatch(movie.title || movie.name || '', query)}</div>
                 </div>
               </li>
             ))}

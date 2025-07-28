@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from "react";
-import axios from "./axios";
-import "./Row.css";
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import './Row.css';
 import YouTube, { YouTubeProps } from "react-youtube";
-import movieTrailer from "movie-trailer";
-
+import movieTrailer from 'movie-trailer';
+import { useAuth } from '../context/AuthContext';
+import { logUserEvent } from '../services/analytics';
+import { getMoviesForCategory } from '../services/movieService';
 const base_url = "https://image.tmdb.org/t/p/original/";
 
 interface Movie {
@@ -12,55 +13,80 @@ interface Movie {
   title: string;
   poster_path: string;
   backdrop_path: string;
+  media_type?: string;
 }
 
 interface RowProps {
   title: string;
-  fetchUrl: string;
+  categoryId: string;
   isLargeRow?: boolean;
 }
 
-const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
+const Row: React.FC<RowProps> = ({ title, categoryId, isLargeRow = false }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [trailerUrl, setTrailerUrl] = useState<string>("");
   const [noTrailer, setNoTrailer] = useState<boolean>(false);
-  const fetchDebounce = useRef<NodeJS.Timeout | null>(null);
+  const [currentMovieId, setCurrentMovieId] = useState<number | null>(null); // New state for movie ID
+  const { currentUser } = useAuth();
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    fetchDebounce.current = setTimeout(async () => {
-      try {
-        const res = await axios.get(fetchUrl, { signal: controller.signal });
-        setMovies(res.data.results);
-      } catch (e: any) {
-        if (e.name !== "CanceledError" && e.name !== "AbortError") {
-          console.error("Fetch movies failed:", e);
-        }
-      }
-    }, 300);
-
-    return () => {
-      if (fetchDebounce.current) {
-        clearTimeout(fetchDebounce.current);
-      }
-      controller.abort();
+    const fetchMovies = async () => {
+      const movies = await getMoviesForCategory(categoryId);
+      setMovies(movies as Movie[]);
     };
-  }, [fetchUrl]);
 
+    fetchMovies();
+  }, [categoryId]);
+
+  // Define the origin explicitly for local development
   const opts: YouTubeProps["opts"] = {
     height: "390",
     width: "100%",
     playerVars: { autoplay: 1 },
   };
 
+  const [watchStartTime, setWatchStartTime] = useState<number | null>(null);
+  // Removed currentPlayingMovieId state
+
+  const onPlayerStateChange = (event: any) => {
+    if (!currentUser) return;
+
+    // const videoId = trailerUrl; // The videoId is the trailerUrl - Removed
+    // if (!videoId) return; - Removed
+
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      setWatchStartTime(Date.now());
+      // Removed setCurrentPlayingMovieId(videoId);
+      console.log(`Started playing video`); // Removed videoId from log
+    } else if (
+      (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
+      watchStartTime !== null
+      // Removed && currentPlayingMovieId === videoId
+    ) {
+      const watchDuration = Date.now() - watchStartTime; // Duration in milliseconds
+      console.log(`Stopped playing video, duration: ${watchDuration}ms`); // Removed videoId from log
+      if (currentMovieId) { // Added check for currentMovieId
+        logUserEvent('watch_time', {
+          movieId: currentMovieId, // Using currentMovieId from state
+          duration: watchDuration
+        });
+      }
+      setWatchStartTime(null);
+      // Removed setCurrentPlayingMovieId(null);
+    }
+  };
+
   const handleClick = useCallback(
-    (movie: Movie) => {
+    async (movie: Movie) => {
+      logUserEvent('movie_select', { movieId: movie.id, categoryId: categoryId }); // Added categoryId
+
       if (trailerUrl) {
         setTrailerUrl("");
         setNoTrailer(false);
+        setCurrentMovieId(null); // Clear currentMovieId when closing trailer
       } else {
         setNoTrailer(false);
+        setCurrentMovieId(movie.id); // Set currentMovieId on click
         const query = movie?.name || movie?.title || "";
         if (!query) return;
 
@@ -78,7 +104,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
           });
       }
     },
-    [trailerUrl]
+    [trailerUrl, currentUser, categoryId] // Added categoryId to dependencies
   );
 
   return (
@@ -97,7 +123,7 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
           />
         ))}
       </div>
-      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} />}
+      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} onStateChange={onPlayerStateChange} />}
       {noTrailer && (
         <div className="row__noTrailer">
           This movie currently does not have a trailer.
@@ -106,5 +132,4 @@ const Row: React.FC<RowProps> = ({ title, fetchUrl, isLargeRow = false }) => {
     </div>
   );
 };
-
 export default Row;
