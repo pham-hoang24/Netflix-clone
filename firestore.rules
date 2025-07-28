@@ -1,0 +1,32 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Your existing rule for user profiles
+    match /users/{userId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // NEW: Allow public read-only access to the movie catalog
+    match /movies/{movieId} {
+      allow read: if true;
+      allow write: if false; // Prevent clients from editing movies
+    }
+
+    // NEW: Allow public read-only access to the category lists
+    match /categories/{categoryId} {
+      allow read: if true;
+      allow write: if false; // Prevent clients from editing categories
+    }
+
+    // NEW: Allow authenticated users to log events
+    match /userEvents/{eventId} {
+      // Any authenticated user can create an event log.
+      allow create: if request.auth != null;
+      // A user can only read their own events.
+      allow read: if request.auth != null && resource.data.userId == request.auth.uid;
+      // Nobody can update or delete events from the client.
+      allow update, delete: if false;
+    }
+  }
+}

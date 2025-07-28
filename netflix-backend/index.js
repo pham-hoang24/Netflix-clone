@@ -1,17 +1,205 @@
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
+const admin = require('firebase-admin');
 require('dotenv').config();
 
+// Initialize Firebase Admin SDK
+if (!admin.apps.length) {
+  // Option 1: Using service account key file (recommended for local development)
+  // Make sure to add your service account key file to your project
+  try {
+    const serviceAccount = require('./serviceAccountKey.json');
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount),
+      projectId: "netflix-clone-62aec",
+    });
+  } catch (error) {
+    // Option 2: Using environment variables (recommended for production)
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId: process.env.FIREBASE_PROJECT_ID,
+        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n'),
+        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+      }),
+    });
+  }
+}
+
+const db = admin.firestore();
+
+async function fetchMediaDetails(id, type) {
+  const params = { api_key: TMDB_API_KEY };
+  const [detailsRes, creditsRes] = await Promise.all([
+    axios.get(`${TMDB_URL}/${type}/${id}`, { params }),
+    axios.get(`${TMDB_URL}/${type}/${id}/credits`, { params }),
+  ]);
+
+  const genres = await getGenres(type);
+  const director = creditsRes.data.crew.find(c => c.job === 'Director')?.name || null;
+
+  return {
+    movieName: detailsRes.data.title || detailsRes.data.name,
+    genre: detailsRes.data.genre_ids?.map(gId => genres[gId]).filter(Boolean).join(', ') || null,
+    publishDate: detailsRes.data.release_date || detailsRes.data.first_air_date || null,
+    director
+  };
+}
 
 const app = express();
 const PORT = process.env.PORT || 2000;
 const TMDB_API_KEY = process.env.TMDB_API_KEY;
+const TMDB_URL = "https://api.themoviedb.org/3";
 
-app.use(cors());
+let genreCache = null;
+
+async function getGenres(type) {
+  if (!genreCache) {
+    const res = await axios.get(`${TMDB_URL}/genre/${type}/list`, { params: { api_key: TMDB_API_KEY } });
+    genreCache = res.data.genres.reduce((m, g) => (m[g.id] = g.name, m), {});
+  }
+  return genreCache;
+}
+
+app.use(cors({ origin: true }));
 app.use(express.json());
 
-// 👇 Existing route (can rename if you want)
+// Middleware to verify Firebase ID token and extract user ID
+const authenticateUser = async (req, res, next) => {
+  try {
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return res.status(401).json({ error: 'No valid authorization header found' });
+    }
+
+    const idToken = authHeader.split('Bearer ')[1];
+    const decodedToken = await admin.auth().verifyIdToken(idToken);
+    req.userId = decodedToken.uid;
+    req.userEmail = decodedToken.email;
+    next();
+  } catch (error) {
+    console.error('Authentication error:', error.message);
+    return res.status(401).json({ error: 'Invalid or expired token' });
+  }
+};
+
+// ✅ NEW: Event logging endpoint
+app.post('/api/log-event', authenticateUser, async (req, res) => {
+  try {
+    const {
+      event,
+      movieId,
+      watchTimeSeconds,
+      searchTerm,
+      deviceType,
+      sessionId,
+      movieName,
+      genre,
+      publishDate,
+      director,
+      metadata = {}
+    } = req.body;
+
+    // Validate required fields
+    if (!event) {
+      return res.status(400).json({ error: 'Event type is required' });
+    }
+
+    // Create the event document
+    const eventData = {
+      userId: req.userId,
+      event,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      serverTimestamp: new Date().toISOString(), // Backup timestamp
+      ...(movieId && { movieId }),
+      ...(watchTimeSeconds !== undefined && { watchTimeSeconds }),
+      ...(searchTerm && { searchTerm }),
+      ...(deviceType && { deviceType }),
+      ...(sessionId && { sessionId }),
+      ...(movieName && { movieName }),
+      ...(genre && { genre }),
+      ...(publishDate && { publishDate }),
+      ...(director && { director }),
+      ...metadata
+    };
+
+    // Add the event to Firestore
+    const docRef = await db.collection('userEvents').add(eventData);
+    
+    console.log(`Event logged: ${event} for user ${req.userId}, docId: ${docRef.id}`);
+    
+    res.status(201).json({
+      success: true,
+      eventId: docRef.id,
+      message: 'Event logged successfully'
+    });
+
+  } catch (error) {
+    console.error('Error logging event:', error.message);
+    res.status(500).json({ error: 'Failed to log event' });
+  }
+});
+
+// ✅ NEW: Get movie details
+app.get('/api/movie-details/:id/:type', async (req, res) => {
+  try {
+    const { id, type } = req.params;
+    if (!id || !type || (type !== 'movie' && type !== 'tv')) {
+      return res.status(400).json({ error: 'Invalid movie ID or type' });
+    }
+    const details = await fetchMediaDetails(id, type);
+    res.json(details);
+  } catch (error) {
+    console.error('Error fetching movie details:', error.message);
+    res.status(500).json({ error: 'Failed to fetch movie details' });
+  }
+});
+
+// ✅ NEW: Get user events (useful for debugging/analytics)
+app.get('/api/user-events', authenticateUser, async (req, res) => {
+  try {
+    const { limit = 50, eventType } = req.query;
+    
+    let query = db.collection('userEvents')
+      .where('userId', '==', req.userId)
+      .orderBy('timestamp', 'desc')
+      .limit(parseInt(limit));
+
+    if (eventType) {
+      query = query.where('event', '==', eventType);
+    }
+
+    const snapshot = await query.get();
+    const events = [];
+    
+    snapshot.forEach(doc => {
+      events.push({
+        id: doc.id,
+        ...doc.data(),
+        timestamp: doc.data().timestamp?.toDate?.()?.toISOString() || doc.data().serverTimestamp
+      });
+    });
+
+    res.json({ events, total: events.length });
+  } catch (error) {
+    console.error('Error fetching user events:', error.message);
+    res.status(500).json({ error: 'Failed to fetch user events' });
+  }
+});
+
+// ✅ NEW: Health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({
+    status: 'healthy',
+    timestamp: new Date().toISOString(),
+    services: {
+      tmdb: !!TMDB_API_KEY,
+      firebase: !!admin.apps.length
+    }
+  });
+});
+
+// 👇 Existing routes (unchanged)
 app.get('/api/trending', async (req, res) => {
   try {
     const tmdbUrl = `https://api.themoviedb.org/3/trending/movie/day`;
@@ -25,7 +213,6 @@ app.get('/api/trending', async (req, res) => {
   }
 });
 
-// ✅ New route: Trending Movies
 app.get('/api/trending/movie', async (req, res) => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/trending/movie/day', {
@@ -38,8 +225,6 @@ app.get('/api/trending/movie', async (req, res) => {
   }
 });
 
-
-// ✅ New route: Trending TV
 app.get('/api/trending/tv', async (req, res) => {
   try {
     const response = await axios.get('https://api.themoviedb.org/3/trending/tv/day', {
@@ -52,7 +237,6 @@ app.get('/api/trending/tv', async (req, res) => {
   }
 });
 
-// ✅ New route: Combined Genre Map
 app.get('/api/genres', async (req, res) => {
   try {
     const [movieRes, tvRes] = await Promise.all([
@@ -77,8 +261,6 @@ app.get('/api/genres', async (req, res) => {
   }
 });
 
-
-// ✅ New route: Getting the logo URL
 app.get('/api/trending-with-details', async (req, res) => {
   try {
     const [movieRes, tvRes] = await Promise.all([
@@ -93,7 +275,7 @@ app.get('/api/trending-with-details', async (req, res) => {
     const combinedItems = [...movieRes.data.results, ...tvRes.data.results]
       .filter((item) => item.poster_path || item.backdrop_path)
       .sort((a, b) => b.popularity - a.popularity)
-      .slice(0, 10); // Get top 10 trending items
+      .slice(0, 10);
 
     const IMAGE_BASE = 'https://image.tmdb.org/t/p/w500';
 
@@ -130,7 +312,29 @@ app.get('/api/trending-with-details', async (req, res) => {
   }
 });
 
+// NEW: Multi-search endpoint
+app.get('/api/search/multi', async (req, res) => {
+  try {
+    const searchQuery = req.query.query;
+    if (!searchQuery) {
+      return res.status(400).json({ error: 'Search query is required.' });
+    }
+
+    const response = await axios.get(`${TMDB_URL}/search/multi`, {
+      params: {
+        api_key: TMDB_API_KEY,
+        query: searchQuery,
+        language: 'en-US',
+      },
+    });
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching multi-search data from TMDB:', error.message);
+    res.status(500).json({ error: 'Failed to fetch multi-search data.' });
+  }
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
+  console.log(`Firebase Admin initialized: ${!!admin.apps.length}`);
 });

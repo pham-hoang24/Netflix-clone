@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from "react";
-import axios from "./axios";
-import "./Banner.css";
-import requests from "./requests";
-import { useTranslation } from "react-i18next";
+import React, { useState, useEffect } from 'react';
+import './Banner.css';
+import { useTranslation } from 'react-i18next';
+import { getMoviesForCategory } from '../services/movieService';
 
 interface Movie {
   backdrop_path: string;
@@ -15,17 +14,11 @@ interface Movie {
 const Banner: React.FC = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const { t } = useTranslation();
-  
 
   useEffect(() => {
     async function fetchData() {
-      const request = await axios.get(requests.fetchNetflixOriginals);
-      setMovie(
-        request.data.results[
-          Math.floor(Math.random() * request.data.results.length - 1)
-        ]
-      );
-      return request;
+      const movies = await getMoviesForCategory('fetchNetflixOriginals');
+      setMovie(movies[Math.floor(Math.random() * movies.length - 1)] as Movie);
     }
     fetchData();
   }, []);

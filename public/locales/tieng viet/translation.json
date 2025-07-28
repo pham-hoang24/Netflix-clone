@@ -53,7 +53,7 @@
     "signIn": "Đăng nhập"
   },
   "landingPage": {
-    "trendingNow": "Đang thịnh hành",
+    "fetchTrending": "Đang thịnh hành",
     "moreReasonsToJoin": "Thêm lý do để tham gia",
     "enjoyOnTv": {
       "title": "Thưởng thức trên TV của bạn",
@@ -111,14 +111,14 @@
     "signOut": "Đăng xuất"
   },
   "homePage": {
-    "netflixOriginals": "NETFLIX ORIGINALS",
-    "trendingNow": "Thịnh hành ngay",
-    "topRated": "Xếp hạng cao nhất",
-    "actionMovies": "Phim hành động",
-    "comedyMovies": "Phim hài",
-    "horrorMovies": "Phim kinh dị",
-    "romanceMovies": "Phim lãng mạn",
-    "documentaries": "Phim tài liệu"
+    "fetchNetflixOriginals": "NETFLIX ORIGINALS",
+    "fetchTrending": "Thịnh hành ngay",
+    "fetchTopRated": "Xếp hạng cao nhất",
+    "fetchActionMovies": "Phim hành động",
+    "fetchComedyMovies": "Phim hài",
+    "fetchHorrorMovies": "Phim kinh dị",
+    "fetchRomanceMovies": "Phim lãng mạn",
+    "fetchDocumentaries": "Phim tài liệu"
   },
   "row": {
     "noTrailer": "Phim này hiện không có trailer."

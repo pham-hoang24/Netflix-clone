@@ -29,7 +29,7 @@
   "navbar.vietnamese": "Vietnam",
   "navbar.finnish": "Suomi",
   "navbar.signIn": "Kirjaudu sisään",
-  "landingPage.trendingNow": "Trendaavat nyt",
+  "landingPage.fetchTrending": "Trendaavat nyt",
   "landingPage.moreReasonsToJoin": "Lisää syitä liittyä",
   "landingPage.enjoyOnTv.title": "Nauti televisiosta",
   "landingPage.enjoyOnTv.description": "Katso älytelevisioista, PlayStationista, Xboxista, Chromecastista, Apple TV:stä, Blu-ray-soittimista ja muista.",
@@ -104,14 +104,14 @@
     "signOut": "Kirjaudu ulos"
   },
   "homePage": {
-    "netflixOriginals": "NETFLIX ORIGINALS",
-    "trendingNow": "Trendaavat nyt",
-    "topRated": "Parhaat arvosanat",
-    "actionMovies": "Toimintaelokuvat",
-    "comedyMovies": "Komediaelokuvat",
-    "horrorMovies": "Kauuelokuvat",
-    "romanceMovies": "Romanssielokuvat",
-    "documentaries": "Dokumentit"
+    "fetchNetflixOriginals": "NETFLIX ORIGINALS",
+    "fetchTrending": "Trendaavat nyt",
+    "fetchTopRated": "Parhaat arvosanat",
+    "fetchActionMovies": "Toimintaelokuvat",
+    "fetchComedyMovies": "Komediaelokuvat",
+    "fetchHorrorMovies": "Kauuelokuvat",
+    "fetchRomanceMovies": "Romanssielokuvat",
+    "fetchDocumentaries": "Dokumentit"
   },
   "row": {
     "noTrailer": "Tällä elokuvalla ei tällä hetkellä ole traileria."
