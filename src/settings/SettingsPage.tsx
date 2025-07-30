@@ -1,93 +1,33 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { sendPasswordResetEmail } from 'firebase/auth';
-import { auth, db } from '../services/firebase';
-import { useAuth } from '../context/AuthContext';
+import React from 'react';
 import styles from './SettingsPage.module.css';
-import { useTranslation } from 'react-i18next';
+import { TFunction } from 'react-i18next';
 
-const SettingsPage: React.FC = () => {
-  
-  const { currentUser } = useAuth();
-  const navigate = useNavigate();
-  const { t } = useTranslation();
-  const [formData, setFormData] = useState({
-    profileName: '',
-    devices: [] as string[],
-    preferredLanguages: [] as string[],
-    preferredShows: [] as string[],
-  });
-  const [initialData, setInitialData] = useState({});
+interface FormData {
+  profileName: string;
+  devices: string[];
+  preferredLanguages: string[];
+  preferredShows: string[];
+}
 
-  useEffect(() => {
-    if (currentUser) {
-      const fetchUserData = async () => {
-        const docRef = doc(db, 'users', currentUser.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          const data = docSnap.data();
-          setFormData({
-            profileName: data.profileName || '',
-            devices: data.devices || [],
-            preferredLanguages: data.preferredLanguages || [],
-            preferredShows: data.preferred_genres || [],
-          });
-          setInitialData(data);
-        }
-      };
-      fetchUserData();
-    }
-  }, [currentUser]);
+interface SettingsPagePresenterProps {
+  formData: FormData;
+  currentUserEmail: string;
+  handleChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  handleSaveChanges: () => void;
+  handleCancel: () => void;
+  handlePasswordReset: () => void;
+  t: TFunction;
+}
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const { checked } = e.target as HTMLInputElement;
-      const arrayName = name as 'devices' | 'preferredLanguages';
-      setFormData((prev) => ({
-        ...prev,
-        [arrayName]: checked
-          ? [...prev[arrayName], value]
-          : prev[arrayName].filter((item) => item !== value),
-      }));
-    } else {
-      setFormData((prev) => ({
-        ...prev,
-        [name]: value,
-      }));
-    }
-  };
-
-  const handleSaveChanges = async () => {
-    if (currentUser) {
-      const docRef = doc(db, 'users', currentUser.uid);
-      await updateDoc(docRef, {
-        profileName: formData.profileName,
-        devices: formData.devices,
-        preferredLanguages: formData.preferredLanguages,
-        preferred_genres: formData.preferredShows,
-      });
-      navigate('/home');
-    }
-  };
-
-  const handleCancel = () => {
-    navigate('/home');
-  };
-
-  const handlePasswordReset = () => {
-    if (currentUser?.email) {
-      sendPasswordResetEmail(auth, currentUser.email)
-        .then(() => {
-          alert('Password reset email sent!');
-        })
-        .catch((error) => {
-          alert(error.message);
-        });
-    }
-  };
-
+const SettingsPagePresenter: React.FC<SettingsPagePresenterProps> = ({
+  formData,
+  currentUserEmail,
+  handleChange,
+  handleSaveChanges,
+  handleCancel,
+  handlePasswordReset,
+  t,
+}) => {
   return (
     <div className={styles.settingsContainer}>
       <h1 className={styles.title}>{t('settings.title')}</h1>
@@ -96,7 +36,7 @@ const SettingsPage: React.FC = () => {
         <h2 className={styles.sectionTitle}>{t('settings.membershipBilling')}</h2>
         <div className={styles.inputGroup}>
           <label>{t('settings.email')}</label>
-          <input type="email" value={currentUser?.email || ''} readOnly />
+          <input type="email" value={currentUserEmail} readOnly />
         </div>
         <button onClick={handlePasswordReset} className={styles.button}>
           {t('settings.changePassword')}
@@ -158,7 +98,10 @@ const SettingsPage: React.FC = () => {
             id="preferredShows"
             name="preferredShows"
             value={formData.preferredShows.join(', ')}
-            onChange={(e) => setFormData(prev => ({ ...prev, preferredShows: e.target.value.split(',').map(s => s.trim()) }))}
+            onChange={(e) => handleChange({
+              ...e,
+              target: { ...e.target, value: e.target.value.split(',').map(s => s.trim()).join(', ') }
+            } as React.ChangeEvent<HTMLTextAreaElement>)}
           />
         </div>
 
@@ -211,4 +154,4 @@ const SettingsPage: React.FC = () => {
   );
 };
 
-export default SettingsPage;
+export default SettingsPagePresenter;
