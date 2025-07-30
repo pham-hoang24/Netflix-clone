@@ -1,6 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import LandingPage from "../Landing/LandingPage";
+import DetailModalContainer from "../container/DetailModalContainer";
 import {
   fetchGenres,
   fetchTrendingWithDetails,
@@ -53,6 +54,7 @@ const LandingPageContainer: React.FC = () => {
       faqs={faqs}
       handleItemClick={handleItemClick}
       handleCloseModal={handleCloseModal}
+      DetailModal={DetailModalContainer}
     />
   );
 };
