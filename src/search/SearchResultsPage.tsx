@@ -7,6 +7,7 @@ import styles from './SearchResultsPage.module.css';
 import YouTube from 'react-youtube';
 import movieTrailer from 'movie-trailer';
 import { logUserEvent } from '../services/analytics';
+import NavContainer from '../home/container/NavContainer';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -125,7 +126,7 @@ const SearchResultsPage: React.FC = () => {
 
   return (
     <div className={styles.searchResultsPage}>
-      <Nav />
+      <NavContainer />
       <div className={styles.resultsContent}>
         <h1 className={styles.title}>Search results for "{query}"</h1>
 
