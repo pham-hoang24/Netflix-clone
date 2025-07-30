@@ -1,8 +1,8 @@
 import React from "react";
 import Layout from "../Layout/Layout";
-import Hero from "../Hero/Hero";
+import Hero from "../container/HeroContainer";
 import ContentSection from "../ContentSection/ContentSection";
-import Carousel from "../Carousel/Carousel";
+import Carousel from "../container/CarouselContainer";
 import DetailModal from "../DetailModal/DetailModal";
 import FaqSection from "../FaqSection/FaqSection";
 import { TrendingItem } from "../../services/api-client";
