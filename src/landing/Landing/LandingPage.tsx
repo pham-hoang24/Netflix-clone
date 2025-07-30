@@ -1,81 +1,37 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Layout from "../Layout/Layout";
 import Hero from "../Hero/Hero";
 import ContentSection from "../ContentSection/ContentSection";
 import Carousel from "../Carousel/Carousel";
 import DetailModal from "../DetailModal/DetailModal";
 import FaqSection from "../FaqSection/FaqSection";
-import {
-  fetchGenres,
-  fetchTrendingWithDetails,
-  TrendingItem,
-} from "../../services/api-client";
-import { useTranslation } from 'react-i18next'; // Add this import
+import { TrendingItem } from "../../services/api-client";
+import { useTranslation } from 'react-i18next';
 import "./LandingPage.module.css";
 import styles from "./LandingPage.module.css";
 
-const LandingPage: React.FC = () => {
-  const{t} =  useTranslation()
-  const [selectedItem, setSelectedItem] = useState<TrendingItem | null>(null);
-  const [trendingItems, setTrendingItems] = useState<TrendingItem[]>([]);
-  const [genreMap, setGenreMap] = useState<{ [id: number]: string }>({});
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+interface LandingPageProps {
+  isLoading: boolean;
+  error: string | null;
+  trendingItems: TrendingItem[];
+  selectedItem: TrendingItem | null;
+  genreMap: { [id: number]: string };
+  faqs: { question: string; answer: string }[];
+  handleItemClick: (item: TrendingItem) => void;
+  handleCloseModal: () => void;
+}
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const [genres, trending] = await Promise.all([
-          fetchGenres(),
-          fetchTrendingWithDetails(),
-        ]);
-        setGenreMap(genres);
-        setTrendingItems(trending);
-      } catch (err) {
-        console.error("Failed to load initial data:", err);
-        setError("Failed to load content. Please try again later.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadData();
-  }, []);
-
-  const handleItemClick = (item: TrendingItem) => {
-    setSelectedItem(item);
-  };
-
-  const handleCloseModal = () => {
-    setSelectedItem(null);
-  };
-
-  const faqs = [
-    {
-      question: "faq.whatIsNetflix.question", // Use translation key
-      answer: "faq.whatIsNetflix.answer",     // Use translation key
-    },
-    {
-      question: "faq.howMuchCost.question",
-      answer: "faq.howMuchCost.answer",
-    },
-    {
-      question: "faq.whereCanIWatch.question",
-      answer: "faq.whereCanIWatch.answer",
-    },
-    {
-      question: "faq.howDoICancel.question",
-      answer: "faq.howDoICancel.answer",
-    },
-    {
-      question: "faq.whatCanIWatch.question",
-      answer: "faq.whatCanIWatch.answer",
-    },
-    {
-      question: "faq.isNetflixGoodForChildren.question",
-      answer: "faq.isNetflixGoodForChildren.answer",
-    },
-  ];
+const LandingPage: React.FC<LandingPageProps> = ({ 
+    isLoading, 
+    error, 
+    trendingItems, 
+    selectedItem, 
+    genreMap, 
+    faqs, 
+    handleItemClick, 
+    handleCloseModal 
+}) => {
+  const { t } = useTranslation();
 
   if (isLoading) {
     return (
@@ -88,7 +44,7 @@ const LandingPage: React.FC = () => {
             height: "100vh",
           }}
         >
-          {t("landingPage.loading")} {/* Use translation key */}
+          {t("landingPage.loading")}
         </div>
       </Layout>
     );
@@ -120,12 +76,11 @@ const LandingPage: React.FC = () => {
               cursor: "pointer",
             }}
           >
-            {t("landingPage.retry")} {/* Use translation key */}
+            {t("landingPage.retry")}
           </button>
         </div>
       </Layout>
     );
-    
   }
 
   return (
@@ -135,22 +90,18 @@ const LandingPage: React.FC = () => {
         <Carousel items={trendingItems} onItemClick={handleItemClick} />
       </ContentSection>
       <ContentSection title="landingPage.moreReasonsToJoin">
-        {/* Placeholder for cards */}
         <div className={styles.cardContainer}>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>{t("landingPage.enjoyOnTv.title")}</h3> {/* Use translation key */}
-              <p>
-                {t("landingPage.enjoyOnTv.description")} {/* Use translation key */}
-              </p>
+              <h3>{t("landingPage.enjoyOnTv.title")}</h3>
+              <p>{t("landingPage.enjoyOnTv.description")}</p>
             </div>
             <svg
               className={styles.svg}
-
               viewBox="0 0 72 72"
               fill="none"
             >
-              <g id="television-core-small">
+               <g id="television-core-small">
                 <path
                   id="Vector"
                   fill-rule="evenodd"
@@ -270,10 +221,8 @@ const LandingPage: React.FC = () => {
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>{t("landingPage.downloadSeries.title")}</h3> {/* Use translation key */}
-              <p>
-                {t("landingPage.downloadSeries.description")} {/* Use translation key */}
-              </p>
+              <h3>{t("landingPage.downloadSeries.title")}</h3>
+              <p>{t("landingPage.downloadSeries.description")}</p>
             </div>
             <svg
               className={styles.svg}
@@ -420,17 +369,15 @@ const LandingPage: React.FC = () => {
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>{t("landingPage.watchEverywhere.title")}</h3> {/* Use translation key */}
-              <p>
-                {t("landingPage.watchEverywhere.description")} {/* Use translation key */}
-              </p>
+              <h3>{t("landingPage.watchEverywhere.title")}</h3>
+              <p>{t("landingPage.watchEverywhere.description")}</p>
             </div>
             <svg
               className={styles.svg}
               viewBox="0 0 72 72"
               fill="none"
             >
-              <g id="telescope-core-small">
+               <g id="telescope-core-small">
                 <path
                   id="Vector"
                   d="M24.0492 36.6016L33.6 46.3898L17.8029 56.8633C17.8029 56.8633 15.8891 57.6983 13.625 55.2638C11.361 52.8293 12.1235 51.238 12.1235 51.238L24.0492 36.6016Z"
@@ -594,21 +541,19 @@ const LandingPage: React.FC = () => {
                   <stop offset="1" stop-color="#792A95"></stop>
                 </linearGradient>
               </defs>
-            </svg>{" "}
+            </svg>
           </div>
           <div className={styles.cards}>
             <div className={styles.textContainer}>
-              <h3>{t("landingPage.createProfiles.title")}</h3> {/* Use translation key */}
-              <p>
-                {t("landingPage.createProfiles.description")} {/* Use translation key */}
-              </p>
+              <h3>{t("landingPage.createProfiles.title")}</h3>
+              <p>{t("landingPage.createProfiles.description")}</p>
             </div>
             <svg
               className={styles.svg}
               viewBox="0 0 72 72"
               fill="none"
             >
-              <g id="profiles-core-small">
+               <g id="profiles-core-small">
                 <path
                   id="Vector"
                   d="M10.8 15.6008C10.8 12.9499 12.949 10.8008 15.5999 10.8008H40.8C43.4509 10.8008 45.6 12.9498 45.6 15.6008V40.8007C45.6 43.4516 43.4509 45.6007 40.8 45.6007H15.6C12.949 45.6007 10.8 43.4517 10.8 40.8007V15.6008Z"
@@ -811,4 +756,5 @@ const LandingPage: React.FC = () => {
     </Layout>
   );
 };
+
 export default LandingPage;
