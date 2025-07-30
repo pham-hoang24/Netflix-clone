@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Banner.css';
 import { useTranslation } from 'react-i18next';
-import { getMoviesForCategory } from '../services/movieService';
 
 interface Movie {
   backdrop_path: string;
@@ -11,24 +10,13 @@ interface Movie {
   overview: string;
 }
 
-const Banner: React.FC = () => {
-  const [movie, setMovie] = useState<Movie | null>(null);
+interface BannerProps {
+  movie: Movie | null;
+  truncate: (str: string | undefined, n: number) => string;
+}
+
+const Banner: React.FC<BannerProps> = ({ movie, truncate }) => {
   const { t } = useTranslation();
-
-  useEffect(() => {
-    async function fetchData() {
-      const movies = await getMoviesForCategory('fetchNetflixOriginals');
-      setMovie(movies[Math.floor(Math.random() * movies.length - 1)] as Movie);
-    }
-    fetchData();
-  }, []);
-
-  function truncate(str: string | undefined, n: number): string {
-    if (!str) {
-      return "";
-    }
-    return str.length > n ? str.substr(0, n - 1) + "..." : str;
-  }
 
   return (
     <header

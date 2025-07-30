@@ -3,7 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import LandingPage from './landing/container/LandingPageContainer';
 import LoginPage from './auth/LoginPage';
 import SignupPage from './auth/SignupPage';
-import HomePage from './home/HomePage';// Assuming this is the main component for the home page
+import HomePage from './home/container/HomePageContainer';// Assuming this is the main component for the home page
 import SettingsPage from './settings/SettingsPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import { I18nextProvider } from 'react-i18next';
