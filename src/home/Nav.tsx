@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from 'react-router-dom';
 import "./Nav.css";
-import Search from "./Search"
+import SearchContainer from "./container/SearchContainer";
 import { TFunction } from "react-i18next";
 
 interface NavProps {
@@ -29,7 +29,7 @@ const Nav: React.FC<NavProps> = ({
         />
       </Link>
       <div className="nav_search">
-        <Search />
+        <SearchContainer />
       </div>
         <div className="nav_avatar_container">
           <img
