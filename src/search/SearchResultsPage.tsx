@@ -1,12 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../home/axios';
-import requests from '../home/requests';
-import Nav from '../home/Nav';
+import React from 'react';
 import styles from './SearchResultsPage.module.css';
 import YouTube from 'react-youtube';
-import movieTrailer from 'movie-trailer';
-import { logUserEvent } from '../services/analytics';
 import NavContainer from '../home/container/NavContainer';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
@@ -20,72 +14,33 @@ interface Movie {
   media_type?: string;
 }
 
-const SearchResultsPage: React.FC = () => {
-  const { query } = useParams<{ query: string }>();
-  const [movieResults, setMovieResults] = useState<Movie[]>([]);
-  const [tvResults, setTvResults] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [trailerUrl, setTrailerUrl] = useState<string>("");
-  const [noTrailer, setNoTrailer] = useState<boolean>(false);
-  const [activeMovieId, setActiveMovieId] = useState<number | null>(null);
-  const [filterType, setFilterType] = useState<'all' | 'movie' | 'tv'>('all');
+interface SearchResultsPagePresenterProps {
+  query: string | undefined;
+  movieResults: Movie[];
+  tvResults: Movie[];
+  isLoading: boolean;
+  error: string | null;
+  trailerUrl: string;
+  noTrailer: boolean;
+  activeMovieId: number | null;
+  filterType: 'all' | 'movie' | 'tv';
+  setFilterType: (type: 'all' | 'movie' | 'tv') => void;
+  handleMovieClick: (movie: Movie) => void;
+}
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      if (!query) return;
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get('/api/search/multi', { params: { query: query } });
-        const filteredResults = response.data.results.filter((item: Movie) => item.poster_path);
-
-        setMovieResults(filteredResults.filter((item: Movie) => item.media_type === 'movie'));
-        setTvResults(filteredResults.filter((item: Movie) => item.media_type === 'tv'));
-
-      } catch (err) {
-        setError('Failed to fetch movies.');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, [query]);
-
-  const handleMovieClick = useCallback(async (movie: Movie) => {
-    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_results' });
-
-    if (activeMovieId === movie.id) {
-      setTrailerUrl("");
-      setNoTrailer(false);
-      setActiveMovieId(null);
-    } else {
-      setTrailerUrl("");
-      setNoTrailer(false);
-      setActiveMovieId(movie.id);
-
-      const movieTitle = movie.title || movie.name;
-      if (!movieTitle) return;
-
-      (movieTrailer as any)(null, { tmdbId: movie.id })
-        .then((url: string | null) => {
-          if (!url) throw new Error("No URL returned");
-          const urlParams = new URLSearchParams(new URL(url).search);
-          const id = urlParams.get("v");
-          if (id) setTrailerUrl(id);
-          else throw new Error("No video ID in URL");
-        })
-        .catch((_: any) => {
-          console.warn("No trailer found for:", movieTitle);
-          setNoTrailer(true);
-        });
-    }
-  }, [trailerUrl, activeMovieId]);
-
+const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
+  query,
+  movieResults,
+  tvResults,
+  isLoading,
+  error,
+  trailerUrl,
+  noTrailer,
+  activeMovieId,
+  filterType,
+  setFilterType,
+  handleMovieClick,
+}) => {
   const opts = {
     height: '390',
     width: '100%',
@@ -176,4 +131,4 @@ const SearchResultsPage: React.FC = () => {
   );
 };
 
-export default SearchResultsPage;
+export default SearchResultsPagePresenter;
