@@ -53,7 +53,7 @@
     "signIn": "Đăng nhập"
   },
   "landingPage": {
-    "fetchTrending": "Đang thịnh hành",
+    "trendingNow": "Đang thịnh hành",
     "moreReasonsToJoin": "Thêm lý do để tham gia",
     "enjoyOnTv": {
       "title": "Thưởng thức trên TV của bạn",
