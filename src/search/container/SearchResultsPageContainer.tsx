@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../../home/axios';
-import movieTrailer from 'movie-trailer';
+import { TrailerService } from '../../services/trailerService';
 import { logUserEvent } from '../../services/analytics';
 import SearchResultsPagePresenter from '../SearchResultsPage';
 
@@ -65,18 +65,25 @@ const SearchResultsPageContainer: React.FC = () => {
       const movieTitle = movie.title || movie.name;
       if (!movieTitle) return;
 
-      (movieTrailer as any)(null, { tmdbId: movie.id })
-        .then((url: string | null) => {
-          if (!url) throw new Error("No URL returned");
-          const urlParams = new URLSearchParams(new URL(url).search);
-          const id = urlParams.get("v");
-          if (id) setTrailerUrl(id);
-          else throw new Error("No video ID in URL");
-        })
-        .catch((_: any) => {
-          console.warn("No trailer found for:", movieTitle);
+      try {
+        const releaseDate = (movie as any).release_date || (movie as any).first_air_date;
+        const year = releaseDate ? new Date(releaseDate).getFullYear() : undefined;
+
+        const videoId = await TrailerService.getMovieTrailer(
+          movie.id,
+          movieTitle,
+          year
+        );
+
+        if (videoId && TrailerService.isValidYouTubeId(videoId)) {
+          setTrailerUrl(videoId);
+        } else {
           setNoTrailer(true);
-        });
+        }
+      } catch (error) {
+        console.warn("No trailer found for:", movieTitle, error);
+        setNoTrailer(true);
+      }
     }
   }, [activeMovieId]);
 
