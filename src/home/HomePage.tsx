@@ -1,21 +1,20 @@
-import React from 'react';
-import './HomePage.css';
-import Row from './container/RowContainer';
-import Banner from './container/BannerContainer';
-import Nav from './container/NavContainer';
-import { useTranslation } from 'react-i18next';
+import Row from "./container/RowContainer";
+import Banner from "./container/BannerContainer";
+import Nav from "./container/NavContainer";
+import { useTranslation } from "react-i18next";
 
-interface RowData {
-  id: string;
-  name: string;
-  isLargeRow?: boolean;
-}
+const rows = [
+  { id: "fetchNetflixOriginals", isLargeRow: true },
+  { id: "fetchTrending" },
+  { id: "fetchTopRated" },
+  { id: "fetchActionMovies" },
+  { id: "fetchComedyMovies" },
+  { id: "fetchHorrorMovies" },
+  { id: "fetchRomanceMovies" },
+  { id: "fetchDocumentaries" },
+];
 
-interface HomePageProps {
-  rows: RowData[];
-}
-
-const HomePage: React.FC<HomePageProps> = ({ rows }) => {
+const HomePage: React.FC = () => {
   const { t } = useTranslation();
 
   return (
@@ -23,7 +22,12 @@ const HomePage: React.FC<HomePageProps> = ({ rows }) => {
       <Nav />
       <Banner />
       {rows.map((row) => (
-        <Row key={row.id} title={row.name} categoryId={row.id} isLargeRow={row.isLargeRow} />
+        <Row
+          key={row.id}
+          title={t(`homePage.${row.id}`)}
+          categoryId={row.id}
+          isLargeRow={row.isLargeRow}
+        />
       ))}
     </div>
   );

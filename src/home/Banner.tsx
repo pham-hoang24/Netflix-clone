@@ -13,17 +13,22 @@ interface Movie {
 interface BannerProps {
   movie: Movie | null;
   truncate: (str: string | undefined, n: number) => string;
+  placeholderImg: string;
 }
 
-const Banner: React.FC<BannerProps> = ({ movie, truncate }) => {
+const Banner: React.FC<BannerProps> = ({ movie, truncate, placeholderImg }) => {
   const { t } = useTranslation();
+
+  const backgroundImageUrl = movie?.backdrop_path
+    ? `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`
+    : placeholderImg;
 
   return (
     <header
       className="banner"
       style={{
         backgroundSize: "cover",
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
+        backgroundImage: `url("${backgroundImageUrl}")`,
         backgroundPosition: "center center",
       }}
     >

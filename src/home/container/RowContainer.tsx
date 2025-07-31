@@ -5,6 +5,7 @@ import movieTrailer from 'movie-trailer';
 import { useAuth } from '../../context/AuthContext';
 import { logUserEvent } from '../../services/analytics';
 import { getMoviesForCategory } from '../../services/movieService';
+import placeholderImg from './istockphoto-1147544807-612x612.jpg';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -112,6 +113,7 @@ const RowContainer: React.FC<RowContainerProps> = ({ title, categoryId, isLargeR
       onPlayerStateChange={onPlayerStateChange}
       handleClick={handleClick}
       base_url={base_url}
+      placeholderImg={placeholderImg}
     />
   );
 };
