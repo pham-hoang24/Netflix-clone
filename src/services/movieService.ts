@@ -18,6 +18,11 @@ export const getMoviesForCategory = async (categoryName: string) => {
   }
 
   const movieIds = categoryData.movies;
+
+  if (!Array.isArray(movieIds)) {
+    return [];
+  }
+
   const movies = [];
 
   for (const movieId of movieIds) {

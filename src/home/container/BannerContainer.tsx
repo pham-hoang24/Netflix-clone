@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Banner from '../Banner'; // Import the presentational component
 import { getMoviesForCategory } from '../../services/movieService';
+import placeholderImg from './1sgfb0.jpg';
 
 interface Movie {
   backdrop_path: string;
@@ -28,7 +29,7 @@ const BannerContainer: React.FC = () => {
     return str.length > n ? str.substr(0, n - 1) + "..." : str;
   }
 
-  return <Banner movie={movie} truncate={truncate} />;
+  return <Banner movie={movie} truncate={truncate} placeholderImg={placeholderImg} />;
 };
 
 export default BannerContainer;
