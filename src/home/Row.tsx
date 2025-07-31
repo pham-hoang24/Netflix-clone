@@ -69,7 +69,7 @@ const Row: React.FC<RowProps> = ({
 
   return (
     <div className="row">
-      <h2>{title}</h2>
+      <h2 style={{ paddingTop: isLargeRow ? '1rem' : '0' }}>{title}</h2>
       <div className="row__posters">
         {movies.map((movie, index) => {
           const imagePath = isLargeRow ? movie.poster_path : movie.backdrop_path;

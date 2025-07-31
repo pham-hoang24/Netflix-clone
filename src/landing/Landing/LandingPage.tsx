@@ -748,7 +748,7 @@ const LandingPage: React.FC<LandingPageProps> = ({
           </div>
         </div>
       </ContentSection>
-      <ContentSection title="Frequently Asked Questions">
+      <ContentSection title="landingPage.faqTitle">
         <FaqSection faqs={faqs} />
       </ContentSection>
 
