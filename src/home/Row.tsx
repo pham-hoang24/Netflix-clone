@@ -11,58 +11,89 @@ interface Movie {
   media_type?: string;
 }
 
+
 interface RowProps {
   title: string;
-  categoryId: string;
-  isLargeRow?: boolean;
   movies: Movie[];
-  trailerUrl: string;
-  noTrailer: boolean;
-  opts: YouTubeProps["opts"];
-  onPlayerStateChange: (event: any) => void;
-  handleClick: (movie: Movie) => void;
+  isLargeRow?: boolean;
+  onMovieClick: (movie: Movie) => void;
   base_url: string;
   placeholderImg: string;
+  isLoading: boolean;
+  error: string | null;
+  isPlayerActive: boolean;
+  trailerUrl: string;
+  noTrailer: boolean;
+  youtubeOpts: any;
+  onPlayerReady: (event: any) => void;
+  onPlayerStateChange: (event: any) => void;
 }
 
 const Row: React.FC<RowProps> = ({
   title,
-  categoryId,
-  isLargeRow = false,
   movies,
-  trailerUrl,
-  noTrailer,
-  opts,
-  onPlayerStateChange,
-  handleClick,
+  isLargeRow = false,
+  onMovieClick,
   base_url,
   placeholderImg,
+  isLoading,
+  error,
+  isPlayerActive,
+  trailerUrl,
+  noTrailer,
+  youtubeOpts,
+  onPlayerReady,
+  onPlayerStateChange,
 }) => {
+  if (isLoading) {
+    return (
+      <div className="row">
+        <h2>{title}</h2>
+        <div className="row__posters">
+          {Array.from({ length: 10 }).map((_, index) => (
+            <div key={index} className="row__poster-placeholder" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="row">
+        <h2>{title}</h2>
+        <p className="row__error">{error}</p>
+      </div>
+    );
+  }
+
   return (
     <div className="row">
       <h2>{title}</h2>
       <div className="row__posters">
-        {Array.from({ length: 20 }).map((_, index) => {
-          const movie = movies[index];
-          const imagePath = movie
-            ? isLargeRow
-              ? movie.poster_path
-              : movie.backdrop_path
-            : null;
-
+        {movies.map((movie, index) => {
+          const imagePath = isLargeRow ? movie.poster_path : movie.backdrop_path;
           return (
             <img
-              key={movie ? movie.id : `placeholder-${index}`}
-              onClick={() => movie && handleClick(movie)}
+              key={movie.id}
+              onClick={() => onMovieClick(movie)}
               className={`row__poster ${isLargeRow ? "row__posterLarge" : ""}`}
               src={imagePath ? `${base_url}${imagePath}` : placeholderImg}
-              alt={movie ? movie.name || movie.title || "Movie poster" : "Placeholder"}
+              alt={movie.name || movie.title || "Movie poster"}
             />
           );
         })}
       </div>
-      {trailerUrl && <YouTube videoId={trailerUrl} opts={opts} onStateChange={onPlayerStateChange} />}
-      {noTrailer && (
+      {isPlayerActive && trailerUrl && (
+        <YouTube
+          videoId={trailerUrl}
+          opts={youtubeOpts}
+          onReady={onPlayerReady}
+          onStateChange={onPlayerStateChange}
+          className="youtube-player"
+        />
+      )}
+      {isPlayerActive && noTrailer && (
         <div className="row__noTrailer">
           This movie currently does not have a trailer.
         </div>

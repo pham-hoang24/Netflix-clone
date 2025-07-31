@@ -1,13 +1,122 @@
-import React, { useEffect } from 'react';
-import HomePage from '../HomePage'; // Import the presentational component
+import React, { useState, useEffect, useCallback } from 'react';
+import HomePage from '../HomePage';
+import { useAuth } from '../../context/AuthContext';
 import { logUserEvent } from '../../services/analytics';
+import { TrailerService } from '../../services/trailerService';
+import { YouTubeProps } from 'react-youtube';
+
+interface Movie {
+  id: number;
+  name: string;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+  media_type?: string;
+  release_date?: string;
+  first_air_date?: string;
+}
 
 const HomePageContainer: React.FC = () => {
+  const [trailerUrl, setTrailerUrl] = useState<string>("");
+  const [noTrailer, setNoTrailer] = useState<boolean>(false);
+  const [currentMovieId, setCurrentMovieId] = useState<number | null>(null);
+  const [isLoadingTrailer, setIsLoadingTrailer] = useState<boolean>(false);
+  const { currentUser } = useAuth();
+
+  const [activeRow, setActiveRow] = useState<string | null>(null);
+
   useEffect(() => {
     logUserEvent('page_view', { page_name: 'HomePage' });
   }, []);
 
-  return <HomePage />;
+  const youtubeOpts: YouTubeProps["opts"] = {
+    height: "390",
+    width: "100%",
+    playerVars: { autoplay: 1 },
+  };
+
+  const [watchStartTime, setWatchStartTime] = useState<number | null>(null);
+
+  const handlePlayerReady = (event: any) => {
+    // You can use the event.target to control the player if needed
+  };
+
+  const handlePlayerStateChange = (event: any) => {
+    if (!currentUser) return;
+
+    if (event.data === window.YT.PlayerState.PLAYING) {
+      setWatchStartTime(Date.now());
+    } else if (
+      (event.data === window.YT.PlayerState.PAUSED || event.data === window.YT.PlayerState.ENDED) &&
+      watchStartTime
+    ) {
+      const watchDuration = Date.now() - watchStartTime;
+      if (currentMovieId) {
+        logUserEvent('watch_time', {
+          movieId: currentMovieId,
+          duration: watchDuration,
+        });
+      }
+      setWatchStartTime(null);
+    }
+  };
+
+  const handleMovieClick = useCallback(
+    async (movie: Movie, categoryId: string) => {
+      logUserEvent('movie_select', { movieId: movie.id, categoryId });
+
+      if (currentMovieId === movie.id) {
+        setTrailerUrl("");
+        setCurrentMovieId(null);
+        setNoTrailer(false);
+        setActiveRow(null);
+        return;
+      }
+
+      setIsLoadingTrailer(true);
+      setNoTrailer(false);
+      setCurrentMovieId(movie.id);
+      setActiveRow(categoryId);
+
+      try {
+        const movieTitle = movie?.name || movie?.title || "";
+        const releaseDate = movie.release_date || movie.first_air_date;
+        const year = releaseDate ? new Date(releaseDate).getFullYear() : undefined;
+
+        const videoId = await TrailerService.getMovieTrailer(
+          movie.id,
+          movieTitle,
+          year
+        );
+
+        if (videoId && TrailerService.isValidYouTubeId(videoId)) {
+          setTrailerUrl(videoId);
+        } else {
+          setNoTrailer(true);
+          setTrailerUrl("");
+        }
+      } catch (error) {
+        console.warn(`No trailer found for: ${movie?.name || movie?.title}`, error);
+        setNoTrailer(true);
+        setTrailerUrl("");
+      } finally {
+        setIsLoadingTrailer(false);
+      }
+    },
+    [currentMovieId, currentUser]
+  );
+
+  return (
+    <HomePage
+      trailerUrl={trailerUrl}
+      noTrailer={noTrailer}
+      activeRow={activeRow}
+      onMovieClick={handleMovieClick}
+      onPlayerReady={handlePlayerReady}
+      onPlayerStateChange={handlePlayerStateChange}
+      youtubeOpts={youtubeOpts}
+    />
+  );
 };
 
 export default HomePageContainer;

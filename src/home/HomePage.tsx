@@ -2,6 +2,18 @@ import Row from "./container/RowContainer";
 import Banner from "./container/BannerContainer";
 import Nav from "./container/NavContainer";
 import { useTranslation } from "react-i18next";
+import YouTube from 'react-youtube';
+
+interface Movie {
+  id: number;
+  name: string;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+  media_type?: string;
+  release_date?: string;
+  first_air_date?: string;
+}
 
 const rows = [
   { id: "fetchNetflixOriginals", isLargeRow: true },
@@ -14,7 +26,25 @@ const rows = [
   { id: "fetchDocumentaries" },
 ];
 
-const HomePage: React.FC = () => {
+interface HomePageProps {
+  trailerUrl: string;
+  noTrailer: boolean;
+  activeRow: string | null;
+  onMovieClick: (movie: Movie, categoryId: string) => void;
+  onPlayerReady: (event: any) => void;
+  onPlayerStateChange: (event: any) => void;
+  youtubeOpts: any;
+}
+
+const HomePage: React.FC<HomePageProps> = ({ 
+  trailerUrl, 
+  noTrailer, 
+  activeRow,
+  onMovieClick, 
+  onPlayerReady, 
+  onPlayerStateChange,
+  youtubeOpts
+}) => {
   const { t } = useTranslation();
 
   return (
@@ -27,6 +57,13 @@ const HomePage: React.FC = () => {
           title={t(`homePage.${row.id}`)}
           categoryId={row.id}
           isLargeRow={row.isLargeRow}
+          onMovieClick={(movie) => onMovieClick(movie, row.id)} // Pass the handler down
+          isPlayerActive={activeRow === row.id}
+          trailerUrl={trailerUrl}
+          noTrailer={noTrailer}
+          youtubeOpts={youtubeOpts}
+          onPlayerReady={onPlayerReady}
+          onPlayerStateChange={onPlayerStateChange}
         />
       ))}
     </div>
