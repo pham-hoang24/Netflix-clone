@@ -54,8 +54,11 @@
     "vietnamese": "Tiếng Việt",
     "finnish": "Suomi"
   },
-  
+
   "landingPage": {
+    "loading": "Đang tải...",
+    "failedToLoad": "Không thể tải nội dung. Vui lòng thử lại sau.",
+    "retry": "Thử lại",
     "trendingNow": "Đang thịnh hành",
     "moreReasonsToJoin": "Thêm lý do để tham gia",
     "enjoyOnTv": {
@@ -74,10 +77,7 @@
       "title": "Tạo hồ sơ cho trẻ em",
       "description": "Gửi trẻ em vào cuộc phiêu lưu với các nhân vật yêu thích của chúng trong một không gian dành riêng cho chúng – miễn phí với tư cách thành viên của bạn."
     },
-    "faqTitle": "Câu hỏi thường gặp",
-    "loading": "Đang tải...",
-    "loadError": "Không thể tải nội dung. Vui lòng thử lại sau.",
-    "retry": "Thử lại"
+    "faqTitle": "Câu hỏi thường gặp"
   },
   "faq": {
     "whatIsNetflix": {
