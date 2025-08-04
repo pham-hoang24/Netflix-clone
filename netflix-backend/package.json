@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node src/oldbackend.ts",
     "build": "tsc",
-    "populate": "node populate-firestore.js"
+    "populate": "ts-node src/populate-firestore.ts"
   },
   "keywords": [],
   "author": "",
