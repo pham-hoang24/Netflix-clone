@@ -28,13 +28,17 @@ const HeroPresentation: React.FC<HeroPresentationProps> = ({
         <div className={styles.emailSignup}>
           <div className={styles.inputContainer}>
             <input
+              id="email-input"
               type="email"
-              className={`${styles.emailInput} ${error ? styles.inputError : ''}`}
-              placeholder={t('login.emailPlaceholder')}
+              className={`${styles.emailInput} ${error ? styles.inputError : email && !error ? styles.inputSuccess : ''}`}
+              placeholder=" "
               value={email}
               onChange={handleEmailChange}
               disabled={isLoading}
             />
+            <label htmlFor="email-input" className={styles.label}>
+              {t('login.emailPlaceholder')}
+            </label>
             {error && <p className={styles.errorMessage}>{error}</p>}
           </div>
           <button

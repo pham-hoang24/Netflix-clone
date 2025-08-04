@@ -2,7 +2,6 @@
   position: relative;
   height: 45rem;
   display: flex;
-  /* padding-top: 10%; */ /* Removed this line */
   justify-content: center;
   background-position: center;
   text-align: center;
@@ -46,6 +45,7 @@
   display: flex;
   flex-direction: column; /* Stack input and error message */
   flex-grow: 1; /* Allow the container to grow */
+  position: relative;
 }
 
 .emailInput {
@@ -59,9 +59,31 @@
   color: white;
 }
 
+.label {
+  position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translateY(-50%);
+  color: #8c8c8c;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.emailInput:focus + .label,
+.emailInput:not(:placeholder-shown) + .label {
+  top: 0.5rem;
+  transform: translateY(0);
+  font-size: 0.75rem;
+}
+
 .inputError {
   border-color: #e87c03; /* Netflix orange for errors */
   border-bottom: 2px solid #e87c03;
+}
+
+.inputSuccess {
+  border-color: #008000; /* Green for success */
+  border-bottom: 2px solid #008000;
 }
 
 .errorMessage {
