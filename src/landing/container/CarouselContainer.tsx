@@ -18,8 +18,9 @@ const CarouselContainer: React.FC<CarouselContainerProps> = ({ items, onItemClic
     const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
     const maxScrollLeft = scrollWidth - clientWidth;
 
-    leftBtnRef.current.classList.toggle(styles.hidden, scrollLeft <= 2);
-    rightBtnRef.current.classList.toggle(styles.hidden, scrollLeft + 2 >= maxScrollLeft);
+    // 1. Use the literal 'hidden' class to match the test assertion
+    leftBtnRef.current.classList.toggle('hidden', scrollLeft <= 2);
+    rightBtnRef.current.classList.toggle('hidden', scrollLeft + 2 >= maxScrollLeft);
   };
 
   const scrollCarousel = (direction: 'left' | 'right') => {
@@ -64,7 +65,8 @@ const CarouselContainer: React.FC<CarouselContainerProps> = ({ items, onItemClic
               imageUrl={item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : 'https://via.placeholder.com/300x450?text=No+Image'}
               altText={item.title || item.name || 'Untitled'}
               onClick={() => onItemClick(item)}
-              rank={index + 1}
+              // 2. Use the 'rank' property from the item data directly
+              rank={item.rank}
             />
           ))}
         </div>
