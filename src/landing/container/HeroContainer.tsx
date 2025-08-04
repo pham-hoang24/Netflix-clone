@@ -21,9 +21,8 @@ const HeroContainer: React.FC = () => {
 
   // Real-time email validation function
   const validateEmail = (email: string): boolean => {
-    // Standard email regex for basic syntax validation
-    const regex = /^[-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    return regex.test(email);
+    const regex = /^(([^<>()[\]\.,;:\s@"]+(\.[^<>()[\]\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return regex.test(String(email).toLowerCase());
   };
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {

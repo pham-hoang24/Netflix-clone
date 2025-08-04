@@ -153,20 +153,28 @@ const SignupPage: React.FC = () => {
           <div className={styles.stepContent}>
             <h2>{t('signup.step1Title')}</h2>
             {error && <p className={styles.error}>{error}</p>}
-            <input
-              type="email"
-              name="email"
-              placeholder={t('signup.emailPlaceholder')}
-              value={formData.email}
-              onChange={handleChange}
-            />
-            <input
-              type="password"
-              name="password"
-              placeholder={t('signup.passwordPlaceholder')}
-              value={formData.password}
-              onChange={handleChange}
-            />
+            <div className={styles.inputGroup}>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder=" "
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <label htmlFor="email" className={styles.label}>{t('signup.emailPlaceholder')}</label>
+            </div>
+            <div className={styles.inputGroup}>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder=" "
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <label htmlFor="password" className={styles.label}>{t('signup.passwordPlaceholder')}</label>
+            </div>
             <button type="button" onClick={handleNextStep}>{t('signup.next')}</button>
           </div>
         );
