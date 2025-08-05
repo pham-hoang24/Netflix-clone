@@ -202,4 +202,24 @@ export class MediaService {
     });
     return response.data;
   }
+
+  async getMoviesByGenre(genre: string, limit: number = 10): Promise<TMDBMovie[]> {
+    // This is a placeholder. A real implementation would query TMDB for movies by genre.
+    // TMDB's /discover/movie endpoint can be used with 'with_genres' parameter.
+    console.warn(`getMoviesByGenre for genre: ${genre} is a placeholder and needs full TMDB integration.`);
+    try {
+      const response = await axios.get<TMDBResponse<TMDBMovie>>(`${this.TMDB_URL}/discover/movie`, {
+        params: {
+          api_key: this.TMDB_API_KEY,
+          with_genres: genre, // This assumes 'genre' is the TMDB genre ID. You might need a mapping.
+          language: 'en-US',
+          sort_by: 'popularity.desc',
+        },
+      });
+      return response.data.results.slice(0, limit);
+    } catch (error: any) {
+      console.error(`Error fetching movies by genre ${genre} from TMDB:`, error.message);
+      return [];
+    }
+  }
 }

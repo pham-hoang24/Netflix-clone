@@ -1,53 +1,56 @@
 import admin from 'firebase-admin';
-import { db } from './FirestoreDAO'; // Assuming db is exported from FirestoreDAO
+import { UserEvent } from '../types/recommendation';
 
-export interface EventLogRequest {
-  event: string;
-  movieId?: string;
-  watchTimeSeconds?: number;
-  searchTerm?: string;
-  deviceType?: string;
-  sessionId?: string;
-  movieName?: string;
-  genre?: string;
-  publishDate?: string;
-  director?: string;
-  metadata?: Record<string, any>;
-}
+export class UserEventDAO {
+  private db: admin.firestore.Firestore;
 
-export async function logUserEvent(userId: string, userEmail: string | undefined, eventData: EventLogRequest): Promise<string> {
-  try {
-    const dataToSave: Record<string, any> = {
-      userId,
-      userEmail,
-      event: eventData.event,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      serverTimestamp: new Date().toISOString(), // Backup timestamp
-      ...(eventData.movieId && { movieId: eventData.movieId }),
-      ...(eventData.watchTimeSeconds !== undefined && { watchTimeSeconds: eventData.watchTimeSeconds }),
-      ...(eventData.searchTerm && { searchTerm: eventData.searchTerm }),
-      ...(eventData.deviceType && { deviceType: eventData.deviceType }),
-      ...(eventData.sessionId && { sessionId: eventData.sessionId }),
-      ...(eventData.movieName && { movieName: eventData.movieName }),
-      ...(eventData.genre && { genre: eventData.genre }),
-      ...(eventData.publishDate && { publishDate: eventData.publishDate }),
-      ...(eventData.director && { director: eventData.director }),
-      ...(eventData.metadata && { metadata: eventData.metadata }),
-    };
-
-    const docRef = await db.collection('userEvents').add(dataToSave);
-    console.log(`Event logged: ${eventData.event} for user ${userId}, docId: ${docRef.id}`);
-    return docRef.id;
-  } catch (error: any) {
-    console.error('Error logging event to Firestore:', error.message);
-    throw error;
+  constructor(dbInstance: admin.firestore.Firestore) {
+    this.db = dbInstance;
   }
-}
 
-export async function getUserEvents(userId: string, limit: number, eventType?: string): Promise<any[]> {
-  try {
-    let query = db.collection('userEvents')
-      .where('userId', '==', userId)
+  async createEvent(eventData: UserEvent): Promise<string> {
+    const batch = this.db.batch();
+
+    // Helper to remove undefined values
+    const removeUndefined = (obj: any) => {
+      return Object.fromEntries(
+        Object.entries(obj).filter(([, value]) => value !== undefined)
+      );
+    };
+    
+    const cleanedEventData = removeUndefined(eventData);
+
+    // Store in main userEvents collection for recommendations
+    const eventRef = this.db.collection('userEvents').doc();
+    batch.set(eventRef, {
+      ...cleanedEventData,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      serverTimestamp: new Date().toISOString(),
+    });
+
+    // ALSO store in user subcollection for user-specific queries
+    const userEventRef = this.db
+      .collection('users')
+      .doc(eventData.userId)
+      .collection('events')
+      .doc(eventRef.id);
+    
+    const { userId, ...eventDataWithoutUserId } = cleanedEventData; // Use cleaned data here too
+    batch.set(userEventRef, {
+      ...eventDataWithoutUserId,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      serverTimestamp: new Date().toISOString(),
+    });
+
+    await batch.commit();
+    return eventRef.id;
+  }
+
+  async getUserEvents(userId: string, limit: number = 50, eventType?: string): Promise<UserEvent[]> {
+    let query = this.db
+      .collection('users')
+      .doc(userId)
+      .collection('events')
       .orderBy('timestamp', 'desc')
       .limit(limit);
 
@@ -56,19 +59,96 @@ export async function getUserEvents(userId: string, limit: number, eventType?: s
     }
 
     const snapshot = await query.get();
-    const events: any[] = [];
-    
+    return this.mapEventsFromSnapshot(snapshot, userId);
+  }
+
+  async getEventsForRecommendations(filters: {
+    movieIds?: string[];
+    genres?: string[];
+    eventTypes?: string[];
+    minRating?: number;
+    timeframe?: { start: Date; end: Date };
+    limit?: number;
+  }): Promise<UserEvent[]> {
+    let query: admin.firestore.Query = this.db.collection('userEvents');
+
+    if (filters.movieIds?.length) {
+      query = query.where('movieId', 'in', filters.movieIds.slice(0, 10)); // Firestore limit
+    }
+
+    if (filters.eventTypes?.length) {
+      query = query.where('event', 'in', filters.eventTypes);
+    }
+
+    if (filters.minRating) {
+      query = query.where('rating', '>=', filters.minRating);
+    }
+
+    if (filters.timeframe) {
+      query = query
+        .where('timestamp', '>=', filters.timeframe.start)
+        .where('timestamp', '<=', filters.timeframe.end);
+    }
+
+    if (filters.limit) {
+      query = query.limit(filters.limit);
+    }
+
+    const snapshot = await query.get();
+    return this.mapEventsFromSnapshot(snapshot);
+  }
+
+  async findSimilarUsers(userId: string, movieIds: string[], limit: number = 50): Promise<string[]> {
+    const snapshot = await this.db.collection('userEvents')
+      .where('movieId', 'in', movieIds.slice(0, 10))
+      .where('event', 'in', ['movie_completed', 'positive_rating'])
+      .where('userId', '!=', userId)
+      .limit(limit * 2) // Get more to filter duplicates
+      .get();
+
+    const userCounts: Record<string, number> = {};
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      userCounts[data.userId] = (userCounts[data.userId] || 0) + 1;
+    });
+
+    return Object.entries(userCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, limit)
+      .map(([userId]) => userId);
+  }
+
+  async getTrendingContent(timeframe: Date, limit: number = 20): Promise<Array<{movieId: string, count: number}>> {
+    const snapshot = await this.db.collection('userEvents')
+      .where('timestamp', '>=', timeframe)
+      .where('event', 'in', ['movie_view', 'movie_completed'])
+      .get();
+
+    const movieCounts: Record<string, number> = {};
+    snapshot.forEach(doc => {
+      const data = doc.data();
+      if (data.movieId) {
+        movieCounts[data.movieId] = (movieCounts[data.movieId] || 0) + 1;
+      }
+    });
+
+    return Object.entries(movieCounts)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, limit)
+      .map(([movieId, count]) => ({ movieId, count }));
+  }
+
+  private mapEventsFromSnapshot(snapshot: admin.firestore.QuerySnapshot, userId?: string): UserEvent[] {
+    const events: UserEvent[] = [];
     snapshot.forEach(doc => {
       const data = doc.data();
       events.push({
         id: doc.id,
         ...data,
-        timestamp: data.timestamp?.toDate?.()?.toISOString() || data.serverTimestamp
-      });
+        userId: userId || data.userId, // Use provided userId for subcollection queries
+        timestamp: data.timestamp?.toDate?.() || new Date(data.serverTimestamp)
+      } as UserEvent);
     });
     return events;
-  } catch (error: any) {
-    console.error('Error fetching user events from Firestore:', error.message);
-    throw error;
   }
 }

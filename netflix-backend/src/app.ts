@@ -2,7 +2,7 @@ import express, { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import apiRoutes from './routes';
-import { testFirebaseConnection } from './dao/FirestoreDAO';
+import { testFirebaseConnection, initializeFirebase } from './dao/FirestoreDAO';
 import { testTMDBConnection } from './dao/TMDBDAO';
 
 dotenv.config();
@@ -10,12 +10,15 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 2000;
 
+// Initialize Firebase and get the db instance
+const db = initializeFirebase();
+
 // Global Middleware
 app.use(cors({ origin: true }));
 app.use(express.json());
 
 // API Routes
-app.use('/api', apiRoutes);
+app.use('/api', apiRoutes(db)); // Pass db to routes
 
 // Error handling middleware (optional, but good practice)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
