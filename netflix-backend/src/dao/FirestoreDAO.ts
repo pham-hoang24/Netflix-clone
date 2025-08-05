@@ -4,26 +4,35 @@ import { MovieDetails } from './TMDBDAO';
 
 dotenv.config();
 
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  try {
-    const serviceAccount = require('../serviceAccountKey.json');
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
-      projectId: "netflix-clone-62aec",
-    });
-  } catch (error) {
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID!,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
-      }),
-    });
+let initialized = false;
+let _db: admin.firestore.Firestore;
+
+export function initializeFirebase(): admin.firestore.Firestore {
+  if (!initialized) {
+    if (!admin.apps.length) {
+      try {
+        const serviceAccount = require('../serviceAccountKey.json');
+        admin.initializeApp({
+          credential: admin.credential.cert(serviceAccount),
+          projectId: "netflix-clone-62aec",
+        });
+      } catch (error) {
+        admin.initializeApp({
+          credential: admin.credential.cert({
+            projectId: process.env.FIREBASE_PROJECT_ID!,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, '\n')!,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL!,
+          }),
+        });
+      }
+    }
+    _db = admin.firestore();
+    initialized = true;
   }
+  return _db;
 }
 
-export const db = admin.firestore();
+export const db = initializeFirebase();
 
 export interface CategoryData {
   name: string;
