@@ -2,7 +2,7 @@ import Row from "./container/RowContainer";
 import Banner from "./container/BannerContainer";
 import Nav from "./container/NavContainer";
 import { useTranslation } from "react-i18next";
-import YouTube from 'react-youtube';
+import RecommendedRow from './RecommendedRow';
 
 interface Movie {
   id: number;
@@ -51,6 +51,7 @@ const HomePage: React.FC<HomePageProps> = ({
     <div className="homepage">
       <Nav />
       <Banner />
+      <RecommendedRow />
       {rows.map((row) => (
         <Row
           key={row.id}

@@ -44,8 +44,11 @@ export interface UserEvent {
 
 export interface StoredRecommendation {
   movieId: string;
+  movieName?: string;
+  poster_path?: string;
+  backdrop_path?: string;
   score?: number; // Optional: for ranking within the stored list
-  type?: 'collaborative' | 'content-based' | 'trending'; // Optional: origin of the recommendation
+  type?: 'collaborative' | 'content-based' | 'trending' | 'initial'; // Optional: origin of the recommendation
   generatedAt: Date;
 }
 

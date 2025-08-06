@@ -45,6 +45,9 @@ export class RecommendationDAO {
       const data = doc.data();
       recommendations.push({
         movieId: data.movieId,
+        movieName: data.movieName,
+        poster_path: data.poster_path,
+        backdrop_path: data.backdrop_path,
         score: data.score,
         type: data.type,
         generatedAt: data.generatedAt?.toDate() || new Date(),

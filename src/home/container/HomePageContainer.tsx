@@ -14,20 +14,18 @@ interface Movie {
   media_type?: string;
   release_date?: string;
   first_air_date?: string;
+  genre_ids?: number[]; // Added genre_ids to Movie interface
 }
 
 const HomePageContainer: React.FC = () => {
   const [trailerUrl, setTrailerUrl] = useState<string>("");
   const [noTrailer, setNoTrailer] = useState<boolean>(false);
   const [currentMovieId, setCurrentMovieId] = useState<number | null>(null);
+  const [currentMovie, setCurrentMovie] = useState<Movie | null>(null);
   const [isLoadingTrailer, setIsLoadingTrailer] = useState<boolean>(false);
   const { currentUser } = useAuth();
 
   const [activeRow, setActiveRow] = useState<string | null>(null);
-
-  useEffect(() => {
-    logUserEvent('page_view', { page_name: 'HomePage' });
-  }, []);
 
   const youtubeOpts: YouTubeProps["opts"] = {
     height: "390",
@@ -42,7 +40,7 @@ const HomePageContainer: React.FC = () => {
   };
 
   const handlePlayerStateChange = (event: any) => {
-    if (!currentUser) return;
+    if (!currentUser || !currentMovie) return;
 
     if (event.data === window.YT.PlayerState.PLAYING) {
       setWatchStartTime(Date.now());
@@ -51,10 +49,14 @@ const HomePageContainer: React.FC = () => {
       watchStartTime
     ) {
       const watchDuration = Date.now() - watchStartTime;
-      if (currentMovieId) {
+      if (currentMovie.id) {
+        // Extract genre IDs from the currentMovie object and convert to string for logging
+        const genreIds = currentMovie.genre_ids?.map(id => String(id)).join(', ') || '';
+
         logUserEvent('watch_time', {
-          movieId: currentMovieId,
+          movieId: currentMovie.id,
           duration: watchDuration,
+          genre: genreIds, // Pass genre IDs as a comma-separated string
         });
       }
       setWatchStartTime(null);
@@ -63,7 +65,7 @@ const HomePageContainer: React.FC = () => {
 
   const handleMovieClick = useCallback(
     async (movie: Movie, categoryId: string) => {
-      logUserEvent('movie_select', { movieId: movie.id, categoryId });
+      setCurrentMovie(movie); // Store the clicked movie
 
       if (currentMovieId === movie.id) {
         setTrailerUrl("");

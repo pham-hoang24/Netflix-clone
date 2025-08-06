@@ -41,15 +41,8 @@ class MediaService {
     }
     fetchAndProcessMediaDetails(id, type) {
         return __awaiter(this, void 0, void 0, function* () {
-            var _a;
             const details = yield (0, TMDBDAO_1.fetchMediaDetailsFromTMDB)(id, type);
-            const genres = yield this.getGenres(type);
-            return {
-                movieName: details.title || details.name || '',
-                genre: ((_a = details.genre_ids) === null || _a === void 0 ? void 0 : _a.map(gId => genres[gId]).filter(Boolean).join(', ')) || null,
-                publishDate: details.release_date || details.first_air_date || null,
-                director: details.director
-            };
+            return details; // Return the raw details object which contains genre_ids
         });
     }
     populateAllCategories() {

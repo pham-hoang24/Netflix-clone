@@ -64,7 +64,7 @@ const SearchContainer: React.FC = () => {
   }, []);
 
   const handleSuggestionClick = useCallback(async (movie: Movie) => {
-    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_suggestion' });
+    
     navigate(`/search/${movie.title || movie.name}`);
   }, [navigate]);
 

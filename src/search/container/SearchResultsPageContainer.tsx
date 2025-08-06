@@ -51,7 +51,7 @@ const SearchResultsPageContainer: React.FC = () => {
   }, [query]);
 
   const handleMovieClick = useCallback(async (movie: Movie) => {
-    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_results' });
+    
 
     if (activeMovieId === movie.id) {
       setTrailerUrl("");
