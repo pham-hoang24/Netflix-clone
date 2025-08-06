@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 2000;
 // Initialize Firebase and get the db instance
 const db = (0, FirestoreDAO_1.initializeFirebase)();
 // Global Middleware
-app.use((0, cors_1.default)({ origin: true }));
+app.use((0, cors_1.default)({ origin: 'http://localhost:3000' }));
 app.use(express_1.default.json());
 // API Routes
 app.use('/api', (0, routes_1.default)(db)); // Pass db to routes

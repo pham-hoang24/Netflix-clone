@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 2000;
 const db = initializeFirebase();
 
 // Global Middleware
-app.use(cors({ origin: true }));
+app.use(cors({ origin: 'http://localhost:3000' }));
 app.use(express.json());
 
 // API Routes
