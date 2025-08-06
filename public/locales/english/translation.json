@@ -108,6 +108,7 @@
     "signOut": "Sign Out"
   },
   "homePage": {
+    "personalizedRecommendations": "Recommended for you",
     "fetchNetflixOriginals": "NETFLIX ORIGINALS",
     "fetchTrending": "Trending Now",
     "fetchTopRated": "Top Rated",

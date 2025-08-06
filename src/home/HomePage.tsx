@@ -2,7 +2,6 @@ import Row from "./container/RowContainer";
 import Banner from "./container/BannerContainer";
 import Nav from "./container/NavContainer";
 import { useTranslation } from "react-i18next";
-import RecommendedRow from './RecommendedRow';
 
 interface Movie {
   id: number;
@@ -36,12 +35,12 @@ interface HomePageProps {
   youtubeOpts: any;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ 
-  trailerUrl, 
-  noTrailer, 
+const HomePage: React.FC<HomePageProps> = ({
+  trailerUrl,
+  noTrailer,
   activeRow,
-  onMovieClick, 
-  onPlayerReady, 
+  onMovieClick,
+  onPlayerReady,
   onPlayerStateChange,
   youtubeOpts
 }) => {
@@ -51,7 +50,18 @@ const HomePage: React.FC<HomePageProps> = ({
     <div className="homepage">
       <Nav />
       <Banner />
-      <RecommendedRow />
+      <Row
+        title={t(`homePage.personalizedRecommendations`)}
+        rowType="personalized"
+        isLargeRow={true}
+        onMovieClick={(movie) => onMovieClick(movie, "personalizedRecommendations")}
+        isPlayerActive={activeRow === "personalizedRecommendations"}
+        trailerUrl={trailerUrl}
+        noTrailer={noTrailer}
+        youtubeOpts={youtubeOpts}
+        onPlayerReady={onPlayerReady}
+        onPlayerStateChange={onPlayerStateChange}
+      />
       {rows.map((row) => (
         <Row
           key={row.id}

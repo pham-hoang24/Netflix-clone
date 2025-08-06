@@ -45,11 +45,11 @@ export class RecommendationDAO {
       const data = doc.data();
       recommendations.push({
         movieId: data.movieId,
-        movieName: data.movieName,
-        poster_path: data.poster_path,
-        backdrop_path: data.backdrop_path,
-        score: data.score,
-        type: data.type,
+        movieName: data.movieName || null,
+        poster_path: data.poster_path || null,
+        backdrop_path: data.backdrop_path || null,
+        score: data.score || null,
+        type: data.type || null,
         generatedAt: data.generatedAt?.toDate() || new Date(),
       });
     });
