@@ -114,6 +114,7 @@
     "signOut": "Đăng xuất"
   },
   "homePage": {
+    "personalizedRecommendations": "Chúng tôi nghĩ bạn sẽ thích...",
     "fetchNetflixOriginals": "NETFLIX ORIGINALS",
     "fetchTrending": "Thịnh hành ngay",
     "fetchTopRated": "Xếp hạng cao nhất",

@@ -6,6 +6,8 @@ import { logUserEvent } from '../../services/analytics';
 import { getMoviesForCategory } from '../../services/movieService';
 import { TrailerService } from '../../services/trailerService';
 import placeholderImg from './istockphoto-1147544807-612x612.jpg';
+import { fetchPersonalizedRecommendations } from '../../services/api-client';
+import { auth } from '../../services/firebase';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -22,7 +24,8 @@ interface Movie {
 
 interface RowContainerProps {
   title: string;
-  categoryId: string;
+  categoryId?: string; // Make categoryId optional
+  rowType?: 'category' | 'personalized'; // New prop to distinguish row types
   isLargeRow?: boolean;
   onMovieClick: (movie: Movie) => void;
   isPlayerActive: boolean;
@@ -33,10 +36,11 @@ interface RowContainerProps {
   onPlayerStateChange: (event: any) => void;
 }
 
-const RowContainer: React.FC<RowContainerProps> = ({ 
-  title, 
-  categoryId, 
-  isLargeRow = false, 
+const RowContainer: React.FC<RowContainerProps> = ({
+  title,
+  categoryId,
+  rowType = 'category', // Default to category
+  isLargeRow = false,
   onMovieClick,
   isPlayerActive,
   trailerUrl,
@@ -48,21 +52,51 @@ const RowContainer: React.FC<RowContainerProps> = ({
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
       setError(null);
+
       try {
-        const fetchedMovies = await getMoviesForCategory(categoryId);
-        if (!fetchedMovies) {
-          setError("No movies found for this category");
-          setMovies([]);
-          return;
+        let fetchedMovies: Movie[] = [];
+
+        if (rowType === 'personalized') {
+          if (!currentUser || !auth.currentUser) {
+            setError("Authentication required for personalized recommendations.");
+            setIsLoading(false);
+            return;
+          }
+          const idToken = await auth.currentUser.getIdToken();
+          const rawRecommendations = await fetchPersonalizedRecommendations(idToken);
+          console.log("[RowContainer] Raw personalized recommendations fetched:", rawRecommendations);
+          fetchedMovies = rawRecommendations.map((rec: any) => ({
+            id: parseInt(rec.movieId), // Convert movieId to number for Movie.id
+            name: rec.movieName || rec.title, // Use movieName or title
+            title: rec.movieName || rec.title, // Use movieName or title
+            poster_path: rec.poster_path,
+            backdrop_path: rec.backdrop_path,
+            // Add other Movie properties if available in StoredRecommendation
+          }));
+        } else if (categoryId) {
+          const categoryMovies = await getMoviesForCategory(categoryId);
+          if (!categoryMovies) {
+            setError("No movies found for this category");
+            setMovies([]);
+            return;
+          }
+          fetchedMovies = categoryMovies as Movie[];
         }
-        setMovies(fetchedMovies as Movie[]);
+
+        if (!fetchedMovies || fetchedMovies.length === 0) {
+          setError("No movies found.");
+          setMovies([]);
+        } else {
+          setMovies(fetchedMovies);
+        }
       } catch (err) {
-        console.error(`Failed to fetch movies for category ${categoryId}:`, err);
+        console.error(`Failed to fetch movies for ${rowType} row:`, err);
         setError("Failed to load movies. Please try again later.");
         setMovies([]);
       } finally {
@@ -70,10 +104,12 @@ const RowContainer: React.FC<RowContainerProps> = ({
       }
     };
 
-    if (categoryId) {
+    if (rowType === 'personalized' && currentUser) {
+      fetchMovies();
+    } else if (rowType === 'category' && categoryId) {
       fetchMovies();
     }
-  }, [categoryId]);
+  }, [categoryId, rowType, currentUser]);
   return (
     <Row
       title={title}

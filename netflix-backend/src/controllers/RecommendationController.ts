@@ -23,6 +23,7 @@ export class RecommendationController {
       }
       const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
       const recommendations = await this.recommendationService.getPersonalizedRecommendations(req.userId, limit);
+      console.log("[RecommendationController] Sending personalized recommendations:", JSON.stringify(recommendations, null, 2));
       res.json(recommendations);
     } catch (error: any) {
       console.error('Error fetching personalized recommendations:', error.message);

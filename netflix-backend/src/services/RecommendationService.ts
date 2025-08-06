@@ -91,7 +91,7 @@ export class RecommendationService {
 
     if (cachedRecommendations && cachedRecommendations.length > 0) {
         console.log(`[RecommendationService] Returning ${cachedRecommendations.length} cached recommendations for user ${userId}`);
-        return cachedRecommendations.map(rec => ({ movieId: rec.movieId, score: rec.score }));
+        return cachedRecommendations; // Return full StoredRecommendation objects
     }
 
     console.log(`[RecommendationService] No recommendations found for user ${userId}. Initializing...`);
