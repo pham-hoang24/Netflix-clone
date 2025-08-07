@@ -91,7 +91,8 @@ const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
 
                   if (currentUser && movie) {
                     if (playerState === YouTube.PlayerState.ENDED || playerState === YouTube.PlayerState.PAUSED) {
-                      const duration = event.target.getCurrentTime();
+                      const duration = event.target.getCurrentTime() * 1000; // Convert to milliseconds
+                      console.log(`Captured duration: ${duration}`);
                       if (duration > 0) {
                         logUserEvent('watch_time', {
                           movieId: activeMovieId,
