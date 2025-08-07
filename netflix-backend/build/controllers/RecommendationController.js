@@ -15,7 +15,6 @@ class RecommendationController {
     constructor(db) {
         this.recommendationService = new RecommendationService_1.RecommendationService(db);
         this.getPersonalizedRecommendations = this.getPersonalizedRecommendations.bind(this);
-        this.getTrendingRecommendations = this.getTrendingRecommendations.bind(this);
     }
     getPersonalizedRecommendations(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
