@@ -79,7 +79,33 @@ const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
           </div>
           {activeMovieId === movie.id && trailerUrl && (
             <div className={styles.trailerContainer}>
-              <YouTube videoId={trailerUrl} opts={opts} />
+              <YouTube
+                videoId={trailerUrl}
+                opts={opts}
+                onReady={(event) => {
+                  // You can log a "trailer_started" event here if needed
+                }}
+                onStateChange={(event) => {
+                  const playerState = event.data;
+                  const movie = moviesToRender.find(m => m.id === activeMovieId);
+
+                  if (currentUser && movie) {
+                    if (playerState === YouTube.PlayerState.ENDED || playerState === YouTube.PlayerState.PAUSED) {
+                      const duration = event.target.getCurrentTime();
+                      if (duration > 0) {
+                        logUserEvent('watch_time', {
+                          movieId: activeMovieId,
+                          duration: duration, // Pass duration instead of watchTimeSeconds
+                          movieName: movie.title || movie.name,
+                          userId: currentUser.uid,
+                          eventType: 'trailer_watched',
+                        });
+                        console.log(`Logged watch_time for trailer: ${movie.title || movie.name}, Duration: ${Math.floor(duration)}s`);
+                      }
+                    }
+                  }
+                }}
+              />
             </div>
           )}
           {activeMovieId === movie.id && noTrailer && (
