@@ -115,6 +115,12 @@ export class RecommendationService {
   }
 
   private async getFallbackRecommendations(limit: number): Promise<any[]> {
-    return this.getTrendingRecommendations('week');
+    const trending = await this.mediaService.getGeneralTrendingMovies(Math.floor(limit / 2));
+    const topRated = await this.mediaService.getTopRatedMovies(limit - trending.length);
+
+    const combined = [...trending, ...topRated];
+    // Ensure unique movies and return the specified limit
+    const uniqueMovies = Array.from(new Map(combined.map(movie => [movie.id, movie])).values());
+    return uniqueMovies.slice(0, limit);
   }
 }

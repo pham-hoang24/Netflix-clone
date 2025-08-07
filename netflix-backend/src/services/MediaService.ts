@@ -215,4 +215,28 @@ export class MediaService {
       return [];
     }
   }
+
+  async getGeneralTrendingMovies(limit: number = 10): Promise<TMDBMovie[]> {
+    try {
+      const response = await axios.get<TMDBResponse<TMDBMovie>>(`${this.TMDB_URL}/trending/movie/week`, {
+        params: { api_key: this.TMDB_API_KEY, language: 'en-US' },
+      });
+      return response.data.results.slice(0, limit);
+    } catch (error: any) {
+      console.error(`Error fetching general trending movies from TMDB:`, error.message);
+      return [];
+    }
+  }
+
+  async getTopRatedMovies(limit: number = 10): Promise<TMDBMovie[]> {
+    try {
+      const response = await axios.get<TMDBResponse<TMDBMovie>>(`${this.TMDB_URL}/movie/top_rated`, {
+        params: { api_key: this.TMDB_API_KEY, language: 'en-US' },
+      });
+      return response.data.results.slice(0, limit);
+    } catch (error: any) {
+      console.error(`Error fetching top rated movies from TMDB:`, error.message);
+      return [];
+    }
+  }
 }
