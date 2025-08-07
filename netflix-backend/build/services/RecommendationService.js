@@ -53,6 +53,7 @@ class RecommendationService {
             const uniqueRecs = Array.from(new Map(normalizedRecs.map(rec => [rec.id, rec])).values());
             const watchedMovieIds = new Set(userEvents.map(e => e.movieId));
             const finalRecs = uniqueRecs.filter(rec => !watchedMovieIds.has(String(rec.id)));
+            console.log(`[RecService] Final recommendations before storing:`, JSON.stringify(finalRecs, null, 2));
             const storedRecommendations = finalRecs.slice(0, limit).map(rec => ({
                 movieId: String(rec.id),
                 movieName: rec.title || rec.name, // Assuming 'title' or 'name' exists on the movie object
@@ -88,6 +89,8 @@ class RecommendationService {
                         title: rec.movieName || rec.movieId,
                         poster_path: rec.poster_path,
                         backdrop_path: rec.backdrop_path,
+                        release_date: rec.release_date,
+                        first_air_date: rec.first_air_date,
                     }));
                 }
                 else {
@@ -99,7 +102,15 @@ class RecommendationService {
             const newRecommendations = yield this.recommendationDAO.getRecommendations(userId, limit);
             if (newRecommendations && newRecommendations.length > 0) {
                 console.log(`[RecommendationService] Successfully initialized and returning ${newRecommendations.length} recommendations for user ${userId}`);
-                return newRecommendations.map(rec => ({ movieId: rec.movieId, score: rec.score }));
+                return newRecommendations.map(rec => ({
+                    id: parseInt(rec.movieId),
+                    name: rec.movieName || rec.movieId,
+                    title: rec.movieName || rec.movieId,
+                    poster_path: rec.poster_path,
+                    backdrop_path: rec.backdrop_path,
+                    release_date: rec.release_date,
+                    first_air_date: rec.first_air_date,
+                }));
             }
             console.log(`[RecommendationService] Failed to initialize or fetch new recommendations for user ${userId}. Returning empty array.`);
             return [];

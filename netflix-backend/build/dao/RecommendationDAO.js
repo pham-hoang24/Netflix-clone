@@ -55,6 +55,8 @@ class RecommendationDAO {
                     movieName: data.movieName || null,
                     poster_path: data.poster_path || null,
                     backdrop_path: data.backdrop_path || null,
+                    release_date: data.release_date || null,
+                    first_air_date: data.first_air_date || null,
                     score: data.score || null,
                     type: data.type || null,
                     generatedAt: ((_a = data.generatedAt) === null || _a === void 0 ? void 0 : _a.toDate()) || new Date(),

@@ -71,15 +71,19 @@ const RowContainer: React.FC<RowContainerProps> = ({
           const idToken = await auth.currentUser.getIdToken();
           const rawRecommendations = await fetchPersonalizedRecommendations(idToken);
           console.log("[RowContainer] Raw personalized recommendations fetched:", rawRecommendations);
-          fetchedMovies = rawRecommendations.map((rec: any) => ({
-            id: rec.movieId ? parseInt(rec.movieId) : Math.random(), // Ensure id is a valid number, fallback to random for unique key
-            name: rec.movieName || `Movie ${rec.movieId}`, // Fallback name
-            title: rec.movieName || `Movie ${rec.movieId}`, // Fallback title
-            poster_path: rec.poster_path,
-            backdrop_path: rec.backdrop_path,
-            release_date: rec.release_date, // Assuming backend will provide this
-            first_air_date: rec.first_air_date, // Assuming backend will provide this for TV shows
-          }));
+          fetchedMovies = rawRecommendations.map((rec: any) => {
+            const movie = {
+              id: rec.id,
+              name: rec.title,
+              title: rec.title,
+              poster_path: rec.poster_path,
+              backdrop_path: rec.backdrop_path,
+              release_date: rec.release_date,
+              first_air_date: rec.first_air_date,
+            };
+            console.log("[RowContainer] Mapped personalized movie:", movie);
+            return movie;
+          });
         } else if (categoryId) {
           const categoryMovies = await getMoviesForCategory(categoryId);
           if (!categoryMovies) {
