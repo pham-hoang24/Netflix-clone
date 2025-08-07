@@ -75,8 +75,22 @@ class RecommendationService {
             console.log(`[RecommendationService] getPersonalizedRecommendations called for userId: ${userId}`);
             const cachedRecommendations = yield this.recommendationDAO.getRecommendations(userId, limit);
             if (cachedRecommendations && cachedRecommendations.length > 0) {
-                console.log(`[RecommendationService] Returning ${cachedRecommendations.length} cached recommendations for user ${userId}`);
-                return cachedRecommendations.map(rec => ({ movieId: rec.movieId, score: rec.score }));
+                const latestRec = cachedRecommendations[0];
+                const oneMinuteAgo = new Date();
+                oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1); // Recommendations are fresh for 1 minute
+                if (latestRec.generatedAt > oneMinuteAgo) {
+                    console.log(`[RecommendationService] Returning ${cachedRecommendations.length} FRESH cached recommendations for user ${userId}`);
+                    return cachedRecommendations.map(rec => ({
+                        id: parseInt(rec.movieId),
+                        name: rec.movieName || rec.movieId,
+                        title: rec.movieName || rec.movieId,
+                        poster_path: rec.poster_path,
+                        backdrop_path: rec.backdrop_path,
+                    }));
+                }
+                else {
+                    console.log(`[RecommendationService] Cached recommendations for user ${userId} are STALE. Generating new ones.`);
+                }
             }
             console.log(`[RecommendationService] No recommendations found for user ${userId}. Initializing...`);
             yield this.initializeRecommendationsForNewUser(userId, limit);
@@ -89,16 +103,14 @@ class RecommendationService {
             return [];
         });
     }
-    getTrendingRecommendations() {
-        return __awaiter(this, arguments, void 0, function* (timeframe = 'week') {
-            const date = new Date();
-            date.setDate(date.getDate() - (timeframe === 'day' ? 1 : timeframe === 'week' ? 7 : 30));
-            return this.userEventDAO.getTrendingContent(date, 20);
-        });
-    }
     getFallbackRecommendations(limit) {
         return __awaiter(this, void 0, void 0, function* () {
-            return this.getTrendingRecommendations('week');
+            const trending = yield this.mediaService.getGeneralTrendingMovies(Math.floor(limit / 2));
+            const topRated = yield this.mediaService.getTopRatedMovies(limit - trending.length);
+            const combined = [...trending, ...topRated];
+            // Ensure unique movies and return the specified limit
+            const uniqueMovies = Array.from(new Map(combined.map(movie => [movie.id, movie])).values());
+            return uniqueMovies.slice(0, limit);
         });
     }
 }

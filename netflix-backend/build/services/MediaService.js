@@ -210,5 +210,33 @@ class MediaService {
             }
         });
     }
+    getGeneralTrendingMovies() {
+        return __awaiter(this, arguments, void 0, function* (limit = 10) {
+            try {
+                const response = yield axios_1.default.get(`${this.TMDB_URL}/trending/movie/week`, {
+                    params: { api_key: this.TMDB_API_KEY, language: 'en-US' },
+                });
+                return response.data.results.slice(0, limit);
+            }
+            catch (error) {
+                console.error(`Error fetching general trending movies from TMDB:`, error.message);
+                return [];
+            }
+        });
+    }
+    getTopRatedMovies() {
+        return __awaiter(this, arguments, void 0, function* (limit = 10) {
+            try {
+                const response = yield axios_1.default.get(`${this.TMDB_URL}/movie/top_rated`, {
+                    params: { api_key: this.TMDB_API_KEY, language: 'en-US' },
+                });
+                return response.data.results.slice(0, limit);
+            }
+            catch (error) {
+                console.error(`Error fetching top rated movies from TMDB:`, error.message);
+                return [];
+            }
+        });
+    }
 }
 exports.MediaService = MediaService;

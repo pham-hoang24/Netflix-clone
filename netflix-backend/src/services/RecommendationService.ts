@@ -90,8 +90,22 @@ export class RecommendationService {
     const cachedRecommendations = await this.recommendationDAO.getRecommendations(userId, limit);
 
     if (cachedRecommendations && cachedRecommendations.length > 0) {
-        console.log(`[RecommendationService] Returning ${cachedRecommendations.length} cached recommendations for user ${userId}`);
-        return cachedRecommendations; // Return full StoredRecommendation objects
+        const latestRec = cachedRecommendations[0];
+        const oneMinuteAgo = new Date();
+        oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1); // Recommendations are fresh for 1 minute
+
+        if (latestRec.generatedAt > oneMinuteAgo) {
+            console.log(`[RecommendationService] Returning ${cachedRecommendations.length} FRESH cached recommendations for user ${userId}`);
+            return cachedRecommendations.map(rec => ({
+                id: parseInt(rec.movieId),
+                name: rec.movieName || rec.movieId,
+                title: rec.movieName || rec.movieId,
+                poster_path: rec.poster_path,
+                backdrop_path: rec.backdrop_path,
+            }));
+        } else {
+            console.log(`[RecommendationService] Cached recommendations for user ${userId} are STALE. Generating new ones.`);
+        }
     }
 
     console.log(`[RecommendationService] No recommendations found for user ${userId}. Initializing...`);
@@ -105,13 +119,6 @@ export class RecommendationService {
 
     console.log(`[RecommendationService] Failed to initialize or fetch new recommendations for user ${userId}. Returning empty array.`);
     return [];
-  }
-
-  async getTrendingRecommendations(timeframe: 'day' | 'week' | 'month' = 'week'): Promise<any[]> {
-    const date = new Date();
-    date.setDate(date.getDate() - (timeframe === 'day' ? 1 : timeframe === 'week' ? 7 : 30));
-
-    return this.userEventDAO.getTrendingContent(date, 20);
   }
 
   private async getFallbackRecommendations(limit: number): Promise<any[]> {
