@@ -55,7 +55,7 @@ const HomePageContainer: React.FC = () => {
 
         logUserEvent('watch_time', {
           movieId: currentMovie.id,
-          duration: watchDuration,
+          duration: watchDuration, // Pass watchDuration (already in ms)
           genre: genreIds, // Pass genre IDs as a comma-separated string
         });
       }
@@ -72,6 +72,7 @@ const HomePageContainer: React.FC = () => {
         setCurrentMovieId(null);
         setNoTrailer(false);
         setActiveRow(null);
+        setWatchStartTime(null); // Reset watchStartTime when trailer is closed
         return;
       }
 
@@ -79,6 +80,7 @@ const HomePageContainer: React.FC = () => {
       setNoTrailer(false);
       setCurrentMovieId(movie.id);
       setActiveRow(categoryId);
+      setWatchStartTime(null); // Reset watchStartTime when a new movie is clicked
 
       try {
         const movieTitle = movie?.name || movie?.title || "";
