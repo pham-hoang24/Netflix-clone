@@ -58,6 +58,8 @@ class RecommendationService {
                 movieName: rec.title || rec.name, // Assuming 'title' or 'name' exists on the movie object
                 poster_path: rec.poster_path,
                 backdrop_path: rec.backdrop_path,
+                release_date: rec.release_date || null, // Ensure release_date is always present, or null
+                first_air_date: rec.first_air_date || null, // Ensure first_air_date is always present, or null
                 type: 'initial',
                 generatedAt: new Date(),
             }));

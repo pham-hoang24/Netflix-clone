@@ -77,7 +77,8 @@ const RowContainer: React.FC<RowContainerProps> = ({
             title: rec.movieName || `Movie ${rec.movieId}`, // Fallback title
             poster_path: rec.poster_path,
             backdrop_path: rec.backdrop_path,
-            // Add other Movie properties if available in StoredRecommendation
+            release_date: rec.release_date, // Assuming backend will provide this
+            first_air_date: rec.first_air_date, // Assuming backend will provide this for TV shows
           }));
         } else if (categoryId) {
           const categoryMovies = await getMoviesForCategory(categoryId);
