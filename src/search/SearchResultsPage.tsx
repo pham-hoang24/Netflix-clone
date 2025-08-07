@@ -2,6 +2,8 @@ import React from 'react';
 import styles from './SearchResultsPage.module.css';
 import YouTube from 'react-youtube';
 import NavContainer from '../home/container/NavContainer';
+import { logUserEvent } from '../services/analytics';
+import { useAuth } from '../context/AuthContext';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -41,6 +43,7 @@ const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
   setFilterType,
   handleMovieClick,
 }) => {
+  const { currentUser } = useAuth();
   const opts = {
     height: '390',
     width: '100%',
@@ -56,7 +59,17 @@ const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
         <React.Fragment key={movie.id}>
           <div
             className={`${styles.movieCard} ${activeMovieId === movie.id ? styles.activeScaled : ''}`}
-            onClick={() => handleMovieClick(movie)}
+            onClick={() => {
+              handleMovieClick(movie);
+              if (currentUser) {
+                logUserEvent('movie_selected_from_search_results', {
+                  movieId: movie.id,
+                  movieName: movie.title || movie.name,
+                  searchTerm: query,
+                  userId: currentUser.uid,
+                });
+              }
+            }}
           >
             <img
               className={styles.poster}

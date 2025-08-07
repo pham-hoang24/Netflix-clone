@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import styles from './Search.module.css';
+import { logUserEvent } from '../services/analytics';
+import { useAuth } from '../context/AuthContext';
 
 const base_url = "https://image.tmdb.org/t/p/w200";
 
@@ -52,6 +54,19 @@ const SearchPresenter: React.FC<SearchPresenterProps> = ({
   handleSuggestionClick,
   searchContainerRef,
 }) => {
+  const { currentUser } = useAuth();
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      if (query.trim() !== '' && currentUser) {
+        logUserEvent('search', { searchTerm: query, userId: currentUser.uid });
+      }
+    }, 500); // Debounce for 500ms
+
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [query, currentUser]);
   return (
     <div className={styles.searchContainer} ref={searchContainerRef}>
       <input
@@ -71,7 +86,17 @@ const SearchPresenter: React.FC<SearchPresenterProps> = ({
               <li
                 key={movie.id}
                 className={`${styles.resultItem} ${index === activeIndex ? styles.active : ''}`}
-                onClick={() => handleSuggestionClick(movie)}
+                onClick={() => {
+                  handleSuggestionClick(movie);
+                  if (currentUser) {
+                    logUserEvent('movie_selected_from_search', {
+                      movieId: movie.id,
+                      movieName: movie.title || movie.name,
+                      searchTerm: query,
+                      userId: currentUser.uid,
+                    });
+                  }
+                }}
               >
                 <div className={styles.resultLink}>
                   <img
