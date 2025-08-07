@@ -72,9 +72,9 @@ const RowContainer: React.FC<RowContainerProps> = ({
           const rawRecommendations = await fetchPersonalizedRecommendations(idToken);
           console.log("[RowContainer] Raw personalized recommendations fetched:", rawRecommendations);
           fetchedMovies = rawRecommendations.map((rec: any) => ({
-            id: parseInt(rec.movieId), // Convert movieId to number for Movie.id
-            name: rec.movieName || rec.title, // Use movieName or title
-            title: rec.movieName || rec.title, // Use movieName or title
+            id: rec.movieId ? parseInt(rec.movieId) : Math.random(), // Ensure id is a valid number, fallback to random for unique key
+            name: rec.movieName || `Movie ${rec.movieId}`, // Fallback name
+            title: rec.movieName || `Movie ${rec.movieId}`, // Fallback title
             poster_path: rec.poster_path,
             backdrop_path: rec.backdrop_path,
             // Add other Movie properties if available in StoredRecommendation

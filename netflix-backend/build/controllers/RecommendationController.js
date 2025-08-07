@@ -26,24 +26,12 @@ class RecommendationController {
                 }
                 const limit = req.query.limit ? parseInt(req.query.limit) : 10;
                 const recommendations = yield this.recommendationService.getPersonalizedRecommendations(req.userId, limit);
+                console.log("[RecommendationController] Sending personalized recommendations:", JSON.stringify(recommendations, null, 2));
                 res.json(recommendations);
             }
             catch (error) {
                 console.error('Error fetching personalized recommendations:', error.message);
                 res.status(500).json({ error: 'Failed to fetch personalized recommendations' });
-            }
-        });
-    }
-    getTrendingRecommendations(req, res) {
-        return __awaiter(this, void 0, void 0, function* () {
-            try {
-                const timeframe = req.query.timeframe || 'week';
-                const recommendations = yield this.recommendationService.getTrendingRecommendations(timeframe);
-                res.json(recommendations);
-            }
-            catch (error) {
-                console.error('Error fetching trending recommendations:', error.message);
-                res.status(500).json({ error: 'Failed to fetch trending recommendations' });
             }
         });
     }
