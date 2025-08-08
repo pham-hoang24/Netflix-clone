@@ -1,14 +1,13 @@
 import React from "react";
 import { render, act, waitFor, getByTestId, RenderResult, fireEvent } from "@testing-library/react";
+import { Movie } from "../../home/HomePage/types/HomePageTypes";
 import LandingPageContainer from "./LandingPageContainer";
 import {
   fetchGenres,
   fetchTrendingWithDetails,
-  TrendingItem,
 } from "../../services/api-client";
 import { faqs } from "../data/faqs";
 import LandingPage from "../Landing/LandingPage";
-
 // Mock the API client
 jest.mock("../../services/api-client", () => ({
   fetchGenres: jest.fn(),
@@ -28,7 +27,7 @@ jest.mock("../Landing/LandingPage", () => {
       <div data-testid="faqs">{JSON.stringify(props.faqs)}</div>
       <button 
         data-testid="item-click-trigger" 
-        onClick={() => handleItemClick({ id: 1, title: "Test Item" } as TrendingItem)}
+        onClick={() => handleItemClick({ id: 1, title: "Test Item", name: "Test Item" } as Movie)}
       >
         Trigger Item Click
       </button>
@@ -39,7 +38,7 @@ jest.mock("../Landing/LandingPage", () => {
         Trigger Close Modal
       </button>
       {/* If the component is a function, we must render it */}
-      {props.selectedItem && <DetailModal selectedItem={props.selectedItem} onClose={handleCloseModal} />}
+      {props.selectedItem && <DetailModal selectedItem={props.selectedItem as Movie} onClose={handleCloseModal} />}
     </div>
   ));
 });
@@ -67,24 +66,34 @@ const LandingPageMock = LandingPage as jest.Mock; // Type assertion for the mock
 
 describe("LandingPageContainer", () => {
   const mockGenreMap = { 1: "Action", 2: "Comedy", 3: "Drama" };
-  const mockTrendingItems: TrendingItem[] = [
+  const mockTrendingItems: Movie[] = [
     {
       id: 1,
+      name: "Movie 1",
       title: "Movie 1",
       overview: "Overview for Movie 1",
       poster_path: "/poster1.jpg",
       backdrop_path: "/backdrop1.jpg",
       popularity: 100,
-      genre_ids: [1, 2],
+      genres: [{ id: 5, name: "Action" }],
+      logo_url: "/logo1.png",
+      media_type: "movie",
+      release_date: "2023-01-01",
+      first_air_date: null,
     },
     {
       id: 2,
+      name: "Movie 2",
       title: "Movie 2",
       overview: "Overview for Movie 2",
       poster_path: "/poster2.jpg",
       backdrop_path: "/backdrop2.jpg",
       popularity: 200,
-      genre_ids: [2, 3],
+      genres: [{ id: 4, name: "Drama" }],
+      logo_url: "/logo2.png",
+      media_type: "movie",
+      release_date: "2023-02-01",
+      first_air_date: null,
     },
   ];
 
