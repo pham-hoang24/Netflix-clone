@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "populate": "node populate-firestore.js"
+    "start": "ts-node src/app.ts",
+    "build": "tsc",
+    "populate": "ts-node src/populate-firestore.ts"
   },
   "keywords": [],
   "author": "",
@@ -17,5 +19,12 @@
     "dotenv": "^17.0.1",
     "express": "^5.1.0",
     "firebase-admin": "^12.1.1"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.2.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }

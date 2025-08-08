@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './Banner.css';
 import { useTranslation } from 'react-i18next';
-import { getMoviesForCategory } from '../services/movieService';
 
 interface Movie {
   backdrop_path: string;
@@ -11,43 +10,49 @@ interface Movie {
   overview: string;
 }
 
-const Banner: React.FC = () => {
-  const [movie, setMovie] = useState<Movie | null>(null);
+interface BannerProps {
+  movie: Movie | null;
+  truncate: (str: string | undefined, n: number) => string;
+  placeholderImg: string;
+  isLoading: boolean;
+  error: string | null;
+}
+
+const Banner: React.FC<BannerProps> = ({ 
+  movie, 
+  truncate,
+  isLoading,
+  error, 
+  placeholderImg 
+}) => {
   const { t } = useTranslation();
 
-  useEffect(() => {
-    async function fetchData() {
-      const movies = await getMoviesForCategory('fetchNetflixOriginals');
-      setMovie(movies[Math.floor(Math.random() * movies.length - 1)] as Movie);
-    }
-    fetchData();
-  }, []);
-
-  function truncate(str: string | undefined, n: number): string {
-    if (!str) {
-      return "";
-    }
-    return str.length > n ? str.substr(0, n - 1) + "..." : str;
+  if (isLoading) {
+    return <header className="banner" style={{ height: '448px', backgroundColor: '#141414' }} />;
   }
+
+  const backgroundImageUrl = error || !movie?.backdrop_path
+    ? placeholderImg
+    : `https://image.tmdb.org/t/p/original/${movie.backdrop_path}`;
 
   return (
     <header
       className="banner"
       style={{
         backgroundSize: "cover",
-        backgroundImage: `url("https://image.tmdb.org/t/p/original/${movie?.backdrop_path}")`,
+        backgroundImage: `url("${backgroundImageUrl}")`,
         backgroundPosition: "center center",
       }}
     >
       <div className="banner__contents">
         <h1 className="banner__title">
-          {movie?.title || movie?.name || movie?.original_name}
+          {error ? "Error" : movie?.title || movie?.name || movie?.original_name}
         </h1>
         <div className="banner__buttons">
           <button className="banner__button">{t('banner.play')}</button>
           <button className="banner__button">{t('banner.myList')}</button>
         </div>
-        <h1 className="banner__description">{truncate(movie?.overview, 150)}</h1>
+        <h1 className="banner__description">{error ? "Could not load content." : truncate(movie?.overview, 150)}</h1>
       </div>
       <div className="banner--fadeBottom" />
     </header>

@@ -1,4 +1,10 @@
 {
+  "navbar": {
+    "english": "English",
+    "signIn": "Đăng nhập",
+    "vietnamese": "Tiếng Việt",
+    "finnish": "Suomi"
+  },
   "hero": {
     "title": "Phim, chương trình truyền hình và nhiều nội dung khác không giới hạn",
     "subtitle": "Bắt đầu từ 9,49 €. Hủy bất cứ lúc nào.",
@@ -12,8 +18,7 @@
   "login": {
     "signIn": "Đăng nhập",
     "emailPlaceholder": "Email hoặc số điện thoại",
-    "passwordPlaceholder": "Mật khẩu",
-    "rememberMe": "Ghi nhớ tôi",
+    "passwordPlaceholder": "Mật khẩu",    "rememberMe": "Ghi nhớ tôi",
     "needHelp": "Cần trợ giúp?",
     "newToNetflix": "Bạn mới sử dụng Netflix?",
     "signUpNow": "Đăng ký ngay.",
@@ -22,7 +27,7 @@
     "tooLong": "Quá dài",
     "accountDisabled": "Tài khoản của bạn đã bị vô hiệu hóa. Vui lòng liên hệ bộ phận hỗ trợ.",
     "simultaneousLogin": "Bạn đã đăng nhập vào một trình duyệt khác. Bạn có muốn đăng xuất khỏi trình duyệt trước đó không?",
-    "stayOnBrowser": "Tiếp tục sử dụng trình duyệt này",
+    "stayOnBrowser": "Tiếp tục sử dụng trình trình duyệt này",
     "returnToExisting": "Quay lại trình duyệt hiện tại"
   },
   "footer": {
@@ -49,11 +54,12 @@
     "vietnamese": "Tiếng Việt",
     "finnish": "Suomi"
   },
-  "navbar": {
-    "signIn": "Đăng nhập"
-  },
+
   "landingPage": {
-    "fetchTrending": "Đang thịnh hành",
+    "loading": "Đang tải...",
+    "failedToLoad": "Không thể tải nội dung. Vui lòng thử lại sau.",
+    "retry": "Thử lại",
+    "trendingNow": "Đang thịnh hành",
     "moreReasonsToJoin": "Thêm lý do để tham gia",
     "enjoyOnTv": {
       "title": "Thưởng thức trên TV của bạn",
@@ -71,10 +77,7 @@
       "title": "Tạo hồ sơ cho trẻ em",
       "description": "Gửi trẻ em vào cuộc phiêu lưu với các nhân vật yêu thích của chúng trong một không gian dành riêng cho chúng – miễn phí với tư cách thành viên của bạn."
     },
-    "faqTitle": "Câu hỏi thường gặp",
-    "loading": "Đang tải...",
-    "loadError": "Không thể tải nội dung. Vui lòng thử lại sau.",
-    "retry": "Thử lại"
+    "faqTitle": "Câu hỏi thường gặp"
   },
   "faq": {
     "whatIsNetflix": {
@@ -111,6 +114,7 @@
     "signOut": "Đăng xuất"
   },
   "homePage": {
+    "personalizedRecommendations": "Chúng tôi nghĩ bạn sẽ thích...",
     "fetchNetflixOriginals": "NETFLIX ORIGINALS",
     "fetchTrending": "Thịnh hành ngay",
     "fetchTopRated": "Xếp hạng cao nhất",

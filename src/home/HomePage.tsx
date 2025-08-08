@@ -1,67 +1,86 @@
-import React, { useEffect, useState } from 'react';
-import './HomePage.css';
-import Row from './Row';
-import Banner from './Banner';
-import Nav from './Nav';
-import { logUserEvent } from '../services/analytics';
-import { getCategories } from '../services/movieService';
-import { useTranslation } from 'react-i18next';
+import Row from "./container/RowContainer";
+import Banner from "./container/BannerContainer";
+import Nav from "./container/NavContainer";
+import { useTranslation } from "react-i18next";
+import { fetchMoviesByGenres } from "../services/api-client";
 
-interface RowData {
-  id: string;
+interface Movie {
+  id: number;
   name: string;
-  isLargeRow?: boolean;
+  title: string;
+  poster_path: string;
+  backdrop_path: string;
+  media_type?: string;
+  release_date?: string;
+  first_air_date?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
-const ROW_ORDER = [
-  'fetchNetflixOriginals',
-  'fetchTrending',
-  'fetchTopRated',
-  'fetchActionMovies',
-  'fetchComedyMovies',
-  'fetchHorrorMovies',
-  'fetchRomanceMovies',
-  'fetchDocumentaries',
+const rows = [
+  { id: "fetchNetflixOriginals", isLargeRow: true },
+  { id: "fetchTrending" },
+  { id: "fetchTopRated" },
+  { id: "fetchActionMovies" },
+  { id: "fetchComedyMovies" },
+  { id: "fetchHorrorMovies" },
+  { id: "fetchRomanceMovies" },
+  { id: "fetchDocumentaries" },
 ];
 
-const HomePage: React.FC = () => {
-  const [rows, setRows] = useState<RowData[]>([]);
+interface HomePageProps {
+  trailerUrl: string;
+  noTrailer: boolean;
+  activeRow: string | null;
+  onMovieClick: (movie: Movie, categoryId: string) => void;
+  onPlayerReady: (event: any) => void;
+  onPlayerStateChange: (event: any) => void;
+  youtubeOpts: any;
+}
+
+const HomePage: React.FC<HomePageProps> = ({
+  trailerUrl,
+  noTrailer,
+  activeRow,
+  onMovieClick,
+  onPlayerReady,
+  onPlayerStateChange,
+  youtubeOpts
+}) => {
   const { t } = useTranslation();
-
-  useEffect(() => {
-    logUserEvent('page_view', {
-      page_name: 'HomePage',
-    });
-
-    const fetchCategories = async () => {
-      const categories = await getCategories();
-      const categoriesMap = new Map(categories.map(cat => [cat.id, cat]));
-
-      const orderedRows: RowData[] = [];
-      ROW_ORDER.forEach(categoryId => {
-        const category = categoriesMap.get(categoryId);
-        if (category) {
-          orderedRows.push({
-            id: category.id,
-            name: t(`homePage.${category.id}`),
-            isLargeRow: category.id === 'fetchNetflixOriginals',
-          });
-        }
-      });
-      setRows(orderedRows);
-    };
-
-    fetchCategories();
-  }, [t]);
 
   return (
     <div className="homepage">
       <Nav />
       <Banner />
+      <Row
+        title={t(`homePage.personalizedRecommendations`)}
+        rowType="personalized"
+        isLargeRow={true}
+        onMovieClick={(movie) => onMovieClick(movie, "personalizedRecommendations")}
+        isPlayerActive={activeRow === "personalizedRecommendations"}
+        trailerUrl={trailerUrl}
+        noTrailer={noTrailer}
+        youtubeOpts={youtubeOpts}
+        onPlayerReady={onPlayerReady}
+        onPlayerStateChange={onPlayerStateChange}
+      />
       {rows.map((row) => (
-        <Row key={row.id} title={row.name} categoryId={row.id} isLargeRow={row.isLargeRow} />
+        <Row
+          key={row.id}
+          title={t(`homePage.${row.id}`)}
+          categoryId={row.id}
+          isLargeRow={row.isLargeRow}
+          onMovieClick={(movie) => onMovieClick(movie, row.id)} // Pass the handler down
+          isPlayerActive={activeRow === row.id}
+          trailerUrl={trailerUrl}
+          noTrailer={noTrailer}
+          youtubeOpts={youtubeOpts}
+          onPlayerReady={onPlayerReady}
+          onPlayerStateChange={onPlayerStateChange}
+        />
       ))}
     </div>
   );
 };
-export default HomePage
+
+export default HomePage;

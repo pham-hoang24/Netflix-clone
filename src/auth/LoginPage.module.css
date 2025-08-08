@@ -35,7 +35,7 @@
   opacity: 90%;
   background-color: rgba(0, 0, 0, 0.75);
   padding: 60px 68px 40px;
-  border-radius: 4px;
+  border-radius: 6px;
   width: 100%;
   max-width: 450px;
   display: flex;
@@ -51,11 +51,13 @@
 
 .inputGroup {
   margin-bottom: 16px;
+  position: relative;
 }
 
 .inputGroup input {
   width: 100%;
-  padding: 16px 20px;
+  /* Modified Padding */
+  padding: 24px 17px 8px; /* Adjusted top, right, bottom, left padding */
   border: none;
   border-radius: 4px;
   background-color: #333;
@@ -63,8 +65,20 @@
   font-size: 1rem;
 }
 
-.inputGroup input::placeholder {
+.label {
+  position: absolute;
+  top: 50%;
+  left: 17px; /* Align with the new padding */
+  transform: translateY(-50%);
   color: #8c8c8c;
+  pointer-events: none;
+  transition: all 0.2s ease-in-out;
+}
+
+.inputGroup input:focus + .label,
+.inputGroup input:not(:placeholder-shown) + .label {
+  top: 1rem; /* Adjusted to align with the new top padding of the input */
+  font-size: 0.75rem;
 }
 
 .signInButton {
