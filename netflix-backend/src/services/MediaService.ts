@@ -34,7 +34,7 @@ export class MediaService {
 
   async fetchAndProcessMediaDetails(id: number, type: 'movie' | 'tv'): Promise<any> {
     const details = await fetchMediaDetailsFromTMDB(id, type);
-    return details; // Return the raw details object which contains genre_ids
+    return { ...details, genres: details.genres || [] };
   }
 
   async populateAllCategories(): Promise<void> {

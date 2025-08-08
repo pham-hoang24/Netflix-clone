@@ -8,6 +8,7 @@ import { TrailerService } from '../../services/trailerService';
 import placeholderImg from './istockphoto-1147544807-612x612.jpg';
 import { fetchPersonalizedRecommendations } from '../../services/api-client';
 import { auth } from '../../services/firebase';
+import { fetchMoviesByGenres } from '../../services/api-client';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -20,6 +21,7 @@ interface Movie {
   media_type?: string;
   release_date?: string;
   first_air_date?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
 interface RowContainerProps {
@@ -54,6 +56,24 @@ const RowContainer: React.FC<RowContainerProps> = ({
   const [error, setError] = useState<string | null>(null);
   const { currentUser } = useAuth();
 
+  const handleMovieClick = useCallback(async (movie: Movie) => {
+    onMovieClick(movie); // Call the original onMovieClick from HomePage
+
+    if (movie.genres && movie.genres.length > 0) {
+      const genreIds = movie.genres.map(genre => genre.id);
+      console.log("Searching for movies with genres:", genreIds);
+      try {
+        const similarMovies = await fetchMoviesByGenres(genreIds);
+        console.log("Similar movies found:", similarMovies);
+        // Here you would typically update state to display these similar movies,
+        // e.g., navigate to a search results page or open a modal.
+        // For now, we'll just log them.
+      } catch (err) {
+        console.error("Failed to fetch similar movies by genre:", err);
+      }
+    }
+  }, [onMovieClick]);
+
   useEffect(() => {
     const fetchMovies = async () => {
       setIsLoading(true);
@@ -80,6 +100,7 @@ const RowContainer: React.FC<RowContainerProps> = ({
               backdrop_path: rec.backdrop_path,
               release_date: rec.release_date,
               first_air_date: rec.first_air_date,
+              genres: rec.genres || [],
             };
             console.log("[RowContainer] Mapped personalized movie:", movie);
             return movie;
@@ -120,7 +141,7 @@ const RowContainer: React.FC<RowContainerProps> = ({
       title={title}
       movies={movies}
       isLargeRow={isLargeRow}
-      onMovieClick={onMovieClick}
+      onMovieClick={handleMovieClick}
       base_url={base_url}
       placeholderImg={placeholderImg}
       isLoading={isLoading}

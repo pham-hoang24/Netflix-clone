@@ -42,7 +42,7 @@ class MediaService {
     fetchAndProcessMediaDetails(id, type) {
         return __awaiter(this, void 0, void 0, function* () {
             const details = yield (0, TMDBDAO_1.fetchMediaDetailsFromTMDB)(id, type);
-            return details; // Return the raw details object which contains genre_ids
+            return Object.assign(Object.assign({}, details), { genres: details.genres || [] });
         });
     }
     populateAllCategories() {

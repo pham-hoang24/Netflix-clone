@@ -50,6 +50,7 @@ export class RecommendationDAO {
         backdrop_path: data.backdrop_path || null,
         release_date: data.release_date || null,
         first_air_date: data.first_air_date || null,
+        genres: data.genres || [],
         score: data.score || null,
         type: data.type || null,
         generatedAt: data.generatedAt?.toDate() || new Date(),

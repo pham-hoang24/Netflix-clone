@@ -48,7 +48,12 @@ export class RecommendationService {
                 const genreRecs = await Promise.all(
                     genreIds.slice(0, 3).map(gid => this.mediaService.getMoviesByGenre(String(gid), 10).catch(e => []))
                 );
-                recommendations = genreRecs.flat().map((movie: any) => ({ movieId: String(movie.id), ...movie }));
+                const genresMap = await this.mediaService.getGenres('movie');
+                recommendations = genreRecs.flat().map((movie: any) => ({
+                    movieId: String(movie.id),
+                    ...movie,
+                    genres: movie.genre_ids ? movie.genre_ids.map((id: number) => ({ id, name: genresMap[id] || '' })) : [],
+                }));
             }
         }
     }
@@ -76,6 +81,7 @@ export class RecommendationService {
         backdrop_path: rec.backdrop_path,
         release_date: rec.release_date || null, // Ensure release_date is always present, or null
         first_air_date: rec.first_air_date || null, // Ensure first_air_date is always present, or null
+        genres: rec.genres || [], // Store genre names (already processed in MediaService)
         type: 'initial',
         generatedAt: new Date(),
     }));
@@ -108,6 +114,7 @@ export class RecommendationService {
                 backdrop_path: rec.backdrop_path,
                 release_date: rec.release_date,
                 first_air_date: rec.first_air_date,
+                genres: rec.genres || [],
             }));
         } else {
             console.log(`[RecommendationService] Cached recommendations for user ${userId} are STALE. Generating new ones.`);
@@ -128,11 +135,28 @@ export class RecommendationService {
             backdrop_path: rec.backdrop_path,
             release_date: rec.release_date,
             first_air_date: rec.first_air_date,
+            genres: rec.genres || [],
         }));
     }
 
     console.log(`[RecommendationService] Failed to initialize or fetch new recommendations for user ${userId}. Returning empty array.`);
     return [];
+  }
+
+  public async getMoviesByGenres(genreIds: number[], limit: number = 10): Promise<any[]> {
+    const moviesByGenre: any[] = [];
+    for (const genreId of genreIds) {
+      const movies = await this.mediaService.getMoviesByGenre(String(genreId), limit);
+      const genresMap = await this.mediaService.getGenres('movie');
+      const moviesWithGenres = movies.map((movie: any) => ({
+        ...movie,
+        genres: movie.genre_ids ? movie.genre_ids.map((id: number) => ({ id, name: genresMap[id] || '' })) : [],
+      }));
+      moviesByGenre.push(...moviesWithGenres);
+    }
+    // Remove duplicates and limit the results
+    const uniqueMovies = Array.from(new Map(moviesByGenre.map(movie => [movie.id, movie])).values());
+    return uniqueMovies.slice(0, limit);
   }
 
   private async getFallbackRecommendations(limit: number): Promise<any[]> {
@@ -142,6 +166,10 @@ export class RecommendationService {
     const combined = [...trending, ...topRated];
     // Ensure unique movies and return the specified limit
     const uniqueMovies = Array.from(new Map(combined.map(movie => [movie.id, movie])).values());
-    return uniqueMovies.slice(0, limit);
+    const genresMap = await this.mediaService.getGenres('movie');
+    return uniqueMovies.slice(0, limit).map((movie: any) => ({
+        ...movie,
+        genres: movie.genre_ids ? movie.genre_ids.map((id: number) => ({ id, name: genresMap[id] || '' })) : [],
+    }));
   }
 }

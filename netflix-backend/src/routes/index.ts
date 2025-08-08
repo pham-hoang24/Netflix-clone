@@ -25,6 +25,7 @@ export default (db: admin.firestore.Firestore) => {
 
   // Recommendation Routes
   router.get('/recommendations/personalized', authenticateUser, recommendationController.getPersonalizedRecommendations);
+  router.post('/recommendations/by-genres', authenticateUser, recommendationController.getMoviesByGenres);
 
   // Health Check
   router.get('/health', (req, res) => {

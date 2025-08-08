@@ -29,4 +29,19 @@ export class RecommendationController {
       res.status(500).json({ error: 'Failed to fetch personalized recommendations' });
     }
   }
+
+  async getMoviesByGenres(req: Request, res: Response): Promise<void> {
+    try {
+      const { genreIds } = req.body;
+      if (!genreIds || !Array.isArray(genreIds) || genreIds.length === 0) {
+        res.status(400).json({ error: 'genreIds array is required in the request body' });
+        return;
+      }
+      const movies = await this.recommendationService.getMoviesByGenres(genreIds);
+      res.json(movies);
+    } catch (error: any) {
+      console.error('Error fetching movies by genres:', error.message);
+      res.status(500).json({ error: 'Failed to fetch movies by genres' });
+    }
+  }
 }
