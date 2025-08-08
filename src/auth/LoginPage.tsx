@@ -117,21 +117,25 @@ const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         {error && <div className={styles.errorMessage}>{error}</div>}
         <div className={styles.inputGroup}>
           <input
+            id="email"
             type="email"
-            placeholder={t('login.emailPlaceholder')}
+            placeholder=" "
             value={email}
             onChange={handleEmailChange}
             required
           />
+          <label htmlFor="email" className={styles.label}>{t('login.emailPlaceholder')}</label>
         </div>
         <div className={styles.inputGroup}>
           <input
+            id="password"
             type="password"
-            placeholder={t('login.passwordPlaceholder')}
+            placeholder=" "
             value={password}
             onChange={handlePasswordChange}
             required
           />
+          <label htmlFor="password" className={styles.label}>{t('login.passwordPlaceholder')}</label>
         </div>
         <button type="submit" className={styles.signInButton} disabled={isButtonDisabled}>
           {t('login.signIn')}

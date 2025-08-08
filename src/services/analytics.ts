@@ -10,9 +10,10 @@ interface LogEventPayload {
   sessionId?: string;
   metadata?: Record<string, any>;
   movieName?: string;
-  genre?: string;
+  genre?: Array<{ id: number; name: string }>;
   publishDate?: string;
   director?: string;
+  eventType?: string; // Added for specific event types like 'trailer_watched'
 }
 
 export const logUserEvent = async (eventName: string, params: Record<string, any>) => {
@@ -43,6 +44,7 @@ export const logUserEvent = async (eventName: string, params: Record<string, any
       payload.genre = params.genre;
       payload.publishDate = params.publishDate;
       payload.director = params.director;
+      payload.eventType = params.eventType; // Assign eventType from params
     }
 
     // Add other event-specific parameters as needed

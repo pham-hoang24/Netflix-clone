@@ -1,40 +1,24 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React from "react";
 import { Link } from 'react-router-dom';
-import { useAuth } from '../../src/context/AuthContext';
 import "./Nav.css";
-import Search from "./Search"
-import { useTranslation } from "react-i18next";
+import SearchContainer from "./container/SearchContainer";
+import { TFunction } from "react-i18next";
 
+interface NavProps {
+  show: boolean;
+  dropdownOpen: boolean;
+  handleAvatarClick: () => void;
+  handleSignOut: () => void;
+  t: TFunction; // Pass the translation function
+}
 
-const Nav: React.FC = () => {
-  const [show, handleShow] = useState<boolean>(false);
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
-  const { logout } = useAuth();
-  const { t } = useTranslation();
-
-  const handleScroll = useCallback(() => {
-    if (window.scrollY > 100) {
-      handleShow(true);
-    } else {
-      handleShow(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [handleScroll]);
-
-  const handleAvatarClick = () => {
-    setDropdownOpen(!dropdownOpen);
-  };
-
-  const handleSignOut = () => {
-    logout();
-    setDropdownOpen(false);
-  };
+const Nav: React.FC<NavProps> = ({
+  show,
+  dropdownOpen,
+  handleAvatarClick,
+  handleSignOut,
+  t,
+}) => {
   return (
     <div className={`nav ${show && "nav_black"}`}>
       <Link to="/home">
@@ -45,7 +29,7 @@ const Nav: React.FC = () => {
         />
       </Link>
       <div className="nav_search">
-        <Search />
+        <SearchContainer />
       </div>
         <div className="nav_avatar_container">
           <img
@@ -61,7 +45,7 @@ const Nav: React.FC = () => {
                 className="nav_dropdown_item"
                 onClick={() => {
                   console.log('clicked settings link');
-                  setDropdownOpen(false);
+                  // setDropdownOpen(false); // This state is now managed by the container
                 }}>
                 {t('nav.settings')}
               </Link>

@@ -1,12 +1,9 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from '../home/axios';
-import requests from '../home/requests';
-import Nav from '../home/Nav';
+import React from 'react';
 import styles from './SearchResultsPage.module.css';
 import YouTube from 'react-youtube';
-import movieTrailer from 'movie-trailer';
+import NavContainer from '../home/container/NavContainer';
 import { logUserEvent } from '../services/analytics';
+import { useAuth } from '../context/AuthContext';
 
 const base_url = "https://image.tmdb.org/t/p/original/";
 
@@ -17,74 +14,37 @@ interface Movie {
   poster_path: string;
   backdrop_path?: string;
   media_type?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
-const SearchResultsPage: React.FC = () => {
-  const { query } = useParams<{ query: string }>();
-  const [movieResults, setMovieResults] = useState<Movie[]>([]);
-  const [tvResults, setTvResults] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [trailerUrl, setTrailerUrl] = useState<string>("");
-  const [noTrailer, setNoTrailer] = useState<boolean>(false);
-  const [activeMovieId, setActiveMovieId] = useState<number | null>(null);
-  const [filterType, setFilterType] = useState<'all' | 'movie' | 'tv'>('all');
+interface SearchResultsPagePresenterProps {
+  query: string | undefined;
+  movieResults: Movie[];
+  tvResults: Movie[];
+  isLoading: boolean;
+  error: string | null;
+  trailerUrl: string;
+  noTrailer: boolean;
+  activeMovieId: number | null;
+  filterType: 'all' | 'movie' | 'tv';
+  setFilterType: (type: 'all' | 'movie' | 'tv') => void;
+  handleMovieClick: (movie: Movie) => void;
+}
 
-  useEffect(() => {
-    const fetchMovies = async () => {
-      if (!query) return;
-
-      setIsLoading(true);
-      setError(null);
-
-      try {
-        const response = await axios.get('/api/search/multi', { params: { query: query } });
-        const filteredResults = response.data.results.filter((item: Movie) => item.poster_path);
-
-        setMovieResults(filteredResults.filter((item: Movie) => item.media_type === 'movie'));
-        setTvResults(filteredResults.filter((item: Movie) => item.media_type === 'tv'));
-
-      } catch (err) {
-        setError('Failed to fetch movies.');
-        console.error(err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchMovies();
-  }, [query]);
-
-  const handleMovieClick = useCallback(async (movie: Movie) => {
-    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_results' });
-
-    if (activeMovieId === movie.id) {
-      setTrailerUrl("");
-      setNoTrailer(false);
-      setActiveMovieId(null);
-    } else {
-      setTrailerUrl("");
-      setNoTrailer(false);
-      setActiveMovieId(movie.id);
-
-      const movieTitle = movie.title || movie.name;
-      if (!movieTitle) return;
-
-      (movieTrailer as any)(null, { tmdbId: movie.id })
-        .then((url: string | null) => {
-          if (!url) throw new Error("No URL returned");
-          const urlParams = new URLSearchParams(new URL(url).search);
-          const id = urlParams.get("v");
-          if (id) setTrailerUrl(id);
-          else throw new Error("No video ID in URL");
-        })
-        .catch((_: any) => {
-          console.warn("No trailer found for:", movieTitle);
-          setNoTrailer(true);
-        });
-    }
-  }, [trailerUrl, activeMovieId]);
-
+const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
+  query,
+  movieResults,
+  tvResults,
+  isLoading,
+  error,
+  trailerUrl,
+  noTrailer,
+  activeMovieId,
+  filterType,
+  setFilterType,
+  handleMovieClick,
+}) => {
+  const { currentUser } = useAuth();
   const opts = {
     height: '390',
     width: '100%',
@@ -100,7 +60,17 @@ const SearchResultsPage: React.FC = () => {
         <React.Fragment key={movie.id}>
           <div
             className={`${styles.movieCard} ${activeMovieId === movie.id ? styles.activeScaled : ''}`}
-            onClick={() => handleMovieClick(movie)}
+            onClick={() => {
+              handleMovieClick(movie);
+              if (currentUser) {
+                logUserEvent('movie_selected_from_search_results', {
+                  movieId: movie.id,
+                  movieName: movie.title || movie.name,
+                  searchTerm: query,
+                  userId: currentUser.uid,
+                });
+              }
+            }}
           >
             <img
               className={styles.poster}
@@ -110,7 +80,37 @@ const SearchResultsPage: React.FC = () => {
           </div>
           {activeMovieId === movie.id && trailerUrl && (
             <div className={styles.trailerContainer}>
-              <YouTube videoId={trailerUrl} opts={opts} />
+              <YouTube
+                videoId={trailerUrl}
+                opts={opts}
+                onReady={(event) => {
+                  // You can log a "trailer_started" event here if needed
+                }}
+                onStateChange={(event) => {
+                  const playerState = event.data;
+                  const movie = moviesToRender.find(m => m.id === activeMovieId);
+
+                  if (currentUser && movie) {
+                    if (playerState === YouTube.PlayerState.ENDED || playerState === YouTube.PlayerState.PAUSED) {
+                      const duration = event.target.getCurrentTime(); // Convert to milliseconds
+                      console.log(`Captured duration: ${duration}`);
+                      if (duration > 0) {
+                        const genreIds = movie.genres?.map(genre => genre.id) || [];
+                        console.log(`Searching for movies with genres: (${genreIds.length})`, genreIds);
+                        logUserEvent('watch_time', {
+                          movieId: activeMovieId,
+                          duration: duration, // Pass duration instead of watchTimeSeconds
+                          movieName: movie.title || movie.name,
+                          userId: currentUser.uid,
+                          eventType: 'trailer_watched',
+                          genres: movie.genres || [],
+                        });
+                        console.log(`Logged watch_time for trailer: ${movie.title || movie.name}, Duration: ${Math.floor(duration)}s`);
+                      }
+                    }
+                  }
+                }}
+              />
             </div>
           )}
           {activeMovieId === movie.id && noTrailer && (
@@ -125,7 +125,7 @@ const SearchResultsPage: React.FC = () => {
 
   return (
     <div className={styles.searchResultsPage}>
-      <Nav />
+      <NavContainer />
       <div className={styles.resultsContent}>
         <h1 className={styles.title}>Search results for "{query}"</h1>
 
@@ -175,4 +175,4 @@ const SearchResultsPage: React.FC = () => {
   );
 };
 
-export default SearchResultsPage;
+export default SearchResultsPagePresenter;

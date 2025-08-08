@@ -2,8 +2,6 @@
 import axios from 'axios';
 
 const API_BASE = 'http://localhost:2000';
-const POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
-const BACKDROP_SMALL = 'https://image.tmdb.org/t/p/w780';
 
 export interface TrendingItem {
   id: number;
@@ -33,5 +31,21 @@ export const fetchGenres = async (): Promise<{ [id: number]: string }> => {
 
 export const fetchTrendingWithDetails = async (): Promise<TrendingItem[]> => {
   const response = await axios.get<TrendingItem[]>(`${API_BASE}/api/trending-with-details`);
+  return response.data;
+};
+
+export const fetchPersonalizedRecommendations = async (idToken: string): Promise<any[]> => {
+  const response = await axios.get(`${API_BASE}/api/recommendations/personalized`, {
+    headers: {
+      Authorization: `Bearer ${idToken}`
+    }
+  });
+  return response.data;
+};
+
+export const fetchMoviesByGenres = async (genreIds: number[]): Promise<any[]> => {
+  const response = await axios.post(`${API_BASE}/api/recommendations/by-genres`, {
+    genreIds
+  });
   return response.data;
 };

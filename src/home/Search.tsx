@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import styles from './Search.module.css';
-import requests from './requests';
-import axios from './axios';
 import { logUserEvent } from '../services/analytics';
+import { useAuth } from '../context/AuthContext';
 
-const base_url = "https://image.tmdb.org/t/p/w200"; // Smaller poster size for suggestions
+const base_url = "https://image.tmdb.org/t/p/w200";
 
 interface Movie {
   id: number;
@@ -14,96 +13,60 @@ interface Movie {
   poster_path: string;
 }
 
-const Search: React.FC = () => {
-  const [query, setQuery] = useState('');
-  const [results, setResults] = useState<Movie[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [activeIndex, setActiveIndex] = useState(-1);
-  const searchContainerRef = useRef<HTMLDivElement>(null);
-  const navigate = useNavigate(); // Initialize useNavigate
+interface SearchPresenterProps {
+  query: string;
+  setQuery: (query: string) => void;
+  results: Movie[];
+  isLoading: boolean;
+  error: string | null;
+  activeIndex: number;
+  handleKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  handleSuggestionClick: (movie: Movie) => void;
+  searchContainerRef: React.RefObject<HTMLDivElement | null>;
+}
 
-  const fetchSearchResults = useCallback(async (searchQuery: string) => {
-    if (searchQuery.trim() === '') {
-      setResults([]);
-      return;
-    }
+const highlightMatch = (text: string, highlight: string) => {
+  if (!highlight.trim()) {
+    return <span>{text}</span>;
+  }
+  const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+  return (
+    <span>
+      {parts.map((part, i) =>
+        part.toLowerCase() === highlight.toLowerCase() ? (
+          <b key={i}>{part}</b>
+        ) : (
+          part
+        )
+      )}
+    </span>
+  );
+};
 
-    setIsLoading(true);
-    setError(null);
-
-    try {
-      const response = await axios.get('/api/search/multi', { params: { query: searchQuery } });
-      setResults(response.data.results.filter((item: Movie) => item.poster_path).slice(0, 4)); // Filter and limit
-    } catch (err) {
-      setError('Failed to fetch search results.');
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
+const SearchPresenter: React.FC<SearchPresenterProps> = ({
+  query,
+  setQuery,
+  results,
+  isLoading,
+  error,
+  activeIndex,
+  handleKeyDown,
+  handleSuggestionClick,
+  searchContainerRef,
+}) => {
+  const { currentUser } = useAuth();
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      fetchSearchResults(query);
-    }, 300); // 300ms debounce
+      if (query.trim() !== '' && currentUser) {
+        logUserEvent('search', { searchTerm: query, userId: currentUser.uid });
+      }
+    }, 500); // Debounce for 500ms
 
     return () => {
       clearTimeout(handler);
     };
-  }, [query, fetchSearchResults]);
-
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (searchContainerRef.current && !searchContainerRef.current.contains(event.target as Node)) {
-        setResults([]);
-        setQuery('');
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const handleSuggestionClick = useCallback(async (movie: Movie) => {
-    logUserEvent('movie_select', { movieId: movie.id, categoryId: 'search_suggestion' });
-    navigate(`/search/${movie.title || movie.name}`); // Redirect to search results page
-  }, [navigate]);
-
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'ArrowDown') {
-      setActiveIndex((prevIndex) => (prevIndex < results.length - 1 ? prevIndex + 1 : prevIndex));
-    } else if (e.key === 'ArrowUp') {
-      setActiveIndex((prevIndex) => (prevIndex > 0 ? prevIndex - 1 : 0));
-    } else if (e.key === 'Enter') {
-      if (activeIndex >= 0 && results[activeIndex]) {
-        handleSuggestionClick(results[activeIndex]); // Trigger click handler on Enter
-      } else if (query.trim() !== '') {
-        navigate(`/search/${query}`); // If no suggestion selected, navigate to full search results
-      }
-    }
-  };
-
-  const highlightMatch = (text: string, highlight: string) => {
-    if (!highlight.trim()) {
-      return <span>{text}</span>;
-    }
-    const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
-    return (
-      <span>
-        {parts.map((part, i) =>
-          part.toLowerCase() === highlight.toLowerCase() ? (
-            <b key={i}>{part}</b>
-          ) : (
-            part
-          )
-        )}
-      </span>
-    );
-  };
-
+  }, [query, currentUser]);
   return (
     <div className={styles.searchContainer} ref={searchContainerRef}>
       <input
@@ -123,7 +86,17 @@ const Search: React.FC = () => {
               <li
                 key={movie.id}
                 className={`${styles.resultItem} ${index === activeIndex ? styles.active : ''}`}
-                onClick={() => handleSuggestionClick(movie)} // Add onClick handler
+                onClick={() => {
+                  handleSuggestionClick(movie);
+                  if (currentUser) {
+                    logUserEvent('movie_selected_from_search', {
+                      movieId: movie.id,
+                      movieName: movie.title || movie.name,
+                      searchTerm: query,
+                      userId: currentUser.uid,
+                    });
+                  }
+                }}
               >
                 <div className={styles.resultLink}>
                   <img
@@ -145,4 +118,4 @@ const Search: React.FC = () => {
   );
 };
 
-export default Search;
+export default SearchPresenter;
