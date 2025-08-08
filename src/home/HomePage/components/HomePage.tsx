@@ -1,20 +1,9 @@
-import Row from "./container/RowContainer";
-import Banner from "./container/BannerContainer";
-import Nav from "./container/NavContainer";
+import Row from "../../Row/contianer/RowContainer";
+import Banner from "../../Banner/container/BannerContainer";
+import Nav from "../../Navigation /container/NavContainer";
 import { useTranslation } from "react-i18next";
-import { fetchMoviesByGenres } from "../services/api-client";
-
-interface Movie {
-  id: number;
-  name: string;
-  title: string;
-  poster_path: string;
-  backdrop_path: string;
-  media_type?: string;
-  release_date?: string;
-  first_air_date?: string;
-  genres?: Array<{ id: number; name: string }>;
-}
+import { fetchMoviesByGenres } from "../../../services/api-client";
+import { Movie } from "../types/HomePageTypes";
 
 const rows = [
   { id: "fetchNetflixOriginals", isLargeRow: true },
@@ -44,7 +33,7 @@ const HomePage: React.FC<HomePageProps> = ({
   onMovieClick,
   onPlayerReady,
   onPlayerStateChange,
-  youtubeOpts
+  youtubeOpts,
 }) => {
   const { t } = useTranslation();
 
@@ -56,7 +45,9 @@ const HomePage: React.FC<HomePageProps> = ({
         title={t(`homePage.personalizedRecommendations`)}
         rowType="personalized"
         isLargeRow={true}
-        onMovieClick={(movie) => onMovieClick(movie, "personalizedRecommendations")}
+        onMovieClick={(movie) =>
+          onMovieClick(movie, "personalizedRecommendations")
+        }
         isPlayerActive={activeRow === "personalizedRecommendations"}
         trailerUrl={trailerUrl}
         noTrailer={noTrailer}
