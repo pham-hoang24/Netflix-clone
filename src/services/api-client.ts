@@ -42,3 +42,10 @@ export const fetchPersonalizedRecommendations = async (idToken: string): Promise
   });
   return response.data;
 };
+
+export const fetchMoviesByGenres = async (genreIds: number[]): Promise<any[]> => {
+  const response = await axios.post(`${API_BASE}/api/recommendations/by-genres`, {
+    genreIds
+  });
+  return response.data;
+};

@@ -14,7 +14,7 @@ interface Movie {
   media_type?: string;
   release_date?: string;
   first_air_date?: string;
-  genre_ids?: number[]; // Added genre_ids to Movie interface
+  genres?: Array<{ id: number; name: string }>;
 }
 
 const HomePageContainer: React.FC = () => {
@@ -50,13 +50,11 @@ const HomePageContainer: React.FC = () => {
     ) {
       const watchDuration = Date.now() - watchStartTime;
       if (currentMovie.id) {
-        // Extract genre IDs from the currentMovie object and convert to string for logging
-        const genreIds = currentMovie.genre_ids?.map(id => String(id)).join(', ') || '';
-
         logUserEvent('watch_time', {
           movieId: currentMovie.id,
           duration: watchDuration, // Pass watchDuration (already in ms)
-          genre: genreIds, // Pass genre IDs as a comma-separated string
+          movieName: currentMovie.name || currentMovie.title,
+          genres: currentMovie.genres || [],
         });
       }
       setWatchStartTime(null);

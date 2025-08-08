@@ -14,6 +14,7 @@ interface Movie {
   poster_path: string;
   backdrop_path?: string;
   media_type?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
 interface SearchResultsPagePresenterProps {
@@ -91,15 +92,18 @@ const SearchResultsPagePresenter: React.FC<SearchResultsPagePresenterProps> = ({
 
                   if (currentUser && movie) {
                     if (playerState === YouTube.PlayerState.ENDED || playerState === YouTube.PlayerState.PAUSED) {
-                      const duration = event.target.getCurrentTime() * 1000; // Convert to milliseconds
+                      const duration = event.target.getCurrentTime(); // Convert to milliseconds
                       console.log(`Captured duration: ${duration}`);
                       if (duration > 0) {
+                        const genreIds = movie.genres?.map(genre => genre.id) || [];
+                        console.log(`Searching for movies with genres: (${genreIds.length})`, genreIds);
                         logUserEvent('watch_time', {
                           movieId: activeMovieId,
                           duration: duration, // Pass duration instead of watchTimeSeconds
                           movieName: movie.title || movie.name,
                           userId: currentUser.uid,
                           eventType: 'trailer_watched',
+                          genres: movie.genres || [],
                         });
                         console.log(`Logged watch_time for trailer: ${movie.title || movie.name}, Duration: ${Math.floor(duration)}s`);
                       }

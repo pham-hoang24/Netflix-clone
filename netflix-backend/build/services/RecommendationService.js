@@ -41,7 +41,8 @@ class RecommendationService {
                     const genreIds = Array.from(new Set(validMovieDetails.flatMap((movie) => { var _a; return ((_a = movie.genres) === null || _a === void 0 ? void 0 : _a.map((g) => g.id)) || []; })));
                     if (genreIds.length > 0) {
                         const genreRecs = yield Promise.all(genreIds.slice(0, 3).map(gid => this.mediaService.getMoviesByGenre(String(gid), 10).catch(e => [])));
-                        recommendations = genreRecs.flat().map((movie) => (Object.assign({ movieId: String(movie.id) }, movie)));
+                        const genresMap = yield this.mediaService.getGenres('movie');
+                        recommendations = genreRecs.flat().map((movie) => (Object.assign(Object.assign({ movieId: String(movie.id) }, movie), { genres: movie.genre_ids ? movie.genre_ids.map((id) => ({ id, name: genresMap[id] || '' })) : [] })));
                     }
                 }
             }
@@ -61,6 +62,7 @@ class RecommendationService {
                 backdrop_path: rec.backdrop_path,
                 release_date: rec.release_date || null, // Ensure release_date is always present, or null
                 first_air_date: rec.first_air_date || null, // Ensure first_air_date is always present, or null
+                genres: rec.genres || [], // Store genre names (already processed in MediaService)
                 type: 'initial',
                 generatedAt: new Date(),
             }));
@@ -91,6 +93,7 @@ class RecommendationService {
                         backdrop_path: rec.backdrop_path,
                         release_date: rec.release_date,
                         first_air_date: rec.first_air_date,
+                        genres: rec.genres || [],
                     }));
                 }
                 else {
@@ -110,10 +113,25 @@ class RecommendationService {
                     backdrop_path: rec.backdrop_path,
                     release_date: rec.release_date,
                     first_air_date: rec.first_air_date,
+                    genres: rec.genres || [],
                 }));
             }
             console.log(`[RecommendationService] Failed to initialize or fetch new recommendations for user ${userId}. Returning empty array.`);
             return [];
+        });
+    }
+    getMoviesByGenres(genreIds_1) {
+        return __awaiter(this, arguments, void 0, function* (genreIds, limit = 10) {
+            const moviesByGenre = [];
+            for (const genreId of genreIds) {
+                const movies = yield this.mediaService.getMoviesByGenre(String(genreId), limit);
+                const genresMap = yield this.mediaService.getGenres('movie');
+                const moviesWithGenres = movies.map((movie) => (Object.assign(Object.assign({}, movie), { genres: movie.genre_ids ? movie.genre_ids.map((id) => ({ id, name: genresMap[id] || '' })) : [] })));
+                moviesByGenre.push(...moviesWithGenres);
+            }
+            // Remove duplicates and limit the results
+            const uniqueMovies = Array.from(new Map(moviesByGenre.map(movie => [movie.id, movie])).values());
+            return uniqueMovies.slice(0, limit);
         });
     }
     getFallbackRecommendations(limit) {
@@ -123,7 +141,8 @@ class RecommendationService {
             const combined = [...trending, ...topRated];
             // Ensure unique movies and return the specified limit
             const uniqueMovies = Array.from(new Map(combined.map(movie => [movie.id, movie])).values());
-            return uniqueMovies.slice(0, limit);
+            const genresMap = yield this.mediaService.getGenres('movie');
+            return uniqueMovies.slice(0, limit).map((movie) => (Object.assign(Object.assign({}, movie), { genres: movie.genre_ids ? movie.genre_ids.map((id) => ({ id, name: genresMap[id] || '' })) : [] })));
         });
     }
 }

@@ -10,7 +10,7 @@ interface LogEventPayload {
   sessionId?: string;
   metadata?: Record<string, any>;
   movieName?: string;
-  genre?: string;
+  genre?: Array<{ id: number; name: string }>;
   publishDate?: string;
   director?: string;
   eventType?: string; // Added for specific event types like 'trailer_watched'

@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from '../../home/axios';
 import { TrailerService } from '../../services/trailerService';
 import { logUserEvent } from '../../services/analytics';
 import SearchResultsPagePresenter from '../SearchResultsPage';
+import { fetchGenres } from '../../services/api-client';
 
 interface Movie {
   id: number;
@@ -12,6 +13,7 @@ interface Movie {
   poster_path: string;
   backdrop_path?: string;
   media_type?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
 const SearchResultsPageContainer: React.FC = () => {
@@ -33,8 +35,15 @@ const SearchResultsPageContainer: React.FC = () => {
       setError(null);
 
       try {
-        const response = await axios.get('/api/search/multi', { params: { query: query } });
-        const filteredResults = response.data.results.filter((item: Movie) => item.poster_path);
+        const [response, genresMap] = await Promise.all([
+          axios.get('/api/search/multi', { params: { query: query } }),
+          fetchGenres(),
+        ]);
+
+        const filteredResults = response.data.results.filter((item: Movie) => item.poster_path).map((item: any) => ({
+          ...item,
+          genres: item.genre_ids ? item.genre_ids.map((id: number) => ({ id, name: genresMap[id] || '' })) : [],
+        }));
 
         setMovieResults(filteredResults.filter((item: Movie) => item.media_type === 'movie'));
         setTvResults(filteredResults.filter((item: Movie) => item.media_type === 'tv'));
@@ -50,9 +59,7 @@ const SearchResultsPageContainer: React.FC = () => {
     fetchMovies();
   }, [query]);
 
-  const handleMovieClick = useCallback(async (movie: Movie) => {
-    
-
+  const handleMovieClick = async (movie: Movie) => {
     if (activeMovieId === movie.id) {
       setTrailerUrl("");
       setNoTrailer(false);
@@ -85,7 +92,7 @@ const SearchResultsPageContainer: React.FC = () => {
         setNoTrailer(true);
       }
     }
-  }, [activeMovieId]);
+  };
 
   return (
     <SearchResultsPagePresenter

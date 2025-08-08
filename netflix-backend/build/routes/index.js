@@ -22,6 +22,7 @@ exports.default = (db) => {
     router.get('/search/multi', mediaController.multiSearch);
     // Recommendation Routes
     router.get('/recommendations/personalized', authMiddleware_1.authenticateUser, recommendationController.getPersonalizedRecommendations);
+    router.post('/recommendations/by-genres', authMiddleware_1.authenticateUser, recommendationController.getMoviesByGenres);
     // Health Check
     router.get('/health', (req, res) => {
         res.json({

@@ -34,5 +34,22 @@ class RecommendationController {
             }
         });
     }
+    getMoviesByGenres(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { genreIds } = req.body;
+                if (!genreIds || !Array.isArray(genreIds) || genreIds.length === 0) {
+                    res.status(400).json({ error: 'genreIds array is required in the request body' });
+                    return;
+                }
+                const movies = yield this.recommendationService.getMoviesByGenres(genreIds);
+                res.json(movies);
+            }
+            catch (error) {
+                console.error('Error fetching movies by genres:', error.message);
+                res.status(500).json({ error: 'Failed to fetch movies by genres' });
+            }
+        });
+    }
 }
 exports.RecommendationController = RecommendationController;

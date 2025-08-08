@@ -9,6 +9,7 @@ interface Movie {
   poster_path: string;
   backdrop_path: string;
   media_type?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
 

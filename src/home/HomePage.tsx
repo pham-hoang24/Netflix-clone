@@ -2,6 +2,7 @@ import Row from "./container/RowContainer";
 import Banner from "./container/BannerContainer";
 import Nav from "./container/NavContainer";
 import { useTranslation } from "react-i18next";
+import { fetchMoviesByGenres } from "../services/api-client";
 
 interface Movie {
   id: number;
@@ -12,6 +13,7 @@ interface Movie {
   media_type?: string;
   release_date?: string;
   first_air_date?: string;
+  genres?: Array<{ id: number; name: string }>;
 }
 
 const rows = [

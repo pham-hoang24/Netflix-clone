@@ -49,6 +49,7 @@ export interface StoredRecommendation {
   backdrop_path?: string;
   release_date?: string; // Added for movies
   first_air_date?: string; // Added for TV shows
+  genres?: Array<{ id: number; name: string }>; // Added to store movie genres as objects
   score?: number; // Optional: for ranking within the stored list
   type?: 'collaborative' | 'content-based' | 'trending' | 'initial'; // Optional: origin of the recommendation
   generatedAt: Date;
