@@ -2,8 +2,8 @@ export interface Movie {
     id: number;
     name: string;
     title: string;
-    poster_path: string;
-    backdrop_path: string;
+    poster_path: string | null;
+    backdrop_path: string | null;
     overview: string;
     popularity?: number;
     logo_url?: string;

@@ -2,7 +2,7 @@ import React from 'react';
 import './Banner.css';
 import { useTranslation } from 'react-i18next';
 
-import { Movie } from '../HomePage/types/HomePageTypes';
+import { Movie } from '../../HomePage/types/HomePageTypes';
 
 interface BannerProps {
   movie: Movie | null;
