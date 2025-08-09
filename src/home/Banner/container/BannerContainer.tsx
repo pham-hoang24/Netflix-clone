@@ -1,15 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import Banner from '../Banner'; // Import the presentational component
-import { getMoviesForCategory } from '../../services/movieService';
-import placeholderImg from './1sgfb0.jpg';
+import { getMoviesForCategory } from '../../../services/movieService';
+import placeholderImg from '../../PlaceholderPhotos/1sgfb0.jpg';
 
-interface Movie {
-  backdrop_path: string;
-  title: string;
-  name: string;
-  original_name: string;
-  overview: string;
-}
+import { Movie } from '../../HomePage/types/HomePageTypes';
 
 const BannerContainer: React.FC = () => {
 const [movie, setMovie] = useState<Movie | null>(null);
