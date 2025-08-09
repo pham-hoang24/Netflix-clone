@@ -304,7 +304,7 @@ describe("LandingPageContainer", () => {
       fireEvent.click(getByTestId("item-click-trigger"));
 
       expect(getByTestId("selected-item")).toHaveTextContent(
-        JSON.stringify({ id: 1, title: "Test Item" })
+        JSON.stringify({ id: 1, title: "Test Item",name: "Test Item" })
       );
     });
 
@@ -318,13 +318,13 @@ describe("LandingPageContainer", () => {
       fireEvent.click(getByTestId("item-click-trigger"));
 
       expect(getByTestId("selected-item")).toHaveTextContent(
-        JSON.stringify({ id: 1, title: "Test Item" })
+        JSON.stringify({ id: 1, title: "Test Item",name: "Test Item" })
       );
 
       fireEvent.click(getByTestId("item-click-trigger"));
 
       expect(getByTestId("selected-item")).toHaveTextContent(
-        JSON.stringify({ id: 1, title: "Test Item" })
+        JSON.stringify({ id: 1, title: "Test Item",name: "Test Item" })
       );
     });
   });
@@ -341,7 +341,7 @@ describe("LandingPageContainer", () => {
       fireEvent.click(getByTestId("item-click-trigger"));
 
       expect(getByTestId("selected-item")).toHaveTextContent(
-        JSON.stringify({ id: 1, title: "Test Item" })
+        JSON.stringify({ id: 1, title: "Test Item",name: "Test Item" })
       );
 
       fireEvent.click(getByTestId("close-modal-trigger"));
@@ -386,7 +386,7 @@ describe("LandingPageContainer", () => {
       fireEvent.click(getByTestId("item-click-trigger"));
 
       expect(getByTestId("selected-item")).toHaveTextContent(
-        JSON.stringify({ id: 1, title: "Test Item" })
+        JSON.stringify({ id: 1, title: "Test Item",name: "Test Item"  })
       );
 
       fireEvent.click(getByTestId("close-modal-trigger"));

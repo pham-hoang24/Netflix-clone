@@ -1,7 +1,7 @@
 import React from 'react';
 import './Row.css';
 import YouTube, { YouTubeProps } from "react-youtube";
-import { Movie } from '../HomePage/types/HomePageTypes';
+import { Movie } from '../../HomePage/types/HomePageTypes';
 
 interface RowProps {
   title: string;
@@ -42,7 +42,7 @@ const Row: React.FC<RowProps> = ({
         <h2>{title}</h2>
         <div className="row__posters">
           {Array.from({ length: 10 }).map((_, index) => (
-            <div key={index} className="row__poster-placeholder" />
+            <div key={index} className="row__poster-placeholder" data-testid="row__poster-placeholder" />
           ))}
         </div>
       </div>
