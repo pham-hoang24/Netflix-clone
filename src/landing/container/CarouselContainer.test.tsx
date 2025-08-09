@@ -48,8 +48,8 @@ describe('CarouselContainer', () => {
   describe('Rendering and Props', () => {
     it('should render the correct number of CarouselItem components', () => {
       render(<CarouselContainer items={mockItems} onItemClick={mockOnItemClick} />);
-      // Verify that our mock component was called for each item in the array
-      expect(mockCarouselItem).toHaveBeenCalledTimes(mockItems.length);
+      // Count DOM nodes instead of mock calls (robust under Strict Mode)
+      expect(screen.getAllByTestId(/carousel-item-/i)).toHaveLength(mockItems.length);
     });
 
     it('should pass the correct props to each CarouselItem based on available data', () => {
@@ -65,8 +65,8 @@ describe('CarouselContainer', () => {
         })
       );
 
-       // Check props for an item with a backdrop_path and name
-       expect(mockCarouselItem).toHaveBeenCalledWith(
+      // Check props for an item with a backdrop_path and name
+      expect(mockCarouselItem).toHaveBeenCalledWith(
         expect.objectContaining({
           imageUrl: 'https://image.tmdb.org/t/p/w780/backdrop2.jpg',
           altText: 'Show Two',
@@ -98,7 +98,7 @@ describe('CarouselContainer', () => {
 
       // Verify the callback was triggered once with the correct item object
       expect(mockOnItemClick).toHaveBeenCalledTimes(1);
-      expect(mockOnItemClick).toHaveBeenCalledWith(mockItems[1]); // mockItems[1] is the item with id '2'
+      expect(mockOnItemClick).toHaveBeenCalledWith(mockItems[1]);
     });
   });
 
@@ -143,7 +143,7 @@ describe('CarouselContainer', () => {
         const carouselElement = container.querySelector('.carouselContainer');
 
         if (carouselElement) {
-            fireEvent.scroll(carouselElement, { target: { scrollLeft: 1502 } });
+          fireEvent.scroll(carouselElement, { target: { scrollLeft: 1502 } });
         }
 
         expect(screen.getByLabelText('scroll left')).toBeInTheDocument();

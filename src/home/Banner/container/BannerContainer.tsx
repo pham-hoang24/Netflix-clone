@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Banner from '../Banner'; // Import the presentational component
+import Banner from '../components/Banner'; // Import the presentational component
 import { getMoviesForCategory } from '../../../services/movieService';
 import placeholderImg from '../../PlaceholderPhotos/1sgfb0.jpg';
 

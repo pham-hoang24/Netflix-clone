@@ -1,83 +1,94 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from '../Carousel/Carousel.module.css';
 import CarouselItem from '../CarouselItem/CarouselItem';
 
 interface CarouselContainerProps {
-  items: any[]; // Replace 'any' with a proper interface later
+  items: any[];
   onItemClick: (item: any) => void;
 }
 
+const PLACEHOLDER = 'src/home/container/istockphoto-1147544807-612x612.jpg';
+
 const CarouselContainer: React.FC<CarouselContainerProps> = ({ items, onItemClick }) => {
   const carouselRef = useRef<HTMLDivElement>(null);
-  const leftBtnRef = useRef<HTMLDivElement>(null);
-  const rightBtnRef = useRef<HTMLDivElement>(null);
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(true);
 
   const updateScrollButtons = () => {
-    if (!carouselRef.current || !leftBtnRef.current || !rightBtnRef.current) return;
-
-    const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+    const el = carouselRef.current;
+    if (!el) return;
+    const { scrollLeft, scrollWidth, clientWidth } = el;
     const maxScrollLeft = scrollWidth - clientWidth;
-
-    // 1. Use the literal 'hidden' class to match the test assertion
-    leftBtnRef.current.classList.toggle('hidden', scrollLeft <= 2);
-    rightBtnRef.current.classList.toggle('hidden', scrollLeft + 2 >= maxScrollLeft);
+    setShowLeft(scrollLeft > 2);
+    setShowRight(scrollLeft + 2 < maxScrollLeft);
   };
 
-  const scrollCarousel = (direction: 'left' | 'right') => {
-    if (carouselRef.current) {
-      const scrollAmount = carouselRef.current.clientWidth; // Scroll by full width
-      carouselRef.current.scrollBy({
-        left: direction === 'left' ? -scrollAmount : scrollAmount,
-        behavior: 'smooth',
-      });
-    }
+  const scrollCarousel = (dir: 'left' | 'right') => {
+    const el = carouselRef.current;
+    if (!el) return;
+    const amount = el.clientWidth;
+    el.scrollBy({ left: dir === 'left' ? -amount : amount, behavior: 'smooth' });
   };
 
   useEffect(() => {
-    const carousel = carouselRef.current;
-    if (carousel) {
-      carousel.scrollLeft = 0; // Ensure carousel starts at the beginning
-      carousel.addEventListener('scroll', updateScrollButtons);
-      window.addEventListener('resize', updateScrollButtons);
-      updateScrollButtons(); // Initial check
-
-      return () => {
-        carousel.removeEventListener('scroll', updateScrollButtons);
-        window.removeEventListener('resize', updateScrollButtons);
-      };
-    }
+    const el = carouselRef.current;
+    if (!el) return;
+    el.scrollLeft = 0;
+    el.addEventListener('scroll', updateScrollButtons);
+    window.addEventListener('resize', updateScrollButtons);
+    updateScrollButtons();
+    return () => {
+      el.removeEventListener('scroll', updateScrollButtons);
+      window.removeEventListener('resize', updateScrollButtons);
+    };
   }, []);
 
   return (
-    <div className={styles.carouselWrapper}>
-      <div
-        ref={leftBtnRef}
-        className={`${styles.scrollButton} ${styles.left}`}
-        onClick={() => scrollCarousel('left')}
-      >
-        ‹
-      </div>
-      <div className={styles.carouselContainer}>
-        <div className={styles.movieCarousel} ref={carouselRef}>
-          {items.map((item, index) => (
-            <CarouselItem
-              key={item.id}
-              imageUrl={item.poster_path ? `https://image.tmdb.org/t/p/w500${item.poster_path}` : item.backdrop_path ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}` : 'https://via.placeholder.com/300x450?text=No+Image'}
-              altText={item.title || item.name || 'Untitled'}
-              onClick={() => onItemClick(item)}
-              // 2. Use the 'rank' property from the item data directly
-              rank={item.rank}
-            />
-          ))}
+    <div className={`${styles.carouselWrapper} carouselWrapper`}>
+      {showLeft && (
+        <div
+          className={`${styles.scrollButton} ${styles.left} scrollButton left`}
+          onClick={() => scrollCarousel('left')}
+          aria-label="scroll left"
+        >
+          ‹
+        </div>
+      )}
+
+      {/* Literal class so the test can query it */}
+      <div className={`${styles.carouselContainer} carouselContainer`} ref={carouselRef}>
+        <div className={`${styles.movieCarousel} movieCarousel`}>
+          {items.map((item: any) => {
+            const imageUrl =
+              item.imageUrl ??
+              (item.poster_path
+                ? `https://image.tmdb.org/t/p/w500${item.poster_path}`
+                : item.backdrop_path
+                ? `https://image.tmdb.org/t/p/w780${item.backdrop_path}`
+                : PLACEHOLDER);
+
+            return (
+              <CarouselItem
+                key={item.id}
+                imageUrl={imageUrl}
+                altText={item.title || item.name || 'Untitled'}
+                onClick={() => onItemClick(item)}
+                rank={item.rank}
+              />
+            );
+          })}
         </div>
       </div>
-      <div
-        ref={rightBtnRef}
-        className={`${styles.scrollButton} ${styles.right}`}
-        onClick={() => scrollCarousel('right')}
-      >
-        ›
-      </div>
+
+      {showRight && (
+        <div
+          className={`${styles.scrollButton} ${styles.right} scrollButton right`}
+          onClick={() => scrollCarousel('right')}
+          aria-label="scroll right"
+        >
+          ›
+        </div>
+      )}
     </div>
   );
 };

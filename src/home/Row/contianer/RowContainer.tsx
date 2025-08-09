@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Row from "../Row";
+import Row from "../components/Row";
 import YouTube, { YouTubeProps } from "react-youtube";
 import { useAuth } from "../../../context/AuthContext";
 import { logUserEvent } from "../../../services/analytics";
