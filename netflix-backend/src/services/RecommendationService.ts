@@ -101,10 +101,10 @@ export class RecommendationService {
 
     if (cachedRecommendations && cachedRecommendations.length > 0) {
         const latestRec = cachedRecommendations[0];
-        const oneMinuteAgo = new Date();
-        oneMinuteAgo.setMinutes(oneMinuteAgo.getMinutes() - 1); // Recommendations are fresh for 1 minute
+        const oneHourAgo = new Date();
+        oneHourAgo.setHours(oneHourAgo.getHours() - 1); // Recommendations are fresh for 1 hour
 
-        if (latestRec.generatedAt > oneMinuteAgo) {
+        if (latestRec.generatedAt > oneHourAgo) {
             console.log(`[RecommendationService] Returning ${cachedRecommendations.length} FRESH cached recommendations for user ${userId}`);
             return cachedRecommendations.map(rec => ({
                 id: parseInt(rec.movieId),
@@ -141,6 +141,11 @@ export class RecommendationService {
 
     console.log(`[RecommendationService] Failed to initialize or fetch new recommendations for user ${userId}. Returning empty array.`);
     return [];
+  }
+
+  public async invalidateUserCache(userId: string): Promise<void> {
+    await this.recommendationDAO.deleteRecommendations(userId);
+    console.log(`[RecommendationService] Invalidated cache for user ${userId}`);
   }
 
   public async getMoviesByGenres(genreIds: number[], limit: number = 10): Promise<any[]> {
