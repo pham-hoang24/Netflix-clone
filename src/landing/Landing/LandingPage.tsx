@@ -5,7 +5,7 @@ import ContentSection from "../ContentSection/ContentSection";
 import Carousel from "../container/CarouselContainer";
 
 import FaqSection from "../FaqSection/FaqSection";
-import { TrendingItem } from "../../services/api-client";
+import { Movie } from "../../home/HomePage/types/HomePageTypes";
 import { useTranslation } from 'react-i18next';
 import "./LandingPage.module.css";
 import styles from "./LandingPage.module.css";
@@ -13,14 +13,14 @@ import styles from "./LandingPage.module.css";
 interface LandingPageProps {
   isLoading: boolean;
   error: string | null;
-  trendingItems: TrendingItem[];
-  selectedItem: TrendingItem | null;
+  trendingItems: Movie[];
+  selectedItem: Movie | null;
   genreMap: { [id: number]: string };
   faqs: { question: string; answer: string }[];
-  handleItemClick: (item: TrendingItem) => void;
+  handleItemClick: (item: Movie) => void;
   handleCloseModal: () => void;
   DetailModal: React.ComponentType<{
-    item: TrendingItem;
+    item: Movie;
     onClose: () => void;
     genreMap: { [id: number]: string };
   }>;

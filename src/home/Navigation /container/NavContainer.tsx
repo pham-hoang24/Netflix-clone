@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
-import Nav from '../Nav'; // Import the presentational component
-import { useAuth } from '../../context/AuthContext';
+import Nav from "../Nav"; // Import the presentational component
+import { useAuth } from "../../../context/AuthContext";
 import { useTranslation } from "react-i18next";
 
 const NavContainer: React.FC = () => {

@@ -8,7 +8,7 @@ async function validateEnvironment(): Promise<void> {
     throw new Error('TMDB_API_KEY environment variable is required');
   }
   
-  if (!process.env.FIREBASE_PROJECT_ID && !require('./')) {
+  if (!process.env.FIREBASE_PROJECT_ID && !require('./serviceAccountKey.json')) {
     throw new Error('Firebase configuration is required (either serviceAccountKey.json or environment variables)');
   }
 }

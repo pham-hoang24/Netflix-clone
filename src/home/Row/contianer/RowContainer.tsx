@@ -1,33 +1,21 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import Row from '../Row';
+import React, { useState, useEffect, useCallback } from "react";
+import Row from "../Row";
 import YouTube, { YouTubeProps } from "react-youtube";
-import { useAuth } from '../../context/AuthContext';
-import { logUserEvent } from '../../services/analytics';
-import { getMoviesForCategory } from '../../services/movieService';
-import { TrailerService } from '../../services/trailerService';
-import placeholderImg from './istockphoto-1147544807-612x612.jpg';
-import { fetchPersonalizedRecommendations } from '../../services/api-client';
-import { auth } from '../../services/firebase';
-import { fetchMoviesByGenres } from '../../services/api-client';
-
+import { useAuth } from "../../../context/AuthContext";
+import { logUserEvent } from "../../../services/analytics";
+import { getMoviesForCategory } from "../../../services/movieService";
+import { TrailerService } from "../../../services/trailerService";
+import placeholderImg from "../../PlaceholderPhotos/istockphoto-1147544807-612x612.jpg";
+import { fetchPersonalizedRecommendations } from "../../../services/api-client";
+import { auth } from "../../../services/firebase";
+import { fetchMoviesByGenres } from "../../../services/api-client";
+import { Movie } from "../../HomePage/types/HomePageTypes";
 const base_url = "https://image.tmdb.org/t/p/original/";
-
-interface Movie {
-  id: number;
-  name: string;
-  title: string;
-  poster_path: string;
-  backdrop_path: string;
-  media_type?: string;
-  release_date?: string;
-  first_air_date?: string;
-  genres?: Array<{ id: number; name: string }>;
-}
 
 interface RowContainerProps {
   title: string;
   categoryId?: string; // Make categoryId optional
-  rowType?: 'category' | 'personalized'; // New prop to distinguish row types
+  rowType?: "category" | "personalized"; // New prop to distinguish row types
   isLargeRow?: boolean;
   onMovieClick: (movie: Movie) => void;
   isPlayerActive: boolean;
@@ -41,7 +29,7 @@ interface RowContainerProps {
 const RowContainer: React.FC<RowContainerProps> = ({
   title,
   categoryId,
-  rowType = 'category', // Default to category
+  rowType = "category", // Default to category
   isLargeRow = false,
   onMovieClick,
   isPlayerActive,
@@ -49,30 +37,33 @@ const RowContainer: React.FC<RowContainerProps> = ({
   noTrailer,
   youtubeOpts,
   onPlayerReady,
-  onPlayerStateChange
+  onPlayerStateChange,
 }) => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { currentUser } = useAuth();
 
-  const handleMovieClick = useCallback(async (movie: Movie) => {
-    onMovieClick(movie); // Call the original onMovieClick from HomePage
+  const handleMovieClick = useCallback(
+    async (movie: Movie) => {
+      onMovieClick(movie); // Call the original onMovieClick from HomePage
 
-    if (movie.genres && movie.genres.length > 0) {
-      const genreIds = movie.genres.map(genre => genre.id);
-      console.log("Searching for movies with genres:", genreIds);
-      try {
-        const similarMovies = await fetchMoviesByGenres(genreIds);
-        console.log("Similar movies found:", similarMovies);
-        // Here you would typically update state to display these similar movies,
-        // e.g., navigate to a search results page or open a modal.
-        // For now, we'll just log them.
-      } catch (err) {
-        console.error("Failed to fetch similar movies by genre:", err);
+      if (movie.genres && movie.genres.length > 0) {
+        const genreIds = movie.genres.map((genre) => genre.id);
+        console.log("Searching for movies with genres:", genreIds);
+        try {
+          const similarMovies = await fetchMoviesByGenres(genreIds);
+          console.log("Similar movies found:", similarMovies);
+          // Here you would typically update state to display these similar movies,
+          // e.g., navigate to a search results page or open a modal.
+          // For now, we'll just log them.
+        } catch (err) {
+          console.error("Failed to fetch similar movies by genre:", err);
+        }
       }
-    }
-  }, [onMovieClick]);
+    },
+    [onMovieClick]
+  );
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -82,15 +73,22 @@ const RowContainer: React.FC<RowContainerProps> = ({
       try {
         let fetchedMovies: Movie[] = [];
 
-        if (rowType === 'personalized') {
+        if (rowType === "personalized") {
           if (!currentUser || !auth.currentUser) {
-            setError("Authentication required for personalized recommendations.");
+            setError(
+              "Authentication required for personalized recommendations."
+            );
             setIsLoading(false);
             return;
           }
           const idToken = await auth.currentUser.getIdToken();
-          const rawRecommendations = await fetchPersonalizedRecommendations(idToken);
-          console.log("[RowContainer] Raw personalized recommendations fetched:", rawRecommendations);
+          const rawRecommendations = await fetchPersonalizedRecommendations(
+            idToken
+          );
+          console.log(
+            "[RowContainer] Raw personalized recommendations fetched:",
+            rawRecommendations
+          );
           fetchedMovies = rawRecommendations.map((rec: any) => {
             const movie = {
               id: rec.id,
@@ -98,6 +96,7 @@ const RowContainer: React.FC<RowContainerProps> = ({
               title: rec.title,
               poster_path: rec.poster_path,
               backdrop_path: rec.backdrop_path,
+              overview: rec.overview,
               release_date: rec.release_date,
               first_air_date: rec.first_air_date,
               genres: rec.genres || [],
@@ -130,9 +129,9 @@ const RowContainer: React.FC<RowContainerProps> = ({
       }
     };
 
-    if (rowType === 'personalized' && currentUser) {
+    if (rowType === "personalized" && currentUser) {
       fetchMovies();
-    } else if (rowType === 'category' && categoryId) {
+    } else if (rowType === "category" && categoryId) {
       fetchMovies();
     }
   }, [categoryId, rowType, currentUser]);

@@ -6,15 +6,7 @@ import { logUserEvent } from '../../services/analytics';
 import SearchResultsPagePresenter from '../SearchResultsPage';
 import { fetchGenres } from '../../services/api-client';
 
-interface Movie {
-  id: number;
-  name?: string;
-  title?: string;
-  poster_path: string;
-  backdrop_path?: string;
-  media_type?: string;
-  genres?: Array<{ id: number; name: string }>;
-}
+import { Movie } from '../../home/HomePage/types/HomePageTypes';
 
 const SearchResultsPageContainer: React.FC = () => {
   const { query } = useParams<{ query: string }>();

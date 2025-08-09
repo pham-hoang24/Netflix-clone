@@ -2,13 +2,7 @@ import React from 'react';
 import './Banner.css';
 import { useTranslation } from 'react-i18next';
 
-interface Movie {
-  backdrop_path: string;
-  title: string;
-  name: string;
-  original_name: string;
-  overview: string;
-}
+import { Movie } from '../HomePage/types/HomePageTypes';
 
 interface BannerProps {
   movie: Movie | null;
@@ -46,7 +40,7 @@ const Banner: React.FC<BannerProps> = ({
     >
       <div className="banner__contents">
         <h1 className="banner__title">
-          {error ? "Error" : movie?.title || movie?.name || movie?.original_name}
+          {error ? "Error" : movie?.title || movie?.name }
         </h1>
         <div className="banner__buttons">
           <button className="banner__button">{t('banner.play')}</button>

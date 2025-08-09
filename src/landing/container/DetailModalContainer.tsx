@@ -1,9 +1,9 @@
 import React from 'react';
 import DetailModal from '../DetailModal/DetailModal'; // The presentation component
-import { TrendingItem } from '../../services/api-client';
+import { Movie } from '../../home/HomePage/types/HomePageTypes';
 
 interface DetailModalContainerProps {
-  item: TrendingItem;
+  item: Movie;
   onClose: () => void;
   genreMap: { [id: number]: string };
 }
@@ -12,7 +12,7 @@ const DetailModalContainer: React.FC<DetailModalContainerProps> = ({ item, onClo
   const POSTER_BASE = 'https://image.tmdb.org/t/p/w500';
   const BACKDROP_BASE = 'https://image.tmdb.org/t/p/w1280';
 
-  const genreNames = item.genre_ids?.map((id: number) => genreMap[id]).filter(Boolean) || [];
+  const genreNames = item.genres?.map(genre => genre.name) || [];
   const year = item.release_date?.slice(0, 4) ?? 'Unknown';
 
   const truncate = (str: string | null | undefined, wordLimit: number): string => {

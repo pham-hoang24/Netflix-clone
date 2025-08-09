@@ -1,17 +1,11 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import styles from './Search.module.css';
-import { logUserEvent } from '../services/analytics';
-import { useAuth } from '../context/AuthContext';
+import React, { useEffect } from "react";
+import { Link } from "react-router-dom";
+import styles from "./Search.module.css";
+import { logUserEvent } from "../../services/analytics";
+import { useAuth } from "../../context/AuthContext";
+import { Movie } from "../HomePage/types/HomePageTypes";
 
 const base_url = "https://image.tmdb.org/t/p/w200";
-
-interface Movie {
-  id: number;
-  title?: string;
-  name?: string;
-  poster_path: string;
-}
 
 interface SearchPresenterProps {
   query: string;
@@ -29,7 +23,7 @@ const highlightMatch = (text: string, highlight: string) => {
   if (!highlight.trim()) {
     return <span>{text}</span>;
   }
-  const parts = text.split(new RegExp(`(${highlight})`, 'gi'));
+  const parts = text.split(new RegExp(`(${highlight})`, "gi"));
   return (
     <span>
       {parts.map((part, i) =>
@@ -58,8 +52,8 @@ const SearchPresenter: React.FC<SearchPresenterProps> = ({
 
   useEffect(() => {
     const handler = setTimeout(() => {
-      if (query.trim() !== '' && currentUser) {
-        logUserEvent('search', { searchTerm: query, userId: currentUser.uid });
+      if (query.trim() !== "" && currentUser) {
+        logUserEvent("search", { searchTerm: query, userId: currentUser.uid });
       }
     }, 500); // Debounce for 500ms
 
@@ -85,11 +79,13 @@ const SearchPresenter: React.FC<SearchPresenterProps> = ({
             {results.map((movie, index) => (
               <li
                 key={movie.id}
-                className={`${styles.resultItem} ${index === activeIndex ? styles.active : ''}`}
+                className={`${styles.resultItem} ${
+                  index === activeIndex ? styles.active : ""
+                }`}
                 onClick={() => {
                   handleSuggestionClick(movie);
                   if (currentUser) {
-                    logUserEvent('movie_selected_from_search', {
+                    logUserEvent("movie_selected_from_search", {
                       movieId: movie.id,
                       movieName: movie.title || movie.name,
                       searchTerm: query,
@@ -100,11 +96,17 @@ const SearchPresenter: React.FC<SearchPresenterProps> = ({
               >
                 <div className={styles.resultLink}>
                   <img
-                    src={movie.poster_path ? `${base_url}${movie.poster_path}` : 'https://via.placeholder.com/200x300'}
+                    src={
+                      movie.poster_path
+                        ? `${base_url}${movie.poster_path}`
+                        : "https://via.placeholder.com/200x300"
+                    }
                     alt={movie.title}
                     className={styles.poster}
                   />
-                  <div className={styles.title}>{highlightMatch(movie.title || movie.name || '', query)}</div>
+                  <div className={styles.title}>
+                    {highlightMatch(movie.title || movie.name || "", query)}
+                  </div>
                 </div>
               </li>
             ))}

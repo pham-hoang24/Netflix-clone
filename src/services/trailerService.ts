@@ -128,7 +128,7 @@ export class TrailerService {
       console.log('Trailer found via movie-trailer library');
       return trailerKey;
     }
-
+    
     console.log(`No trailer found for: ${movieTitle}`);
     return null;
   }
