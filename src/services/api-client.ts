@@ -1,20 +1,8 @@
 
 import axios from 'axios';
+import { Movie } from '../home/HomePage/types/HomePageTypes';
 
 const API_BASE = 'http://localhost:2000';
-
-export interface TrendingItem {
-  id: number;
-  title?: string;
-  name?: string;
-  overview: string;
-  poster_path: string | null;
-  backdrop_path: string | null;
-  popularity: number;
-  genre_ids?: number[];
-  release_date?: string;
-  logo_url?: string | null;
-}
 
 interface GenreResponse {
   genres: { id: number; name: string }[];
@@ -29,8 +17,8 @@ export const fetchGenres = async (): Promise<{ [id: number]: string }> => {
   return genreMap;
 };
 
-export const fetchTrendingWithDetails = async (): Promise<TrendingItem[]> => {
-  const response = await axios.get<TrendingItem[]>(`${API_BASE}/api/trending-with-details`);
+export const fetchTrendingWithDetails = async (): Promise<Movie[]> => {
+  const response = await axios.get<Movie[]>(`${API_BASE}/api/trending-with-details`);
   return response.data;
 };
 

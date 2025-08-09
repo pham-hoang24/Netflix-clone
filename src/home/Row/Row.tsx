@@ -1,17 +1,7 @@
 import React from 'react';
 import './Row.css';
 import YouTube, { YouTubeProps } from "react-youtube";
-
-interface Movie {
-  id: number;
-  name: string;
-  title: string;
-  poster_path: string;
-  backdrop_path: string;
-  media_type?: string;
-  genres?: Array<{ id: number; name: string }>;
-}
-
+import { Movie } from '../HomePage/types/HomePageTypes';
 
 interface RowProps {
   title: string;

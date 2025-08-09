@@ -1,18 +1,17 @@
-
+import { Movie } from "../../home/HomePage/types/HomePageTypes";
 import React, { useState, useEffect, useRef } from "react";
 import LandingPage from "../Landing/LandingPage";
 import DetailModalContainer from "../container/DetailModalContainer";
 import {
   fetchGenres,
   fetchTrendingWithDetails,
-  TrendingItem,
 } from "../../services/api-client";
 import { faqs } from "../data/faqs";
 import { useTranslation } from "react-i18next";
 
 const LandingPageContainer: React.FC = () => {
-  const [selectedItem, setSelectedItem] = useState<TrendingItem | null>(null);
-  const [trendingItems, setTrendingItems] = useState<TrendingItem[]>([]);
+  const [selectedItem, setSelectedItem] = useState<Movie | null>(null);
+  const [trendingItems, setTrendingItems] = useState<Movie[]>([]);
   const [genreMap, setGenreMap] = useState<{ [id: number]: string }>({});
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -44,7 +43,7 @@ const LandingPageContainer: React.FC = () => {
     };
   }, []);
 
-  const handleItemClick = (item: TrendingItem) => {
+  const handleItemClick = (item: Movie) => {
     setSelectedItem(item);
   };
 
