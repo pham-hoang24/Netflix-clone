@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { UserEventService } from '../services/UserEventService';
+import { RecommendationService } from '../services/RecommendationService';
 import { UserEvent } from '../types/recommendation';
 import admin from 'firebase-admin';
 
@@ -10,9 +11,11 @@ interface AuthenticatedRequest extends Request {
 
 export class UserEventController {
   private userEventService: UserEventService;
+  private recommendationService: RecommendationService;
 
   constructor(db: admin.firestore.Firestore) {
     this.userEventService = new UserEventService(db);
+    this.recommendationService = new RecommendationService(db);
     this.logEvent = this.logEvent.bind(this);
     this.getUserEvents = this.getUserEvents.bind(this);
   }
@@ -63,6 +66,11 @@ export class UserEventController {
         releaseYear,
         metadata
       });
+
+      // Invalidate recommendations cache for significant events
+      if (['watch', 'add_to_list', 'rating'].includes(event)) {
+        await this.recommendationService.invalidateUserCache(req.userId!);
+      }
       
       res.status(201).json({
         success: true,
