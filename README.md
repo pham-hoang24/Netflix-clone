@@ -1,4 +1,3 @@
-# Netflix-clone
 
 # Netflix Clone
 
