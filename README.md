@@ -1,126 +1,46 @@
-# Netflix-clone
+# Getting Started with Create React App
 
-# Netflix Clone
+This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Project Description
+## Available Scripts
 
-This project is a Netflix-like streaming service clone, featuring user authentication, movie browsing, and personalized recommendations. It's built with a React frontend and a Node.js/TypeScript backend, leveraging Firebase for authentication and data storage.
+In the project directory, you can run:
 
-## Key Features
+### `npm start`
 
-*   User Authentication (Sign Up, Log In)
-*   Browse Movies and TV Shows
-*   Personalized Recommendations
-*   Multi-language Support (English, Finnish, Vietnamese)
-*   Responsive Design
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-## Technologies Used
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-### Frontend
-*   React
-*   TypeScript
-*   React Router DOM
-*   i18next (for internationalization)
-*   Axios (for API requests)
-*   Firebase (for authentication)
-*   CSS Modules
+### `npm test`
 
-### Backend
-*   Node.js
-*   TypeScript
-*   Express.js
-*   Firebase Admin SDK (for Firestore and Authentication)
-*   TMDB API (for movie data)
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### Testing
-*   Jest
-*   React Testing Library
+### `npm run build`
 
-## Setup and Installation
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
-To set up the project locally, follow these steps:
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-1.  **Clone the repository:**
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
-    ```bash
-    git clone https://github.com/pham-hoang24/Netflix-clone
-    cd Netflix-clone
-    ```
+### `npm run eject`
 
-2.  **Install Frontend Dependencies:**
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-    ```bash
-    npm install
-    ```
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-3.  **Install Backend Dependencies:**
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-    ```bash
-    cd netflix-backend
-    npm install
-    cd ..
-    ```
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-4.  **Install Firebase Functions Dependencies:**
+## Learn More
 
-    ```bash
-    cd functions
-    npm install
-    cd ..
-    ```
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
-5.  **Firebase Configuration:**
-    *   Create a Firebase project at [console.firebase.google.com](https://console.firebase.google.com/).
-    *   Enable Firestore and Authentication.
-    *   Download your Firebase web app configuration and place it in `src/services/firebase.ts`.
-    *   For the backend, generate a service account key (JSON file) from your Firebase project settings (Project settings > Service accounts > Generate new private key) and save it as `netflix-backend/src/serviceAccountKey.json`.
-
-## Running the Application
-
-### Start Frontend (React App)
-
-From the project root directory:
-
-```bash
-npm start
-```
-
-This will start the React development server, usually at `http://localhost:3000`.
-
-### Start Backend (Node.js API)
-
-From the `netflix-backend` directory:
-
-```bash
-npm run dev # Or npm start if you have a production build script
-```
-
-This will start the Node.js API server, usually at `http://localhost:5000`.
-
-### Deploy Firebase Functions (Optional)
-
-If you have Firebase CLI installed and configured, you can deploy the functions:
-
-```bash
-firebase deploy --only functions
-```
-
-## Running Tests
-
-From the project root directory:
-
-```bash
-npm test
-```
-
-This will run all tests using Jest and React Testing Library.
-
-## Project Structure
-
-*   `src/`: Contains the React frontend application.
-*   `netflix-backend/`: Contains the Node.js/TypeScript backend API.
-*   `functions/`: Contains Firebase Cloud Functions.
-*   `public/`: Static assets for the frontend, including internationalization files.
-*   `__mocks__/`: Jest mock files.
-*   `coverage/`: Test coverage reports.
-*   `build/`: Build output directories for frontend and backend.
+To learn React, check out the [React documentation](https://reactjs.org/).
